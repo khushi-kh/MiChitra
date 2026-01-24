@@ -7,7 +7,9 @@ namespace MiChitra.Models
         [Key]
         public int UserId { get; set; }
         [Required]
-        public string FullName { get; set; } = string.Empty;
+        public string FName { get; set; } = string.Empty;
+        [Required]
+        public string LName { get; set; }  = string.Empty;
         [Required]
         public string Username { get; set; } = string.Empty;
         [EmailAddress, Required]

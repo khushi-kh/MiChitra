@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MiChitra.Migrations
 {
     [DbContext(typeof(MiChitraDbContext))]
-    [Migration("20260124151229_InitialCreate")]
+    [Migration("20260124153225_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -166,12 +166,16 @@ namespace MiChitra.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastLoginAt")
                         .HasColumnType("datetime2");
