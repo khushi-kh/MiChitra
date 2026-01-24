@@ -83,8 +83,6 @@ namespace MiChitra.Controllers
             return Ok(shows);
         }
 
-        // ================= ADMIN APIs =================
-
         // POST: api/movieshows
         [HttpPost]
         public async Task<IActionResult> CreateShow([FromBody] CreateMovieShowDto dto)
