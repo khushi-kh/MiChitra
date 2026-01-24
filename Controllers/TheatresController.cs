@@ -85,19 +85,19 @@ namespace MiChitra.Controllers
             return NoContent();
         }
 
-        // DELETE: api/theatres/{id}
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTheatre(int id)
+        // PUT: api/theatres/deactivate/{id}
+        [HttpPut("deactivate/{id}")]
+        public async Task<IActionResult> InActiveTheatre(int id)
         {
             var theatre = await _context.Theatres.FindAsync(id);
             if (theatre == null)
             {
-                _logger.LogWarning("Theatre with ID {TheatreId} not found for deletion", id);
+                _logger.LogWarning("Theatre with ID {TheatreId} not found for deactivation", id);
                 return NotFound("Theatre not found");
             }
-            _context.Theatres.Remove(theatre);
+            theatre.isActive = false;
             await _context.SaveChangesAsync();
-            _logger.LogInformation("Theatre with ID {TheatreId} deleted successfully", id);
+            _logger.LogInformation("Theatre with ID {TheatreId} deactivated successfully", id);
             return NoContent();
         }
     }

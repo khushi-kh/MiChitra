@@ -10,6 +10,8 @@ namespace MiChitra.Models
         public string Name { get; set; }
         [Required]
         public string City { get; set; }
+        public bool isActive { get; set; } = true;
+        // Navigation Properties
         public ICollection<MovieShow> MovieShows { get; set; } = new List<MovieShow>();
     }
 }
