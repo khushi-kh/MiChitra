@@ -13,6 +13,8 @@ namespace MiChitra.Models
         public DateTime ShowTime { get; set; }
         public int TotalSeats { get; set; }
         public int AvailableSeats { get; set; }
+        [Required]
+        public decimal PricePerSeat { get; set; }
         public MovieShowStatus Status { get; set; } = MovieShowStatus.Available;
 
         // Navigation Properties

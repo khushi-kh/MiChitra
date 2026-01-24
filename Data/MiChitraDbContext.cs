@@ -53,6 +53,7 @@ namespace MiChitra.Data
                       .HasForeignKey(ms => ms.TheatreId)
                       .OnDelete(DeleteBehavior.Cascade);
                 entity.Property(ms => ms.Status).HasConversion<int>();
+                entity.Property(ms => ms.PricePerSeat).HasPrecision(10, 2);
             });
 
             // Ticket entity configuration
