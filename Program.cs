@@ -1,4 +1,11 @@
+using MiChitra.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Register DbContext with SQL Server 
+builder.Services.AddDbContext<MiChitraDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 
