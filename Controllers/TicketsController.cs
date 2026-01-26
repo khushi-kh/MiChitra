@@ -3,6 +3,7 @@ using MiChitra.Models;
 using MiChitra.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace MiChitra.Controllers
 {
@@ -127,6 +128,7 @@ namespace MiChitra.Controllers
 
         // POST: api/tickets/book
         [HttpPost("book")]
+        [EnableRateLimiting("BookingPolicy")]
         public async Task<IActionResult> BookTicket([FromBody] BookTicketDTO dto)
         {
             _logger.LogInformation("Booking ticket for User {UserId}, Show {ShowId}, Seats {Seats}",
@@ -193,6 +195,7 @@ namespace MiChitra.Controllers
 
         // PUT: api/tickets/cancel/{ticketId}
         [HttpPut("cancel/{ticketId}")]
+        [EnableRateLimiting("BookingPolicy")]
         public async Task<IActionResult> CancelTicket(int ticketId)
         {
             _logger.LogInformation("Cancelling ticket {TicketId}", ticketId);

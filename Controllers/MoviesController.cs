@@ -3,11 +3,13 @@ using MiChitra.DTOs;
 using MiChitra.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace MiChitra.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableRateLimiting("GeneralPolicy")]
     public class MoviesController : ControllerBase
     {
         private readonly MiChitraDbContext _context;

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MiChitra.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 
 
 namespace MiChitra.Controllers
@@ -30,6 +31,7 @@ namespace MiChitra.Controllers
 
         // POST: api/Auth/Register
         [HttpPost("Register")]
+        [EnableRateLimiting("AuthPolicy")]
         public async Task<ActionResult<AuthResponse>> Register([FromBody] RegisterDTO registerDto)
         {
             try
@@ -93,6 +95,7 @@ namespace MiChitra.Controllers
 
         // POST: api/Auth/Login
         [HttpPost("Login")]
+        [EnableRateLimiting("AuthPolicy")]
         public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginDTO loginDto)
         {
             _logger.LogInformation("Login requested for username: {Username}", loginDto.Username);

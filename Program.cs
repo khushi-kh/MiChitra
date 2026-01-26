@@ -9,6 +9,9 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +32,39 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
+});
+
+// Add Rate Limiting
+builder.Services.AddRateLimiter(options =>
+{
+    // Auth endpoints - stricter limits
+    options.AddFixedWindowLimiter("AuthPolicy", limiterOptions =>
+    {
+        limiterOptions.PermitLimit = 5;
+        limiterOptions.Window = TimeSpan.FromMinutes(1);
+        limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        limiterOptions.QueueLimit = 2;
+    });
+
+    // Booking endpoints - moderate limits
+    options.AddFixedWindowLimiter("BookingPolicy", limiterOptions =>
+    {
+        limiterOptions.PermitLimit = 10;
+        limiterOptions.Window = TimeSpan.FromMinutes(1);
+        limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        limiterOptions.QueueLimit = 5;
+    });
+
+    // General API endpoints - relaxed limits
+    options.AddFixedWindowLimiter("GeneralPolicy", limiterOptions =>
+    {
+        limiterOptions.PermitLimit = 100;
+        limiterOptions.Window = TimeSpan.FromMinutes(1);
+        limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        limiterOptions.QueueLimit = 10;
+    });
+
+    options.RejectionStatusCode = 429;
 });
 
 // Required for Swagger
@@ -127,6 +163,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 app.UseMiddleware<GlobalExceptionMiddleware>();
+
+app.UseRateLimiter();
 
 app.UseCors("AllowAll");
 
