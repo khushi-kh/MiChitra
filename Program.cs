@@ -20,6 +20,17 @@ builder.Services.AddDbContext<MiChitraDbContext>(options =>
 // Add controllers
 builder.Services.AddControllers();
 
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 // Required for Swagger
 builder.Services.AddEndpointsApiExplorer();
 
@@ -116,6 +127,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 app.UseMiddleware<GlobalExceptionMiddleware>();
+
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
