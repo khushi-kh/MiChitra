@@ -24,7 +24,16 @@ namespace MiChitra.Controllers
         public async Task<IActionResult> GetAllMovies()
         {
             _logger.LogInformation("Fetching all movies");
-            var movies = await _context.Movies.ToListAsync();
+            var movies = await _context.Movies
+                .Select(m => new MovieResponseDto
+                {
+                    MovieId = m.MovieId,
+                    MovieName = m.MovieName,
+                    Description = m.Description,
+                    Language = m.Language,
+                    Rating = m.Rating
+                })
+                .ToListAsync();
             return Ok(movies);
         }
 
@@ -34,7 +43,18 @@ namespace MiChitra.Controllers
         {
             _logger.LogInformation("Fetching movie with ID: {MovieId}", id);
 
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _context.Movies
+                .Where(m => m.MovieId == id)
+                .Select(m => new MovieResponseDto
+                {
+                    MovieId = m.MovieId,
+                    MovieName = m.MovieName,
+                    Description = m.Description,
+                    Language = m.Language,
+                    Rating = m.Rating
+                })
+                .FirstOrDefaultAsync();
+
             if (movie == null)
             {
                 _logger.LogWarning("Movie with ID {MovieId} not found", id);

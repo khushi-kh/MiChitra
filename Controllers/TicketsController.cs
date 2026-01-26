@@ -23,8 +23,6 @@ namespace MiChitra.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllTickets()
         {
-            _logger.LogInformation("Fetching all tickets");
-
             var tickets = await _context.Tickets
                 .Include(t => t.MovieShow)
                     .ThenInclude(ms => ms.Movie)
@@ -32,8 +30,26 @@ namespace MiChitra.Controllers
                     .ThenInclude(ms => ms.Theatre)
                 .ToListAsync();
 
-            return Ok(tickets);
+            var ticketDtos = tickets.Select(t => new TicketResponseDTO
+            {
+                UserId = t.UserId,
+                TicketId = t.TicketId,
+                BookingDate = t.BookingDate,
+                NumberOfSeats = t.NumberOfSeats,
+                TotalPrice = t.TotalPrice,
+                Status = t.Status,
+
+                MovieShowId = t.MovieShow!.Id,
+                ShowTime = t.MovieShow.ShowTime,
+                PricePerSeat = t.MovieShow.PricePerSeat,
+
+                MovieName = t.MovieShow.Movie!.MovieName,
+                TheatreName = t.MovieShow.Theatre!.Name
+            }).ToList();
+
+            return Ok(ticketDtos);
         }
+
 
         // GET: api/tickets/{id}
         [HttpGet("{id}")]
@@ -54,7 +70,25 @@ namespace MiChitra.Controllers
                 return NotFound("Ticket not found");
             }
 
-            return Ok(ticket);
+            var dto = new TicketResponseDTO
+            {
+                UserId = ticket.UserId,
+                TicketId = ticket.TicketId,
+                BookingDate = ticket.BookingDate,
+                NumberOfSeats = ticket.NumberOfSeats,
+                TotalPrice = ticket.TotalPrice,
+                Status = ticket.Status,
+
+                MovieShowId = ticket.MovieShow!.Id,
+                ShowTime = ticket.MovieShow.ShowTime,
+                PricePerSeat = ticket.MovieShow.PricePerSeat,
+
+                MovieName = ticket.MovieShow.Movie!.MovieName,
+                TheatreName = ticket.MovieShow.Theatre!.Name
+            };
+
+            return Ok(dto);
+
         }
 
         // GET: api/tickets/user/{userId}
@@ -71,7 +105,24 @@ namespace MiChitra.Controllers
                 .Where(t => t.UserId == userId)
                 .ToListAsync();
 
-            return Ok(tickets);
+            var ticketDtos = tickets.Select(t => new TicketResponseDTO
+            {
+                TicketId = t.TicketId,
+                BookingDate = t.BookingDate,
+                NumberOfSeats = t.NumberOfSeats,
+                TotalPrice = t.TotalPrice,
+                Status = t.Status,
+
+                MovieShowId = t.MovieShow!.Id,
+                ShowTime = t.MovieShow.ShowTime,
+                PricePerSeat = t.MovieShow.PricePerSeat,
+
+                MovieName = t.MovieShow.Movie!.MovieName,
+                TheatreName = t.MovieShow.Theatre!.Name
+            }).ToList();
+
+            return Ok(ticketDtos);
+
         }
 
         // POST: api/tickets/book
@@ -81,7 +132,11 @@ namespace MiChitra.Controllers
             _logger.LogInformation("Booking ticket for User {UserId}, Show {ShowId}, Seats {Seats}",
                 dto.UserId, dto.MovieShowId, dto.NumberOfSeats);
 
-            var movieShow = await _context.MovieShows.FindAsync(dto.MovieShowId);
+            var movieShow = await _context.MovieShows
+                .Include(ms => ms.Movie)
+                .Include(ms => ms.Theatre)
+                .FirstOrDefaultAsync(ms => ms.Id == dto.MovieShowId);
+
             if (movieShow == null)
             {
                 _logger.LogWarning("MovieShow {ShowId} not found", dto.MovieShowId);
@@ -97,7 +152,6 @@ namespace MiChitra.Controllers
 
             var totalPrice = dto.NumberOfSeats * movieShow.PricePerSeat;
 
-            // Deduct seats
             movieShow.AvailableSeats -= dto.NumberOfSeats;
 
             var ticket = new Ticket
@@ -115,8 +169,27 @@ namespace MiChitra.Controllers
 
             _logger.LogInformation("Ticket booked successfully. TicketId: {TicketId}", ticket.TicketId);
 
-            return Ok(ticket);
+            // Return DTO, not entity
+            var response = new TicketResponseDTO
+            {
+                UserId = ticket.UserId,
+                TicketId = ticket.TicketId,
+                BookingDate = ticket.BookingDate,
+                NumberOfSeats = ticket.NumberOfSeats,
+                TotalPrice = ticket.TotalPrice,
+                Status = ticket.Status,
+
+                MovieShowId = movieShow.Id,
+                ShowTime = movieShow.ShowTime,
+                PricePerSeat = movieShow.PricePerSeat,
+
+                MovieName = movieShow.Movie!.MovieName,
+                TheatreName = movieShow.Theatre!.Name
+            };
+
+            return Ok(response);
         }
+
 
         // PUT: api/tickets/cancel/{ticketId}
         [HttpPut("cancel/{ticketId}")]

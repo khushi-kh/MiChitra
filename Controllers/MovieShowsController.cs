@@ -26,6 +26,20 @@ namespace MiChitra.Controllers
             var shows = await _context.MovieShows
                 .Include(s => s.Movie)
                 .Include(s => s.Theatre)
+                .Select(s => new MovieShowResponseDTO
+                {
+                    Id = s.Id,
+                    MovieId = s.MovieId,
+                    MovieName = s.Movie!.MovieName,
+                    TheatreId = s.TheatreId,
+                    TheatreName = s.Theatre!.Name,
+                    City = s.Theatre!.City,
+                    ShowTime = s.ShowTime,
+                    TotalSeats = s.TotalSeats,
+                    AvailableSeats = s.AvailableSeats,
+                    PricePerSeat = s.PricePerSeat,
+                    Status = s.Status
+                })
                 .ToListAsync();
 
             return Ok(shows);
@@ -38,7 +52,22 @@ namespace MiChitra.Controllers
             var show = await _context.MovieShows
                 .Include(s => s.Movie)
                 .Include(s => s.Theatre)
-                .FirstOrDefaultAsync(s => s.Id == id);
+                .Where(s => s.Id == id)
+                .Select(s => new MovieShowResponseDTO
+                {
+                    Id = s.Id,
+                    MovieId = s.MovieId,
+                    MovieName = s.Movie!.MovieName,
+                    TheatreId = s.TheatreId,
+                    TheatreName = s.Theatre!.Name,
+                    City = s.Theatre!.City,
+                    ShowTime = s.ShowTime,
+                    TotalSeats = s.TotalSeats,
+                    AvailableSeats = s.AvailableSeats,
+                    PricePerSeat = s.PricePerSeat,
+                    Status = s.Status
+                })
+                .FirstOrDefaultAsync();
 
             if (show == null)
                 return NotFound("Show not found");
@@ -53,6 +82,20 @@ namespace MiChitra.Controllers
             var shows = await _context.MovieShows
                 .Include(s => s.Theatre)
                 .Where(s => s.MovieId == movieId)
+                .Select(s => new MovieShowResponseDTO
+                {
+                    Id = s.Id,
+                    MovieId = s.MovieId,
+                    MovieName = s.Movie!.MovieName,
+                    TheatreId = s.TheatreId,
+                    TheatreName = s.Theatre!.Name,
+                    City = s.Theatre!.City,
+                    ShowTime = s.ShowTime,
+                    TotalSeats = s.TotalSeats,
+                    AvailableSeats = s.AvailableSeats,
+                    PricePerSeat = s.PricePerSeat,
+                    Status = s.Status
+                })
                 .ToListAsync();
 
             return Ok(shows);
@@ -64,7 +107,22 @@ namespace MiChitra.Controllers
         {
             var shows = await _context.MovieShows
                 .Include(s => s.Movie)
+                .Include(s => s.Theatre)
                 .Where(s => s.TheatreId == theatreId)
+                .Select(s => new MovieShowResponseDTO
+                {
+                    Id = s.Id,
+                    MovieId = s.MovieId,
+                    MovieName = s.Movie!.MovieName,
+                    TheatreId = s.TheatreId,
+                    TheatreName = s.Theatre!.Name,
+                    City = s.Theatre!.City,
+                    ShowTime = s.ShowTime,
+                    TotalSeats = s.TotalSeats,
+                    AvailableSeats = s.AvailableSeats,
+                    PricePerSeat = s.PricePerSeat,
+                    Status = s.Status
+                })
                 .ToListAsync();
 
             return Ok(shows);
@@ -78,6 +136,20 @@ namespace MiChitra.Controllers
                 .Include(s => s.Movie)
                 .Include(s => s.Theatre)
                 .Where(s => s.Theatre!.City.ToLower() == city.ToLower())
+                .Select(s => new MovieShowResponseDTO
+                {
+                    Id = s.Id,
+                    MovieId = s.MovieId,
+                    MovieName = s.Movie!.MovieName,
+                    TheatreId = s.TheatreId,
+                    TheatreName = s.Theatre!.Name,
+                    City = s.Theatre!.City,
+                    ShowTime = s.ShowTime,
+                    TotalSeats = s.TotalSeats,
+                    AvailableSeats = s.AvailableSeats,
+                    PricePerSeat = s.PricePerSeat,
+                    Status = s.Status
+                })
                 .ToListAsync();
 
             return Ok(shows);
@@ -101,8 +173,32 @@ namespace MiChitra.Controllers
             _context.MovieShows.Add(show);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetShowById), new { id = show.Id }, show);
+            // Fetch again and project into DTO (this is where names get populated)
+            var result = await _context.MovieShows
+                .Where(ms => ms.Id == show.Id)
+                .Select(ms => new MovieShowResponseDTO
+                {
+                    Id = ms.Id,
+
+                    MovieId = ms.MovieId,
+                    MovieName = ms.Movie!.MovieName,
+
+                    TheatreId = ms.TheatreId,
+                    TheatreName = ms.Theatre!.Name,
+
+                    ShowTime = ms.ShowTime,
+                    TotalSeats = ms.TotalSeats,
+                    AvailableSeats = ms.AvailableSeats,
+                    PricePerSeat = ms.PricePerSeat,
+                    Status = MovieShowStatus.Available
+
+
+                })
+                .FirstAsync();
+
+            return CreatedAtAction(nameof(GetShowById), new { id = result.Id }, result);
         }
+
 
         // PUT: api/movieshows/{id}
         [HttpPut("{id}")]
