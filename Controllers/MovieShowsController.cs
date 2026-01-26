@@ -1,8 +1,7 @@
-﻿using MiChitra.Data;
 using MiChitra.Models;
 using MiChitra.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using MiChitra.Interfaces;
 
 namespace MiChitra.Controllers
 {
@@ -10,152 +9,114 @@ namespace MiChitra.Controllers
     [ApiController]
     public class MovieShowsController : ControllerBase
     {
-        private readonly MiChitraDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<MovieShowsController> _logger;
 
-        public MovieShowsController(MiChitraDbContext context, ILogger<MovieShowsController> logger)
+        public MovieShowsController(IUnitOfWork unitOfWork, ILogger<MovieShowsController> logger)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
-        // GET: api/movieshows
         [HttpGet]
         public async Task<IActionResult> GetAllShows()
         {
-            var shows = await _context.MovieShows
-                .Include(s => s.Movie)
-                .Include(s => s.Theatre)
-                .Select(s => new MovieShowResponseDTO
-                {
-                    Id = s.Id,
-                    MovieId = s.MovieId,
-                    MovieName = s.Movie!.MovieName,
-                    TheatreId = s.TheatreId,
-                    TheatreName = s.Theatre!.Name,
-                    City = s.Theatre!.City,
-                    ShowTime = s.ShowTime,
-                    TotalSeats = s.TotalSeats,
-                    AvailableSeats = s.AvailableSeats,
-                    PricePerSeat = s.PricePerSeat,
-                    Status = s.Status
-                })
-                .ToListAsync();
-
-            return Ok(shows);
+            var shows = await _unitOfWork.MovieShows.GetAllAsync();
+            var showDtos = shows.Select(s => new MovieShowResponseDTO
+            {
+                Id = s.Id,
+                MovieId = s.MovieId,
+                TheatreId = s.TheatreId,
+                ShowTime = s.ShowTime,
+                TotalSeats = s.TotalSeats,
+                AvailableSeats = s.AvailableSeats,
+                PricePerSeat = s.PricePerSeat,
+                Status = s.Status
+            });
+            return Ok(showDtos);
         }
 
-        // GET: api/movieshows/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetShowById(int id)
         {
-            var show = await _context.MovieShows
-                .Include(s => s.Movie)
-                .Include(s => s.Theatre)
-                .Where(s => s.Id == id)
-                .Select(s => new MovieShowResponseDTO
-                {
-                    Id = s.Id,
-                    MovieId = s.MovieId,
-                    MovieName = s.Movie!.MovieName,
-                    TheatreId = s.TheatreId,
-                    TheatreName = s.Theatre!.Name,
-                    City = s.Theatre!.City,
-                    ShowTime = s.ShowTime,
-                    TotalSeats = s.TotalSeats,
-                    AvailableSeats = s.AvailableSeats,
-                    PricePerSeat = s.PricePerSeat,
-                    Status = s.Status
-                })
-                .FirstOrDefaultAsync();
-
+            var show = await _unitOfWork.MovieShows.GetByIdAsync(id);
             if (show == null)
                 return NotFound("Show not found");
 
-            return Ok(show);
+            var showDto = new MovieShowResponseDTO
+            {
+                Id = show.Id,
+                MovieId = show.MovieId,
+                TheatreId = show.TheatreId,
+                ShowTime = show.ShowTime,
+                TotalSeats = show.TotalSeats,
+                AvailableSeats = show.AvailableSeats,
+                PricePerSeat = show.PricePerSeat,
+                Status = show.Status
+            };
+            return Ok(showDto);
         }
 
-        // GET: api/movieshows/movie/{movieId}
         [HttpGet("movie/{movieId}")]
         public async Task<IActionResult> GetShowsByMovie(int movieId)
         {
-            var shows = await _context.MovieShows
-                .Include(s => s.Theatre)
-                .Where(s => s.MovieId == movieId)
-                .Select(s => new MovieShowResponseDTO
-                {
-                    Id = s.Id,
-                    MovieId = s.MovieId,
-                    MovieName = s.Movie!.MovieName,
-                    TheatreId = s.TheatreId,
-                    TheatreName = s.Theatre!.Name,
-                    City = s.Theatre!.City,
-                    ShowTime = s.ShowTime,
-                    TotalSeats = s.TotalSeats,
-                    AvailableSeats = s.AvailableSeats,
-                    PricePerSeat = s.PricePerSeat,
-                    Status = s.Status
-                })
-                .ToListAsync();
-
-            return Ok(shows);
+            var shows = await _unitOfWork.MovieShows.GetShowsByMovieIdAsync(movieId);
+            var showDtos = shows.Select(s => new MovieShowResponseDTO
+            {
+                Id = s.Id,
+                MovieId = s.MovieId,
+                TheatreId = s.TheatreId,
+                ShowTime = s.ShowTime,
+                TotalSeats = s.TotalSeats,
+                AvailableSeats = s.AvailableSeats,
+                PricePerSeat = s.PricePerSeat,
+                Status = s.Status
+            });
+            return Ok(showDtos);
         }
 
-        // GET: api/movieshows/theatre/{theatreId}
         [HttpGet("theatre/{theatreId}")]
         public async Task<IActionResult> GetShowsByTheatre(int theatreId)
         {
-            var shows = await _context.MovieShows
-                .Include(s => s.Movie)
-                .Include(s => s.Theatre)
-                .Where(s => s.TheatreId == theatreId)
-                .Select(s => new MovieShowResponseDTO
-                {
-                    Id = s.Id,
-                    MovieId = s.MovieId,
-                    MovieName = s.Movie!.MovieName,
-                    TheatreId = s.TheatreId,
-                    TheatreName = s.Theatre!.Name,
-                    City = s.Theatre!.City,
-                    ShowTime = s.ShowTime,
-                    TotalSeats = s.TotalSeats,
-                    AvailableSeats = s.AvailableSeats,
-                    PricePerSeat = s.PricePerSeat,
-                    Status = s.Status
-                })
-                .ToListAsync();
-
-            return Ok(shows);
+            var shows = await _unitOfWork.MovieShows.GetShowsByTheatreIdAsync(theatreId);
+            var showDtos = shows.Select(s => new MovieShowResponseDTO
+            {
+                Id = s.Id,
+                MovieId = s.MovieId,
+                TheatreId = s.TheatreId,
+                ShowTime = s.ShowTime,
+                TotalSeats = s.TotalSeats,
+                AvailableSeats = s.AvailableSeats,
+                PricePerSeat = s.PricePerSeat,
+                Status = s.Status
+            });
+            return Ok(showDtos);
         }
 
-        // GET: api/movieshows/city/{city}
         [HttpGet("city/{city}")]
         public async Task<IActionResult> GetShowsByCity(string city)
         {
-            var shows = await _context.MovieShows
-                .Include(s => s.Movie)
-                .Include(s => s.Theatre)
-                .Where(s => s.Theatre!.City.ToLower() == city.ToLower())
-                .Select(s => new MovieShowResponseDTO
-                {
-                    Id = s.Id,
-                    MovieId = s.MovieId,
-                    MovieName = s.Movie!.MovieName,
-                    TheatreId = s.TheatreId,
-                    TheatreName = s.Theatre!.Name,
-                    City = s.Theatre!.City,
-                    ShowTime = s.ShowTime,
-                    TotalSeats = s.TotalSeats,
-                    AvailableSeats = s.AvailableSeats,
-                    PricePerSeat = s.PricePerSeat,
-                    Status = s.Status
-                })
-                .ToListAsync();
-
-            return Ok(shows);
+            var theatres = await _unitOfWork.Theatres.GetTheatresByCityAsync(city);
+            var shows = new List<MovieShow>();
+            foreach (var theatre in theatres)
+            {
+                var theatreShows = await _unitOfWork.MovieShows.GetShowsByTheatreIdAsync(theatre.TheatreId);
+                shows.AddRange(theatreShows);
+            }
+            var showDtos = shows.Select(s => new MovieShowResponseDTO
+            {
+                Id = s.Id,
+                MovieId = s.MovieId,
+                TheatreId = s.TheatreId,
+                ShowTime = s.ShowTime,
+                TotalSeats = s.TotalSeats,
+                AvailableSeats = s.AvailableSeats,
+                PricePerSeat = s.PricePerSeat,
+                Status = s.Status
+            });
+            return Ok(showDtos);
         }
 
-        // POST: api/movieshows
         [HttpPost]
         public async Task<IActionResult> CreateShow([FromBody] CreateMovieShowDto dto)
         {
@@ -170,41 +131,16 @@ namespace MiChitra.Controllers
                 Status = MovieShowStatus.Available
             };
 
-            _context.MovieShows.Add(show);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.MovieShows.AddAsync(show);
+            await _unitOfWork.SaveChangesAsync();
 
-            // Fetch again and project into DTO (this is where names get populated)
-            var result = await _context.MovieShows
-                .Where(ms => ms.Id == show.Id)
-                .Select(ms => new MovieShowResponseDTO
-                {
-                    Id = ms.Id,
-
-                    MovieId = ms.MovieId,
-                    MovieName = ms.Movie!.MovieName,
-
-                    TheatreId = ms.TheatreId,
-                    TheatreName = ms.Theatre!.Name,
-
-                    ShowTime = ms.ShowTime,
-                    TotalSeats = ms.TotalSeats,
-                    AvailableSeats = ms.AvailableSeats,
-                    PricePerSeat = ms.PricePerSeat,
-                    Status = MovieShowStatus.Available
-
-
-                })
-                .FirstAsync();
-
-            return CreatedAtAction(nameof(GetShowById), new { id = result.Id }, result);
+            return CreatedAtAction(nameof(GetShowById), new { id = show.Id }, show);
         }
 
-
-        // PUT: api/movieshows/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateShow(int id, [FromBody] UpdateMovieShowDto dto)
         {
-            var show = await _context.MovieShows.FindAsync(id);
+            var show = await _unitOfWork.MovieShows.GetByIdAsync(id);
             if (show == null)
                 return NotFound("Show not found");
 
@@ -213,20 +149,20 @@ namespace MiChitra.Controllers
             show.AvailableSeats = dto.AvailableSeats;
             show.PricePerSeat = dto.PricePerSeat;
 
-            await _context.SaveChangesAsync();
+            _unitOfWork.MovieShows.Update(show);
+            await _unitOfWork.SaveChangesAsync();
             return NoContent();
         }
 
-        // DELETE: api/movieshows/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShow(int id)
         {
-            var show = await _context.MovieShows.FindAsync(id);
+            var show = await _unitOfWork.MovieShows.GetByIdAsync(id);
             if (show == null)
                 return NotFound("Show not found");
 
-            _context.MovieShows.Remove(show);
-            await _context.SaveChangesAsync();
+            _unitOfWork.MovieShows.Delete(show);
+            await _unitOfWork.SaveChangesAsync();
 
             return NoContent();
         }

@@ -1,9 +1,7 @@
-﻿using MiChitra.Data;
-using MiChitra.Interfaces;
+﻿using MiChitra.Interfaces;
 using MiChitra.Models;
 using Microsoft.AspNetCore.Mvc;
 using MiChitra.DTOs;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.RateLimiting;
 
@@ -15,16 +13,16 @@ namespace MiChitra.Controllers
     [Produces("application/json")]
     public class AuthController : ControllerBase
     {
-        private readonly MiChitraDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IJwtService _jwtService;
         private readonly ILogger<AuthController> _logger;
 
         public AuthController(
-            MiChitraDbContext context,
+            IUnitOfWork unitOfWork,
             IJwtService jwtService,
             ILogger<AuthController> logger)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _jwtService = jwtService;
             _logger = logger;
         }
@@ -49,14 +47,14 @@ namespace MiChitra.Controllers
                 }
 
                 // Check if username already exists
-                if (await _context.Users.AnyAsync(u => u.Username == registerDto.Username))
+                if (await _unitOfWork.Users.ExistsAsync(u => u.Username == registerDto.Username))
                 {
                     _logger.LogWarning("Registration failed: Username {Username} already exists", registerDto.Username);
                     return Conflict(new { message = "Username already exists" });
                 }
 
                 // Check if email already exists
-                if (await _context.Users.AnyAsync(u => u.Email == registerDto.Email))
+                if (await _unitOfWork.Users.ExistsAsync(u => u.Email == registerDto.Email))
                 {
                     _logger.LogWarning("Registration failed: Email already exists");
                     return Conflict(new { message = "Email already exists" });
@@ -71,8 +69,8 @@ namespace MiChitra.Controllers
                     Role = UserRole.User
                 };
 
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
+                await _unitOfWork.Users.AddAsync(user);
+                await _unitOfWork.SaveChangesAsync();
 
                 _logger.LogInformation("User registered successfully: {Username}", user.Username);
 
@@ -100,8 +98,7 @@ namespace MiChitra.Controllers
         {
             _logger.LogInformation("Login requested for username: {Username}", loginDto.Username);
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username == loginDto.Username);
+            var user = await _unitOfWork.Users.GetByUsernameAsync(loginDto.Username);
 
             if (user == null)
             {

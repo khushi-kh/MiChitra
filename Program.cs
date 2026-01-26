@@ -2,6 +2,7 @@ using MiChitra.Data;
 using MiChitra.Interfaces;
 using MiChitra.Services;
 using MiChitra.Middleware;
+using MiChitra.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
@@ -19,6 +20,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Register DbContext
 builder.Services.AddDbContext<MiChitraDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register Repository Pattern
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<ITheatreRepository, TheatreRepository>();
+builder.Services.AddScoped<IMovieShowRepository, MovieShowRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Add controllers
 builder.Services.AddControllers();
@@ -148,8 +157,8 @@ var app = builder.Build();
 // Seed database
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<MiChitraDbContext>();
-    await DataSeeder.SeedAsync(context);
+    var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+    await DataSeeder.SeedAsync(unitOfWork);
 }
 
 // Enable Swagger middleware

@@ -1,8 +1,7 @@
-﻿using MiChitra.Data;
-using MiChitra.DTOs;
+﻿using MiChitra.DTOs;
 using MiChitra.Models;
+using MiChitra.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.RateLimiting;
 
 namespace MiChitra.Controllers
@@ -12,12 +11,12 @@ namespace MiChitra.Controllers
     [EnableRateLimiting("GeneralPolicy")]
     public class MoviesController : ControllerBase
     {
-        private readonly MiChitraDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<MoviesController> _logger;
 
-        public MoviesController(MiChitraDbContext context, ILogger<MoviesController> logger)
+        public MoviesController(IUnitOfWork unitOfWork, ILogger<MoviesController> logger)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
@@ -26,17 +25,16 @@ namespace MiChitra.Controllers
         public async Task<IActionResult> GetAllMovies()
         {
             _logger.LogInformation("Fetching all movies");
-            var movies = await _context.Movies
-                .Select(m => new MovieResponseDto
-                {
-                    MovieId = m.MovieId,
-                    MovieName = m.MovieName,
-                    Description = m.Description,
-                    Language = m.Language,
-                    Rating = m.Rating
-                })
-                .ToListAsync();
-            return Ok(movies);
+            var movies = await _unitOfWork.Movies.GetAllAsync();
+            var movieDtos = movies.Select(m => new MovieResponseDto
+            {
+                MovieId = m.MovieId,
+                MovieName = m.MovieName,
+                Description = m.Description,
+                Language = m.Language,
+                Rating = m.Rating
+            });
+            return Ok(movieDtos);
         }
 
         // 2. GET: api/movies/{id}
@@ -45,25 +43,23 @@ namespace MiChitra.Controllers
         {
             _logger.LogInformation("Fetching movie with ID: {MovieId}", id);
 
-            var movie = await _context.Movies
-                .Where(m => m.MovieId == id)
-                .Select(m => new MovieResponseDto
-                {
-                    MovieId = m.MovieId,
-                    MovieName = m.MovieName,
-                    Description = m.Description,
-                    Language = m.Language,
-                    Rating = m.Rating
-                })
-                .FirstOrDefaultAsync();
-
+            var movie = await _unitOfWork.Movies.GetByIdAsync(id);
             if (movie == null)
             {
                 _logger.LogWarning("Movie with ID {MovieId} not found", id);
                 return NotFound("Movie not found");
             }
 
-            return Ok(movie);
+            var movieDto = new MovieResponseDto
+            {
+                MovieId = movie.MovieId,
+                MovieName = movie.MovieName,
+                Description = movie.Description,
+                Language = movie.Language,
+                Rating = movie.Rating
+            };
+
+            return Ok(movieDto);
         }
 
         // 3. POST: api/movies
@@ -80,8 +76,8 @@ namespace MiChitra.Controllers
                 Rating = dto.Rating
             };
 
-            _context.Movies.Add(movie);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Movies.AddAsync(movie);
+            await _unitOfWork.SaveChangesAsync();
 
             _logger.LogInformation("Movie added successfully with ID: {MovieId}", movie.MovieId);
 
@@ -94,7 +90,7 @@ namespace MiChitra.Controllers
         {
             _logger.LogInformation("Updating movie with ID: {MovieId}", id);
 
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _unitOfWork.Movies.GetByIdAsync(id);
             if (movie == null)
             {
                 _logger.LogWarning("Movie with ID {MovieId} not found for update", id);
@@ -106,7 +102,8 @@ namespace MiChitra.Controllers
             movie.Language = dto.Language;
             movie.Rating = dto.Rating;
 
-            await _context.SaveChangesAsync();
+            _unitOfWork.Movies.Update(movie);
+            await _unitOfWork.SaveChangesAsync();
 
             _logger.LogInformation("Movie with ID {MovieId} updated successfully", id);
 
@@ -119,15 +116,15 @@ namespace MiChitra.Controllers
         {
             _logger.LogInformation("Deleting movie with ID: {MovieId}", id);
 
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _unitOfWork.Movies.GetByIdAsync(id);
             if (movie == null)
             {
                 _logger.LogWarning("Movie with ID {MovieId} not found for deletion", id);
                 return NotFound("Movie not found");
             }
 
-            _context.Movies.Remove(movie);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Movies.Delete(movie);
+            await _unitOfWork.SaveChangesAsync();
 
             _logger.LogInformation("Movie with ID {MovieId} deleted successfully", id);
 
