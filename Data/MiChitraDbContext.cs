@@ -22,7 +22,7 @@ namespace MiChitra.Data
                 entity.HasIndex(u => u.Username).IsUnique();
                 entity.HasIndex(u => u.Email).IsUnique();
                 entity.Property(u => u.ContactNumber).HasMaxLength(10);
-                entity.Property(u => u.Role).HasConversion<int>();
+                entity.Property(u => u.Role).HasConversion<string>();
             });
 
             // Movie entity configuration
@@ -70,7 +70,7 @@ namespace MiChitra.Data
                       .OnDelete(DeleteBehavior.Cascade);
 
                 entity.Property(t => t.TotalPrice).HasPrecision(10, 2);
-                entity.Property(t => t.Status).HasConversion<int>();
+                entity.Property(t => t.Status).HasConversion<string>();
             });
 
         }

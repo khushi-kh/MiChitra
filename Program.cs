@@ -1,4 +1,5 @@
 using MiChitra.Data;
+using MiChitra.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
@@ -33,6 +34,13 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+// Seed database
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<MiChitraDbContext>();
+    await DataSeeder.SeedAsync(context);
+}
 
 // Enable Swagger middleware
 if (app.Environment.IsDevelopment())
