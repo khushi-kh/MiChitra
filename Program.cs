@@ -29,6 +29,14 @@ builder.Services.AddScoped<IMovieShowRepository, MovieShowRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+// Register Service Layer
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<ITheatreService, TheatreService>();
+builder.Services.AddScoped<IMovieShowService, MovieShowService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 // Add controllers
 builder.Services.AddControllers();
 

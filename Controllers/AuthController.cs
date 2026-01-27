@@ -1,10 +1,8 @@
 ﻿using MiChitra.Interfaces;
-using MiChitra.Models;
 using Microsoft.AspNetCore.Mvc;
 using MiChitra.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.RateLimiting;
-
 
 namespace MiChitra.Controllers
 {
@@ -13,21 +11,15 @@ namespace MiChitra.Controllers
     [Produces("application/json")]
     public class AuthController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IJwtService _jwtService;
+        private readonly IAuthService _authService;
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(
-            IUnitOfWork unitOfWork,
-            IJwtService jwtService,
-            ILogger<AuthController> logger)
+        public AuthController(IAuthService authService, ILogger<AuthController> logger)
         {
-            _unitOfWork = unitOfWork;
-            _jwtService = jwtService;
+            _authService = authService;
             _logger = logger;
         }
 
-        // POST: api/Auth/Register
         [HttpPost("Register")]
         [EnableRateLimiting("AuthPolicy")]
         public async Task<ActionResult<AuthResponse>> Register([FromBody] RegisterDTO registerDto)
@@ -36,7 +28,6 @@ namespace MiChitra.Controllers
             {
                 _logger.LogInformation("User registration requested");
 
-                // validate model state
                 if (!ModelState.IsValid)
                 {
                     var errors = ModelState.Values
@@ -46,43 +37,14 @@ namespace MiChitra.Controllers
                     return BadRequest(new { message = "Invalid data", errors });
                 }
 
-                // Check if username already exists
-                if (await _unitOfWork.Users.ExistsAsync(u => u.Username == registerDto.Username))
-                {
-                    _logger.LogWarning("Registration failed: Username {Username} already exists", registerDto.Username);
-                    return Conflict(new { message = "Username already exists" });
-                }
-
-                // Check if email already exists
-                if (await _unitOfWork.Users.ExistsAsync(u => u.Email == registerDto.Email))
-                {
-                    _logger.LogWarning("Registration failed: Email already exists");
-                    return Conflict(new { message = "Email already exists" });
-                }
-                
-                var user = new User
-                {
-                    Username = registerDto.Username,
-                    Email = registerDto.Email,
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
-                    CreatedAt = DateTime.UtcNow,
-                    Role = UserRole.User
-                };
-
-                await _unitOfWork.Users.AddAsync(user);
-                await _unitOfWork.SaveChangesAsync();
-
-                _logger.LogInformation("User registered successfully: {Username}", user.Username);
-
-                var token = _jwtService.GenerateToken(user);
-
-                return Ok(new AuthResponse
-                {
-                    Token = token,
-                    UserId = user.UserId,
-                    Username = user.Username,
-                    Email = user.Email
-                });
+                var response = await _authService.RegisterAsync(registerDto);
+                _logger.LogInformation("User registered successfully: {Username}", response.Username);
+                return Ok(response);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning("Registration failed: {Message}", ex.Message);
+                return Conflict(new { message = ex.Message });
             }
             catch (Exception ex)
             {
@@ -91,39 +53,27 @@ namespace MiChitra.Controllers
             }
         }
 
-        // POST: api/Auth/Login
         [HttpPost("Login")]
         [EnableRateLimiting("AuthPolicy")]
         public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginDTO loginDto)
         {
-            _logger.LogInformation("Login requested for username: {Username}", loginDto.Username);
-
-            var user = await _unitOfWork.Users.GetByUsernameAsync(loginDto.Username);
-
-            if (user == null)
+            try
             {
-                _logger.LogWarning("Login failed: Username not found");
-                return Unauthorized(new { message = "Invalid username or password" });
+                _logger.LogInformation("Login requested for username: {Username}", loginDto.Username);
+                var response = await _authService.LoginAsync(loginDto);
+                _logger.LogInformation("Login successful for username: {Username}", response.Username);
+                return Ok(response);
             }
-
-            // Verify hashed password
-            if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+            catch (UnauthorizedAccessException ex)
             {
-                _logger.LogWarning("Login failed: Incorrect password");
-                return Unauthorized(new { message = "Invalid username or password" });
+                _logger.LogWarning("Login failed: {Message}", ex.Message);
+                return Unauthorized(new { message = ex.Message });
             }
-
-            var token = _jwtService.GenerateToken(user);
-
-            _logger.LogInformation("Login successful for username: {Username}", user.Username);
-
-            return Ok(new AuthResponse
+            catch (Exception ex)
             {
-                Token = token,
-                UserId = user.UserId,
-                Username = user.Username,
-                Email = user.Email
-            });
+                _logger.LogError(ex, "Login failed for username: {Username}", loginDto.Username);
+                return StatusCode(500, new { message = "Internal server error" });
+            }
         }
     }
 }

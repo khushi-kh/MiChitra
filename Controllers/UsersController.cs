@@ -1,5 +1,4 @@
-﻿using MiChitra.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MiChitra.DTOs;
 using MiChitra.Interfaces;
 
@@ -9,86 +8,43 @@ namespace MiChitra.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserService _userService;
         private readonly ILogger<UsersController> _logger;
 
-        public UsersController(IUnitOfWork unitOfWork, ILogger<UsersController> logger)
+        public UsersController(IUserService userService, ILogger<UsersController> logger)
         {
-            _unitOfWork = unitOfWork;
+            _userService = userService;
             _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _unitOfWork.Users.GetActiveUsersAsync();
-            var userDtos = users.Select(u => new UserResponseDTO
-            {
-                UserId = u.UserId,
-                FName = u.FName,
-                LName = u.LName,
-                Username = u.Username,
-                Email = u.Email,
-                ContactNumber = u.ContactNumber,
-                CreatedAt = u.CreatedAt,
-                LastLoginAt = u.LastLoginAt,
-                IsActive = u.IsActive
-            });
-            return Ok(userDtos);
+            var users = await _userService.GetAllUsersAsync();
+            return Ok(users);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(id);
-            if (user == null || !user.IsActive)
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null)
                 return NotFound("User not found");
-            
-            var userDto = new UserResponseDTO
-            {
-                UserId = user.UserId,
-                FName = user.FName,
-                LName = user.LName,
-                Username = user.Username,
-                Email = user.Email,
-                ContactNumber = user.ContactNumber,
-                CreatedAt = user.CreatedAt,
-                LastLoginAt = user.LastLoginAt,
-                IsActive = user.IsActive
-            };
-            return Ok(userDto);
+            return Ok(user);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUserProfile(int id, [FromBody] UpdateUserDto dto)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(id);
-            if (user == null || !user.IsActive)
-                return NotFound("User not found");
-
-            user.FName = dto.FName;
-            user.LName = dto.LName;
-            user.Username = dto.Username;
-            user.ContactNumber = dto.ContactNumber;
-            user.Email = dto.Email;
-
-            _unitOfWork.Users.Update(user);
-            await _unitOfWork.SaveChangesAsync();
-
-            var userDto = new UserResponseDTO
+            try
             {
-                UserId = user.UserId,
-                FName = user.FName,
-                LName = user.LName,
-                Username = user.Username,
-                Email = user.Email,
-                ContactNumber = user.ContactNumber,
-                CreatedAt = user.CreatedAt,
-                LastLoginAt = user.LastLoginAt,
-                IsActive = user.IsActive
-            };
-            return Ok(userDto);
+                var user = await _userService.UpdateUserAsync(id, dto);
+                return Ok(user);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
-
 }

@@ -1,5 +1,4 @@
-﻿using MiChitra.Models;
-using MiChitra.DTOs;
+﻿using MiChitra.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using MiChitra.Interfaces;
 using Microsoft.AspNetCore.RateLimiting;
@@ -10,133 +9,68 @@ namespace MiChitra.Controllers
     [ApiController]
     public class TicketsController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ITicketService _ticketService;
         private readonly ILogger<TicketsController> _logger;
 
-        public TicketsController(IUnitOfWork unitOfWork, ILogger<TicketsController> logger)
+        public TicketsController(ITicketService ticketService, ILogger<TicketsController> logger)
         {
-            _unitOfWork = unitOfWork;
+            _ticketService = ticketService;
             _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllTickets()
         {
-            var tickets = await _unitOfWork.Tickets.GetAllAsync();
-            var ticketDtos = tickets.Select(t => new TicketResponseDTO
-            {
-                TicketId = t.TicketId,
-                UserId = t.UserId,
-                MovieShowId = t.MovieShowId,
-                BookingDate = t.BookingDate,
-                NumberOfSeats = t.NumberOfSeats,
-                TotalPrice = t.TotalPrice,
-                Status = t.Status
-            });
-            return Ok(ticketDtos);
+            var tickets = await _ticketService.GetAllTicketsAsync();
+            return Ok(tickets);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTicketById(int id)
         {
-            var ticket = await _unitOfWork.Tickets.GetByIdAsync(id);
+            var ticket = await _ticketService.GetTicketByIdAsync(id);
             if (ticket == null)
                 return NotFound("Ticket not found");
-            
-            var ticketDto = new TicketResponseDTO
-            {
-                TicketId = ticket.TicketId,
-                UserId = ticket.UserId,
-                MovieShowId = ticket.MovieShowId,
-                BookingDate = ticket.BookingDate,
-                NumberOfSeats = ticket.NumberOfSeats,
-                TotalPrice = ticket.TotalPrice,
-                Status = ticket.Status
-            };
-            return Ok(ticketDto);
+            return Ok(ticket);
         }
 
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetTicketsByUser(int userId)
         {
-            var tickets = await _unitOfWork.Tickets.GetTicketsByUserIdAsync(userId);
-            var ticketDtos = tickets.Select(t => new TicketResponseDTO
-            {
-                TicketId = t.TicketId,
-                UserId = t.UserId,
-                MovieShowId = t.MovieShowId,
-                BookingDate = t.BookingDate,
-                NumberOfSeats = t.NumberOfSeats,
-                TotalPrice = t.TotalPrice,
-                Status = t.Status
-            });
-            return Ok(ticketDtos);
+            var tickets = await _ticketService.GetTicketsByUserAsync(userId);
+            return Ok(tickets);
         }
 
         [HttpPost("book")]
         [EnableRateLimiting("BookingPolicy")]
         public async Task<IActionResult> BookTicket([FromBody] BookTicketDTO dto)
         {
-            var movieShow = await _unitOfWork.MovieShows.GetShowWithDetailsAsync(dto.MovieShowId);
-            if (movieShow == null)
-                return NotFound("Movie show not found");
-
-            if (movieShow.AvailableSeats < dto.NumberOfSeats)
-                return BadRequest("Not enough seats available");
-
-            var totalPrice = dto.NumberOfSeats * movieShow.PricePerSeat;
-            movieShow.AvailableSeats -= dto.NumberOfSeats;
-
-            var ticket = new Ticket
+            try
             {
-                UserId = dto.UserId,
-                MovieShowId = dto.MovieShowId,
-                NumberOfSeats = dto.NumberOfSeats,
-                TotalPrice = totalPrice,
-                BookingDate = DateTime.UtcNow,
-                Status = TicketStatus.Booked
-            };
-
-            await _unitOfWork.Tickets.AddAsync(ticket);
-            _unitOfWork.MovieShows.Update(movieShow);
-            await _unitOfWork.SaveChangesAsync();
-
-            var ticketDto = new TicketResponseDTO
+                var ticket = await _ticketService.BookTicketAsync(dto);
+                return Ok(ticket);
+            }
+            catch (InvalidOperationException ex)
             {
-                TicketId = ticket.TicketId,
-                UserId = ticket.UserId,
-                MovieShowId = ticket.MovieShowId,
-                BookingDate = ticket.BookingDate,
-                NumberOfSeats = ticket.NumberOfSeats,
-                TotalPrice = ticket.TotalPrice,
-                Status = ticket.Status
-            };
-            return Ok(ticketDto);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("cancel/{ticketId}")]
         [EnableRateLimiting("BookingPolicy")]
         public async Task<IActionResult> CancelTicket(int ticketId)
         {
-            var ticket = await _unitOfWork.Tickets.GetByIdAsync(ticketId);
-            if (ticket == null)
-                return NotFound("Ticket not found");
-
-            if (ticket.Status == TicketStatus.Cancelled)
-                return BadRequest("Ticket is already cancelled");
-
-            ticket.Status = TicketStatus.Cancelled;
-            var movieShow = await _unitOfWork.MovieShows.GetByIdAsync(ticket.MovieShowId);
-            if (movieShow != null)
+            try
             {
-                movieShow.AvailableSeats += ticket.NumberOfSeats;
-                _unitOfWork.MovieShows.Update(movieShow);
+                var success = await _ticketService.CancelTicketAsync(ticketId);
+                if (!success)
+                    return NotFound("Ticket not found");
+                return Ok("Ticket cancelled successfully");
             }
-
-            _unitOfWork.Tickets.Update(ticket);
-            await _unitOfWork.SaveChangesAsync();
-
-            return Ok("Ticket cancelled successfully");
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
