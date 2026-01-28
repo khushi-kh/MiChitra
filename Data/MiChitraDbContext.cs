@@ -12,6 +12,7 @@ namespace MiChitra.Data
         public DbSet<MovieShow> MovieShows { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -71,6 +72,18 @@ namespace MiChitra.Data
 
                 entity.Property(t => t.TotalPrice).HasPrecision(10, 2);
                 entity.Property(t => t.Status).HasConversion<string>();
+            });
+
+            // Payment entity configuration
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.HasOne(p => p.Ticket)
+                      .WithMany()
+                      .HasForeignKey(p => p.TicketId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.Property(p => p.Amount).HasPrecision(10, 2);
+                entity.Property(p => p.PaymentMethod).HasConversion<string>();
+                entity.Property(p => p.PaymentStatus).HasConversion<string>();
             });
 
         }

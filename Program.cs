@@ -2,7 +2,6 @@ using MiChitra.Data;
 using MiChitra.Interfaces;
 using MiChitra.Services;
 using MiChitra.Middleware;
-using MiChitra.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
@@ -14,20 +13,11 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Register DbContext
 builder.Services.AddDbContext<MiChitraDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Register Repository Pattern
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<ITheatreRepository, TheatreRepository>();
-builder.Services.AddScoped<IMovieShowRepository, MovieShowRepository>();
-builder.Services.AddScoped<ITicketRepository, TicketRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Register Service Layer
 builder.Services.AddScoped<IMovieService, MovieService>();
@@ -101,7 +91,7 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Description= "JWT Authorization header using the Bearer scheme. Enter JWT token like: Bearer {your_token}",
+        Description = "JWT Authorization header using the Bearer scheme. Enter JWT token like: Bearer {your_token}",
         Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
         BearerFormat = "JWT",
@@ -124,10 +114,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
-// Load XML comments
-var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-c.IncludeXmlComments(xmlPath);
+    // Load XML comments
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 });
 
 // JWT Configuration
@@ -165,8 +155,8 @@ var app = builder.Build();
 // Seed database
 using (var scope = app.Services.CreateScope())
 {
-    var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-    await DataSeeder.SeedAsync(unitOfWork);
+    var context = scope.ServiceProvider.GetRequiredService<MiChitraDbContext>();
+    await DataSeeder.SeedAsync(context);
 }
 
 // Enable Swagger middleware
