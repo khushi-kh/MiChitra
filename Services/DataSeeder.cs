@@ -1,34 +1,35 @@
-﻿using MiChitra.Interfaces;
+using MiChitra.Data;
 using MiChitra.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MiChitra.Services
 {
     public static class DataSeeder
     {
-        public static async Task SeedAsync(IUnitOfWork unitOfWork)
+        public static async Task SeedAsync(MiChitraDbContext context)
         {
             // Check if data already exists
-            var existingTheatres = await unitOfWork.Theatres.GetAllAsync();
+            var existingTheatres = await context.Theatres.ToListAsync();
             if (existingTheatres.Any())
             {
                 return; // Data already seeded
             }
             
             // Seed parent tables first
-            var users = await SeedUsersAsync(unitOfWork);
-            var theatres = await SeedTheatresAsync(unitOfWork);
-            var movies = await SeedMoviesAsync(unitOfWork);
-            await unitOfWork.SaveChangesAsync();
+            var users = await SeedUsersAsync(context);
+            var theatres = await SeedTheatresAsync(context);
+            var movies = await SeedMoviesAsync(context);
+            await context.SaveChangesAsync();
             
             // Then seed child tables
-            await SeedMovieShowsAsync(unitOfWork, movies, theatres);
-            await unitOfWork.SaveChangesAsync();
+            await SeedMovieShowsAsync(context, movies, theatres);
+            await context.SaveChangesAsync();
             
-            await SeedTicketsAsync(unitOfWork, users);
-            await unitOfWork.SaveChangesAsync();
+            await SeedTicketsAsync(context, users);
+            await context.SaveChangesAsync();
         }
 
-        private static async Task<List<Theatre>> SeedTheatresAsync(IUnitOfWork unitOfWork)
+        private static async Task<List<Theatre>> SeedTheatresAsync(MiChitraDbContext context)
         {
             var theatres = new List<Theatre>
             {
@@ -38,12 +39,12 @@ namespace MiChitra.Services
             };
             foreach (var theatre in theatres)
             {
-                await unitOfWork.Theatres.AddAsync(theatre);
+                context.Theatres.Add(theatre);
             }
             return theatres;
         }
 
-        private static async Task<List<User>> SeedUsersAsync(IUnitOfWork unitOfWork)
+        private static async Task<List<User>> SeedUsersAsync(MiChitraDbContext context)
         {
             var users = new List<User>
             {
@@ -71,12 +72,12 @@ namespace MiChitra.Services
             };
             foreach (var user in users)
             {
-                await unitOfWork.Users.AddAsync(user);
+                context.Users.Add(user);
             }
             return users;
         }
 
-        private static async Task<List<Movie>> SeedMoviesAsync(IUnitOfWork unitOfWork)
+        private static async Task<List<Movie>> SeedMoviesAsync(MiChitraDbContext context)
         {
             var movies = new List<Movie>
             {
@@ -121,12 +122,12 @@ namespace MiChitra.Services
             };
             foreach (var movie in movies)
             {
-                await unitOfWork.Movies.AddAsync(movie);
+                context.Movies.Add(movie);
             }
             return movies;
         }
 
-        private static async Task SeedMovieShowsAsync(IUnitOfWork unitOfWork, List<Movie> movies, List<Theatre> theatres)
+        private static async Task SeedMovieShowsAsync(MiChitraDbContext context, List<Movie> movies, List<Theatre> theatres)
         {
             var movieShows = new List<MovieShow>
             {
@@ -168,13 +169,13 @@ namespace MiChitra.Services
             };
             foreach (var show in movieShows)
             {
-                await unitOfWork.MovieShows.AddAsync(show);
+                context.MovieShows.Add(show);
             }
         }
 
-        private static async Task SeedTicketsAsync(IUnitOfWork unitOfWork, List<User> users)
+        private static async Task SeedTicketsAsync(MiChitraDbContext context, List<User> users)
         {
-            var movieShows = await unitOfWork.MovieShows.GetAllAsync();
+            var movieShows = await context.MovieShows.ToListAsync();
             var showsList = movieShows.ToList();
             
             var tickets = new List<Ticket>
@@ -200,10 +201,8 @@ namespace MiChitra.Services
             };
             foreach (var ticket in tickets)
             {
-                await unitOfWork.Tickets.AddAsync(ticket);
+                context.Tickets.Add(ticket);
             }
         }
-
-
     }
 }

@@ -1,6 +1,7 @@
 using MiChitra.DTOs;
-using Microsoft.AspNetCore.Mvc;
 using MiChitra.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MiChitra.Controllers
 {
@@ -18,65 +19,95 @@ namespace MiChitra.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllShows()
+        public async Task<IActionResult> GetAllMovieShows()
         {
-            var shows = await _movieShowService.GetAllShowsAsync();
+            var shows = await _movieShowService.GetAllMovieShowsAsync();
             return Ok(shows);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetShowById(int id)
+        public async Task<IActionResult> GetMovieShowById(int id)
         {
-            var show = await _movieShowService.GetShowByIdAsync(id);
+            var show = await _movieShowService.GetMovieShowByIdAsync(id);
             if (show == null)
-                return NotFound("Show not found");
+                return NotFound("Movie show not found");
             return Ok(show);
         }
 
         [HttpGet("movie/{movieId}")]
         public async Task<IActionResult> GetShowsByMovie(int movieId)
         {
-            var shows = await _movieShowService.GetShowsByMovieAsync(movieId);
+            var shows = await _movieShowService.GetShowsByMovieIdAsync(movieId);
             return Ok(shows);
         }
 
         [HttpGet("theatre/{theatreId}")]
         public async Task<IActionResult> GetShowsByTheatre(int theatreId)
         {
-            var shows = await _movieShowService.GetShowsByTheatreAsync(theatreId);
+            var shows = await _movieShowService.GetShowsByTheatreIdAsync(theatreId);
             return Ok(shows);
         }
 
-        [HttpGet("city/{city}")]
-        public async Task<IActionResult> GetShowsByCity(string city)
+        [HttpGet("available")]
+        public async Task<IActionResult> GetAvailableShows()
         {
-            var shows = await _movieShowService.GetShowsByCityAsync(city);
+            var shows = await _movieShowService.GetAvailableShowsAsync();
             return Ok(shows);
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpPost]
-        public async Task<IActionResult> CreateShow([FromBody] CreateMovieShowDto dto)
+        public async Task<IActionResult> CreateMovieShow([FromBody] CreateMovieShowDTO dto)
         {
-            var show = await _movieShowService.CreateShowAsync(dto);
-            return CreatedAtAction(nameof(GetShowById), new { id = show.Id }, show);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var show = await _movieShowService.CreateMovieShowAsync(dto);
+                return CreatedAtAction(nameof(GetMovieShowById), new { id = show.Id }, show);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateShow(int id, [FromBody] UpdateMovieShowDto dto)
+        public async Task<IActionResult> UpdateMovieShow(int id, [FromBody] UpdateMovieShowDTO dto)
         {
-            var success = await _movieShowService.UpdateShowAsync(id, dto);
-            if (!success)
-                return NotFound("Show not found");
-            return NoContent();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var success = await _movieShowService.UpdateMovieShowAsync(id, dto);
+                if (!success)
+                    return NotFound("Movie show not found");
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteShow(int id)
+        public async Task<IActionResult> DeleteMovieShow(int id)
         {
-            var success = await _movieShowService.DeleteShowAsync(id);
-            if (!success)
-                return NotFound("Show not found");
-            return NoContent();
+            try
+            {
+                var success = await _movieShowService.DeleteMovieShowAsync(id);
+                if (!success)
+                    return NotFound("Movie show not found");
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

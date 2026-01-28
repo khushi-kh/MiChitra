@@ -1,3 +1,5 @@
+using MiChitra.Models;
+
 namespace MiChitra.DTOs
 {
     public class UserResponseDTO
@@ -11,5 +13,8 @@ namespace MiChitra.DTOs
         public DateTime CreatedAt { get; set; }
         public DateTime? LastLoginAt { get; set; }
         public bool IsActive { get; set; }
+
+        // Added role so AuthService/UserService can populate it
+        public UserRole Role { get; set; }
     }
 }

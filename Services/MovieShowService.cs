@@ -1,108 +1,51 @@
+using Microsoft.EntityFrameworkCore;
+using MiChitra.Data;
 using MiChitra.DTOs;
-using MiChitra.Models;
 using MiChitra.Interfaces;
+using MiChitra.Models;
 
 namespace MiChitra.Services
 {
     public class MovieShowService : IMovieShowService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly MiChitraDbContext _context;
+        private readonly ILogger<MovieShowService> _logger;
 
-        public MovieShowService(IUnitOfWork unitOfWork)
+        public MovieShowService(MiChitraDbContext context, ILogger<MovieShowService> logger)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
+            _logger = logger;
         }
 
-        public async Task<IEnumerable<MovieShowResponseDTO>> GetAllShowsAsync()
+        public async Task<IEnumerable<MovieShowResponseDTO>> GetAllMovieShowsAsync()
         {
-            var shows = await _unitOfWork.MovieShows.GetAllAsync();
-            return shows.Select(s => new MovieShowResponseDTO
-            {
-                Id = s.Id,
-                MovieId = s.MovieId,
-                TheatreId = s.TheatreId,
-                ShowTime = s.ShowTime,
-                TotalSeats = s.TotalSeats,
-                AvailableSeats = s.AvailableSeats,
-                PricePerSeat = s.PricePerSeat,
-                Status = s.Status
-            });
+            var shows = await _context.MovieShows
+                .Include(ms => ms.Movie)
+                .Include(ms => ms.Theatre)
+                .ToListAsync();
+            return shows.Select(MapToResponseDto);
         }
 
-        public async Task<MovieShowResponseDTO?> GetShowByIdAsync(int id)
+        public async Task<MovieShowResponseDTO?> GetMovieShowByIdAsync(int id)
         {
-            var show = await _unitOfWork.MovieShows.GetByIdAsync(id);
-            if (show == null) return null;
-
-            return new MovieShowResponseDTO
-            {
-                Id = show.Id,
-                MovieId = show.MovieId,
-                TheatreId = show.TheatreId,
-                ShowTime = show.ShowTime,
-                TotalSeats = show.TotalSeats,
-                AvailableSeats = show.AvailableSeats,
-                PricePerSeat = show.PricePerSeat,
-                Status = show.Status
-            };
+            var show = await _context.MovieShows
+                .Include(ms => ms.Movie)
+                .Include(ms => ms.Theatre)
+                .FirstOrDefaultAsync(ms => ms.Id == id);
+            return show == null ? null : MapToResponseDto(show);
         }
 
-        public async Task<IEnumerable<MovieShowResponseDTO>> GetShowsByMovieAsync(int movieId)
+        public async Task<MovieShowResponseDTO> CreateMovieShowAsync(CreateMovieShowDTO dto)
         {
-            var shows = await _unitOfWork.MovieShows.GetShowsByMovieIdAsync(movieId);
-            return shows.Select(s => new MovieShowResponseDTO
-            {
-                Id = s.Id,
-                MovieId = s.MovieId,
-                TheatreId = s.TheatreId,
-                ShowTime = s.ShowTime,
-                TotalSeats = s.TotalSeats,
-                AvailableSeats = s.AvailableSeats,
-                PricePerSeat = s.PricePerSeat,
-                Status = s.Status
-            });
-        }
+            // Validate movie and theatre exist
+            var movieExists = await _context.Movies.AnyAsync(m => m.MovieId == dto.MovieId);
+            var theatreExists = await _context.Theatres.AnyAsync(t => t.TheatreId == dto.TheatreId && t.isActive);
 
-        public async Task<IEnumerable<MovieShowResponseDTO>> GetShowsByTheatreAsync(int theatreId)
-        {
-            var shows = await _unitOfWork.MovieShows.GetShowsByTheatreIdAsync(theatreId);
-            return shows.Select(s => new MovieShowResponseDTO
-            {
-                Id = s.Id,
-                MovieId = s.MovieId,
-                TheatreId = s.TheatreId,
-                ShowTime = s.ShowTime,
-                TotalSeats = s.TotalSeats,
-                AvailableSeats = s.AvailableSeats,
-                PricePerSeat = s.PricePerSeat,
-                Status = s.Status
-            });
-        }
+            if (!movieExists)
+                throw new InvalidOperationException("Movie not found");
+            if (!theatreExists)
+                throw new InvalidOperationException("Theatre not found or inactive");
 
-        public async Task<IEnumerable<MovieShowResponseDTO>> GetShowsByCityAsync(string city)
-        {
-            var theatres = await _unitOfWork.Theatres.GetTheatresByCityAsync(city);
-            var shows = new List<MovieShow>();
-            foreach (var theatre in theatres)
-            {
-                var theatreShows = await _unitOfWork.MovieShows.GetShowsByTheatreIdAsync(theatre.TheatreId);
-                shows.AddRange(theatreShows);
-            }
-            return shows.Select(s => new MovieShowResponseDTO
-            {
-                Id = s.Id,
-                MovieId = s.MovieId,
-                TheatreId = s.TheatreId,
-                ShowTime = s.ShowTime,
-                TotalSeats = s.TotalSeats,
-                AvailableSeats = s.AvailableSeats,
-                PricePerSeat = s.PricePerSeat,
-                Status = s.Status
-            });
-        }
-
-        public async Task<MovieShowResponseDTO> CreateShowAsync(CreateMovieShowDto dto)
-        {
             var show = new MovieShow
             {
                 MovieId = dto.MovieId,
@@ -114,9 +57,89 @@ namespace MiChitra.Services
                 Status = MovieShowStatus.Available
             };
 
-            await _unitOfWork.MovieShows.AddAsync(show);
-            await _unitOfWork.SaveChangesAsync();
+            _context.MovieShows.Add(show);
+            await _context.SaveChangesAsync();
 
+            _logger.LogInformation("Movie show created with ID: {ShowId}", show.Id);
+            
+            // Reload with includes
+            var createdShow = await _context.MovieShows
+                .Include(ms => ms.Movie)
+                .Include(ms => ms.Theatre)
+                .FirstAsync(ms => ms.Id == show.Id);
+
+            return MapToResponseDto(createdShow);
+        }
+
+        public async Task<bool> UpdateMovieShowAsync(int id, UpdateMovieShowDTO dto)
+        {
+            var show = await _context.MovieShows.FindAsync(id);
+            if (show == null) return false;
+
+            if (show.ShowTime <= DateTime.UtcNow)
+                throw new InvalidOperationException("Cannot update past shows");
+
+            show.ShowTime = dto.ShowTime;
+            show.PricePerSeat = dto.PricePerSeat;
+
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Movie show updated with ID: {ShowId}", id);
+            return true;
+        }
+
+        public async Task<bool> DeleteMovieShowAsync(int id)
+        {
+            var show = await _context.MovieShows.FindAsync(id);
+            if (show == null) return false;
+
+            if (show.ShowTime <= DateTime.UtcNow)
+                throw new InvalidOperationException("Cannot delete past shows");
+
+            var hasBookings = await _context.Tickets.AnyAsync(t => t.MovieShowId == id);
+            if (hasBookings)
+                throw new InvalidOperationException("Cannot delete show with existing bookings");
+
+            _context.MovieShows.Remove(show);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Movie show deleted with ID: {ShowId}", id);
+            return true;
+        }
+
+        public async Task<IEnumerable<MovieShowResponseDTO>> GetShowsByMovieIdAsync(int movieId)
+        {
+            var shows = await _context.MovieShows
+                .Include(ms => ms.Movie)
+                .Include(ms => ms.Theatre)
+                .Where(ms => ms.MovieId == movieId && ms.ShowTime > DateTime.UtcNow)
+                .OrderBy(ms => ms.ShowTime)
+                .ToListAsync();
+            return shows.Select(MapToResponseDto);
+        }
+
+        public async Task<IEnumerable<MovieShowResponseDTO>> GetShowsByTheatreIdAsync(int theatreId)
+        {
+            var shows = await _context.MovieShows
+                .Include(ms => ms.Movie)
+                .Include(ms => ms.Theatre)
+                .Where(ms => ms.TheatreId == theatreId && ms.ShowTime > DateTime.UtcNow)
+                .OrderBy(ms => ms.ShowTime)
+                .ToListAsync();
+            return shows.Select(MapToResponseDto);
+        }
+
+        public async Task<IEnumerable<MovieShowResponseDTO>> GetAvailableShowsAsync()
+        {
+            var shows = await _context.MovieShows
+                .Include(ms => ms.Movie)
+                .Include(ms => ms.Theatre)
+                .Where(ms => ms.Status == MovieShowStatus.Available && ms.ShowTime > DateTime.UtcNow)
+                .OrderBy(ms => ms.ShowTime)
+                .ToListAsync();
+            return shows.Select(MapToResponseDto);
+        }
+
+        private static MovieShowResponseDTO MapToResponseDto(MovieShow show)
+        {
             return new MovieShowResponseDTO
             {
                 Id = show.Id,
@@ -128,31 +151,6 @@ namespace MiChitra.Services
                 PricePerSeat = show.PricePerSeat,
                 Status = show.Status
             };
-        }
-
-        public async Task<bool> UpdateShowAsync(int id, UpdateMovieShowDto dto)
-        {
-            var show = await _unitOfWork.MovieShows.GetByIdAsync(id);
-            if (show == null) return false;
-
-            show.ShowTime = dto.ShowTime;
-            show.TotalSeats = dto.TotalSeats;
-            show.AvailableSeats = dto.AvailableSeats;
-            show.PricePerSeat = dto.PricePerSeat;
-
-            _unitOfWork.MovieShows.Update(show);
-            await _unitOfWork.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> DeleteShowAsync(int id)
-        {
-            var show = await _unitOfWork.MovieShows.GetByIdAsync(id);
-            if (show == null) return false;
-
-            _unitOfWork.MovieShows.Delete(show);
-            await _unitOfWork.SaveChangesAsync();
-            return true;
         }
     }
 }

@@ -1,12 +1,14 @@
-﻿using MiChitra.DTOs;
+using MiChitra.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using MiChitra.Interfaces;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MiChitra.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,User")]
     public class TicketsController : ControllerBase
     {
         private readonly ITicketService _ticketService;
@@ -37,7 +39,7 @@ namespace MiChitra.Controllers
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetTicketsByUser(int userId)
         {
-            var tickets = await _ticketService.GetTicketsByUserAsync(userId);
+            var tickets = await _ticketService.GetTicketsByUserIdAsync(userId);
             return Ok(tickets);
         }
 
@@ -45,6 +47,9 @@ namespace MiChitra.Controllers
         [EnableRateLimiting("BookingPolicy")]
         public async Task<IActionResult> BookTicket([FromBody] BookTicketDTO dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             try
             {
                 var ticket = await _ticketService.BookTicketAsync(dto);

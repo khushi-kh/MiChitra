@@ -18,14 +18,18 @@ namespace MiChitra.Models
         public DateTime BookingDate { get; set; } = DateTime.UtcNow;
         public int NumberOfSeats { get; set; }
         public decimal TotalPrice { get; set; }
-
-        public TicketStatus Status { get; set; } = TicketStatus.Booked;
+        public TicketStatus Status { get; set; } = TicketStatus.Reserved;
+        public DateTime? ReservationExpiry { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 
     public enum TicketStatus
     {
+        Reserved,
         Booked,
         Completed,
-        Cancelled
+        Cancelled,
+        Expired
     }
 }

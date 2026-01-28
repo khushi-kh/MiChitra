@@ -1,72 +1,98 @@
 using MiChitra.DTOs;
-using MiChitra.Models;
 using MiChitra.Interfaces;
+using MiChitra.Models;
 
 namespace MiChitra.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserService _userService;
         private readonly IJwtService _jwtService;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(IUnitOfWork unitOfWork, IJwtService jwtService)
+        public AuthService(IUserService userService, IJwtService jwtService, ILogger<AuthService> logger)
         {
-            _unitOfWork = unitOfWork;
+            _userService = userService;
             _jwtService = jwtService;
-        }
-
-        public async Task<AuthResponse> RegisterAsync(RegisterDTO dto)
-        {
-            // Check if username already exists
-            if (await _unitOfWork.Users.ExistsAsync(u => u.Username == dto.Username))
-                throw new InvalidOperationException("Username already exists");
-
-            // Check if email already exists
-            if (await _unitOfWork.Users.ExistsAsync(u => u.Email == dto.Email))
-                throw new InvalidOperationException("Email already exists");
-
-            var user = new User
-            {
-                Username = dto.Username,
-                Email = dto.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                CreatedAt = DateTime.UtcNow,
-                Role = UserRole.User
-            };
-
-            await _unitOfWork.Users.AddAsync(user);
-            await _unitOfWork.SaveChangesAsync();
-
-            var token = _jwtService.GenerateToken(user);
-
-            return new AuthResponse
-            {
-                Token = token,
-                UserId = user.UserId,
-                Username = user.Username,
-                Email = user.Email
-            };
+            _logger = logger;
         }
 
         public async Task<AuthResponse> LoginAsync(LoginDTO dto)
         {
-            var user = await _unitOfWork.Users.GetByUsernameAsync(dto.Username);
-            if (user == null)
+            var user = await _userService.GetByUsernameAsync(dto.Username);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            {
+                _logger.LogWarning("Invalid login attempt for username: {Username}", dto.Username);
                 throw new UnauthorizedAccessException("Invalid username or password");
+            }
 
-            // Verify hashed password
-            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
-                throw new UnauthorizedAccessException("Invalid username or password");
+            if (!user.IsActive)
+            {
+                _logger.LogWarning("Login attempt for inactive user: {Username}", dto.Username);
+                throw new UnauthorizedAccessException("Account is deactivated");
+            }
 
             var token = _jwtService.GenerateToken(user);
-
+            
+            _logger.LogInformation("User logged in successfully: {UserId}", user.UserId);
+            
             return new AuthResponse
             {
                 Token = token,
-                UserId = user.UserId,
-                Username = user.Username,
-                Email = user.Email
+                User = new UserResponseDTO
+                {
+                    UserId = user.UserId,
+                    FName = user.FName,
+                    LName = user.LName,
+                    Username = user.Username,
+                    Email = user.Email,
+                    Role = user.Role,
+                    ContactNumber = user.ContactNumber,
+                    CreatedAt = user.CreatedAt,
+                    LastLoginAt = user.LastLoginAt,
+                    IsActive = user.IsActive
+                }
             };
+        }
+
+        public async Task<AuthResponse> RegisterAsync(RegisterDTO dto)
+        {
+            try
+            {
+                var userResponse = await _userService.CreateUserAsync(dto);
+                var user = await _userService.GetByUsernameAsync(dto.Username);
+                
+                if (user == null)
+                    throw new InvalidOperationException("User creation failed");
+
+                var token = _jwtService.GenerateToken(user);
+                
+                _logger.LogInformation("User registered successfully: {UserId}", user.UserId);
+                
+                return new AuthResponse
+                {
+                    Token = token,
+                    User = userResponse
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Registration failed for username: {Username}", dto.Username);
+                throw;
+            }
+        }
+
+        public async Task<bool> ValidateTokenAsync(string token)
+        {
+            try
+            {
+                var principal = _jwtService.ValidateToken(token);
+                return principal != null;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

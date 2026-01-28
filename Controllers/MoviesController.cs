@@ -2,6 +2,8 @@
 using MiChitra.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MiChitra.Controllers
 {
@@ -40,18 +42,26 @@ namespace MiChitra.Controllers
             return Ok(movie);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddMovie([FromBody] CreateMovieDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+                
             _logger.LogInformation("Adding a new movie: {MovieName}", dto.MovieName);
             var movie = await _movieService.CreateMovieAsync(dto);
             _logger.LogInformation("Movie added successfully with ID: {MovieId}", movie.MovieId);
             return CreatedAtAction(nameof(GetMovieById), new { id = movie.MovieId }, movie);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMovie(int id, [FromBody] UpdateMovieDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+                
             _logger.LogInformation("Updating movie with ID: {MovieId}", id);
             var success = await _movieService.UpdateMovieAsync(id, dto);
             if (!success)
@@ -63,6 +73,7 @@ namespace MiChitra.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie(int id)
         {

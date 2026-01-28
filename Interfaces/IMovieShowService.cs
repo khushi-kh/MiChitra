@@ -1,16 +1,18 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using MiChitra.DTOs;
 
 namespace MiChitra.Interfaces
 {
     public interface IMovieShowService
     {
-        Task<IEnumerable<MovieShowResponseDTO>> GetAllShowsAsync();
-        Task<MovieShowResponseDTO?> GetShowByIdAsync(int id);
-        Task<IEnumerable<MovieShowResponseDTO>> GetShowsByMovieAsync(int movieId);
-        Task<IEnumerable<MovieShowResponseDTO>> GetShowsByTheatreAsync(int theatreId);
-        Task<IEnumerable<MovieShowResponseDTO>> GetShowsByCityAsync(string city);
-        Task<MovieShowResponseDTO> CreateShowAsync(CreateMovieShowDto dto);
-        Task<bool> UpdateShowAsync(int id, UpdateMovieShowDto dto);
-        Task<bool> DeleteShowAsync(int id);
+        Task<IEnumerable<MovieShowResponseDTO>> GetAllMovieShowsAsync();
+        Task<MovieShowResponseDTO?> GetMovieShowByIdAsync(int id);
+        Task<IEnumerable<MovieShowResponseDTO>> GetShowsByMovieIdAsync(int movieId);
+        Task<IEnumerable<MovieShowResponseDTO>> GetShowsByTheatreIdAsync(int theatreId);
+        Task<IEnumerable<MovieShowResponseDTO>> GetAvailableShowsAsync();
+        Task<MovieShowResponseDTO> CreateMovieShowAsync(CreateMovieShowDTO dto);
+        Task<bool> UpdateMovieShowAsync(int id, UpdateMovieShowDTO dto);
+        Task<bool> DeleteMovieShowAsync(int id);
     }
 }

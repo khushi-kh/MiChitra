@@ -1,12 +1,19 @@
-﻿namespace MiChitra.DTOs
+using System.ComponentModel.DataAnnotations;
+
+namespace MiChitra.DTOs
 {
-    // DTO for updating user profile
-    public class UpdateUserDto
+    public class UpdateUserDTO
     {
-        public string FName { get; set; } = string.Empty;
-        public string LName { get; set; } = string.Empty;
-        public string Username { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
+        [StringLength(50)]
+        public string? FName { get; set; }
+        
+        [StringLength(50)]
+        public string? LName { get; set; }
+        
+        [EmailAddress]
+        public string? Email { get; set; }
+        
+        [Phone]
         public string? ContactNumber { get; set; }
     }
 }

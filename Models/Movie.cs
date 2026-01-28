@@ -11,8 +11,9 @@ namespace MiChitra.Models
 
         public string Description { get; set; } = string.Empty;
         public string Language { get; set; } = string.Empty;
-
         public decimal Rating { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation Properties
         public ICollection<MovieShow> MovieShows { get; set; } = new List<MovieShow>();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MiChitra.DTOs;
 using MiChitra.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MiChitra.Controllers
 {
@@ -46,17 +47,25 @@ namespace MiChitra.Controllers
             return Ok(theatres);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddTheatre([FromBody] CreateTheatreDTO dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+                
             _logger.LogInformation("Adding a new theatre: {TheatreName}", dto.Name);
             var theatre = await _theatreService.CreateTheatreAsync(dto);
             return CreatedAtAction(nameof(GetTheatreById), new { id = theatre.TheatreId }, theatre);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTheatre(int id, [FromBody] UpdateTheatreDTO dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+                
             var success = await _theatreService.UpdateTheatreAsync(id, dto);
             if (!success)
             {
@@ -67,17 +76,25 @@ namespace MiChitra.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("deactivate/{id}")]
         public async Task<IActionResult> InActiveTheatre(int id)
         {
-            var success = await _theatreService.DeactivateTheatreAsync(id);
-            if (!success)
+            try
             {
-                _logger.LogWarning("Theatre with ID {TheatreId} not found for deactivation", id);
-                return NotFound("Theatre not found");
+                var success = await _theatreService.DeactivateTheatreAsync(id);
+                if (!success)
+                {
+                    _logger.LogWarning("Theatre with ID {TheatreId} not found for deactivation", id);
+                    return NotFound("Theatre not found");
+                }
+                _logger.LogInformation("Theatre with ID {TheatreId} deactivated successfully", id);
+                return NoContent();
             }
-            _logger.LogInformation("Theatre with ID {TheatreId} deactivated successfully", id);
-            return NoContent();
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
