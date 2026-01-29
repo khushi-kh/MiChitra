@@ -33,13 +33,16 @@ builder.Services.AddControllers();
 // Add CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
+    options.AddPolicy("AllowReact",
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
 });
+
 
 // Add Rate Limiting
 builder.Services.AddRateLimiter(options =>
@@ -173,9 +176,9 @@ app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseRateLimiter();
 
-app.UseCors("AllowAll");
-
 app.UseHttpsRedirection();
+
+app.UseCors("AllowReact");
 
 app.UseAuthentication();
 app.UseAuthorization();
