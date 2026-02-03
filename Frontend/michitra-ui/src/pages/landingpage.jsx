@@ -65,8 +65,7 @@ const MovieBookingLanding = () => {
                 <ul className="nav-links">
                     <li><a href="#movies" className="nav-link">Movies</a></li>
                     <li><a href="#theatres" className="nav-link">Theatres</a></li>
-                    <li><a href="#events" className="nav-link">Events</a></li>
-                    <li><a href="#offers" className="nav-link">Offers</a></li>
+                    <li><a href="#cities" className="nav-link">Cities</a></li>
                     <li><a href="/register" className="nav-cta">Sign Up</a></li>
                 </ul>
             </nav>
@@ -141,7 +140,7 @@ const MovieBookingLanding = () => {
                             Join thousands of movie lovers and start booking your tickets
                             today. Get exclusive early access to blockbusters.
                         </p>
-                        <a href="#start" className="btn-primary">Get Started Now</a>
+                        <a href="/register" className="btn-primary">Get Started Now</a>
                     </div>
                 </div>
             </section>
