@@ -67,8 +67,8 @@ const MovieBookingLanding = () => {
                     <li><a href="#theatres" className="nav-link">Theatres</a></li>
                     <li><a href="#events" className="nav-link">Events</a></li>
                     <li><a href="#offers" className="nav-link">Offers</a></li>
+                    <li><a href="#signin" className="nav-cta">Sign In</a></li>
                 </ul>
-                <a href="#signin" className="nav-cta">Sign In</a>
             </nav>
 
             {/* Hero Section */}

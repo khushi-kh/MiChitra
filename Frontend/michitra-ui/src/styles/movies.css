@@ -175,16 +175,18 @@
     position: fixed;
     top: 0;
     width: 100%;
-    padding: 1.5rem 5%;
+    padding: 1.5rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-sizing: border-box; 
     z-index: 1000;
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    border-bottom: 1px solid rgba(230, 57, 70, 0.2);
     animation: slideDown 0.8s ease;
     transition: background 0.3s ease;
 }
+
 
 .logo {
     font-family: 'Playfair Display', serif;
