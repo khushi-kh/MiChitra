@@ -61,12 +61,15 @@ const MovieBookingLanding = () => {
                         : "rgba(10, 10, 15, 0.8)",
                 }}
             >
-                <div className="logo">MiChitra</div>
+                <div>
+                    <a href="/" className="logo">MiChitra</a>
+                </div>
                 <ul className="nav-links">
                     <li><a href="#movies" className="nav-link">Movies</a></li>
                     <li><a href="#theatres" className="nav-link">Theatres</a></li>
                     <li><a href="#cities" className="nav-link">Cities</a></li>
-                    <li><a href="/register" className="nav-cta">Sign Up</a></li>
+                    <li><a href="/login" className="nav-login">Sign In</a></li>
+                    <li><a href="/register" className="nav-register">Sign Up</a></li>
                 </ul>
             </nav>
 

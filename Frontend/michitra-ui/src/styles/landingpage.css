@@ -234,20 +234,35 @@
     .nav-link:hover::after {
         width: 100%;
     }
+.nav-login {
+    background: transparent;
+    color: #ffffff;
+    padding: 0.7rem 1.8rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    border-radius: 50px 0 0 50px;
+}
+    .nav-login:hover {
+        border-color: #e63946;
+    }
 
-.nav-cta {
+.nav-register {
     background: linear-gradient(135deg, #e63946 0%, #dc2626 100%);
     padding: 0.7rem 1.8rem;
-    border-radius: 50px;
+    border-radius: 0 50px 50px 0;
     color: #ffffff;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9rem;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+    margin-left: -40px;
 }
 
-    .nav-cta:hover {
+    .nav-register:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 25px rgba(230, 57, 70, 0.4);
     }
