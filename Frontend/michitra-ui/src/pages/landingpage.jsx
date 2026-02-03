@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import api from "../api/axios";
-import "../styles/movies.css";
+import "../styles/landingpage.css";
 
 const MovieBookingLanding = () => {
     const [scrolled, setScrolled] = useState(false);
