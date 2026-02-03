@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/auth.css";
 
 const Register = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -10,6 +11,8 @@ const Register = () => {
         password: "",
         confirmPassword: ""
     });
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -18,10 +21,49 @@ const Register = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle registration logic here
-        console.log("Registration data:", formData);
+        setError("");
+        
+        if (formData.password !== formData.confirmPassword) {
+            setError("Passwords do not match");
+            return;
+        }
+        
+        setLoading(true);
+        
+        try {
+            const response = await fetch("http://localhost:5267/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: formData.email,
+                    email: formData.email,
+                    password: formData.password,
+                    fName: formData.firstName,
+                    lName: formData.lastName
+                })
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem("token", data.token);
+                navigate("/");
+            } else {
+                const errorData = await response.text();
+                if (errorData.includes("Username or email already exists")) {
+                    setError("Email is already registered");
+                } else {
+                    setError(errorData || "Registration failed");
+                }
+            }
+        } catch (err) {
+            setError("It's not you, it's us. Please try again after some time.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -38,6 +80,21 @@ const Register = () => {
                     </div>
 
                     <form className="auth-form" onSubmit={handleSubmit}>
+                        {error && (
+                            <div style={{
+                                backgroundColor: "#fee",
+                                border: "1px solid #f88",
+                                borderRadius: "8px",
+                                padding: "12px 16px",
+                                marginBottom: "1rem",
+                                color: "#c33",
+                                fontSize: "14px",
+                                fontWeight: "500",
+                                boxShadow: "0 2px 8px rgba(255, 0, 0, 0.1)"
+                            }}>
+                                ⚠️ {error}
+                            </div>
+                        )}
                         <div className="form-row">
                             <div className="form-group">
                                 <label className="form-label">First Name</label>
@@ -99,8 +156,8 @@ const Register = () => {
                             />
                         </div>
 
-                        <button type="submit" className="auth-button">
-                            Create Account
+                        <button type="submit" className="auth-button" disabled={loading}>
+                            {loading ? "Creating Account..." : "Create Account"}
                         </button>
                     </form>
 

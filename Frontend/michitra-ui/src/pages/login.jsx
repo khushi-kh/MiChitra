@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/auth.css";
 
 const Login = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     });
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -15,10 +18,40 @@ const Login = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle login logic here
-        console.log("Login data:", formData);
+        setError("");
+        setLoading(true);
+        
+        try {
+            const response = await fetch("http://localhost:5267/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: formData.email,
+                    password: formData.password
+                })
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem("token", data.token);
+                navigate("/");
+            } else {
+                if (response.status === 401) {
+                    setError("Invalid email or password");
+                } else {
+                    const errorData = await response.text();
+                    setError(errorData || "Login failed");
+                }
+            }
+        } catch (err) {
+            setError("It's not you, it's us. Please try again after some time.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -35,6 +68,21 @@ const Login = () => {
                     </div>
 
                     <form className="auth-form" onSubmit={handleSubmit}>
+                        {error && (
+                            <div style={{
+                                backgroundColor: "#fee",
+                                border: "1px solid #f88",
+                                borderRadius: "8px",
+                                padding: "12px 16px",
+                                marginBottom: "1rem",
+                                color: "#c33",
+                                fontSize: "14px",
+                                fontWeight: "500",
+                                boxShadow: "0 2px 8px rgba(255, 0, 0, 0.1)"
+                            }}>
+                                ⚠️ {error}
+                            </div>
+                        )}
                         <div className="form-group">
                             <label className="form-label">Email Address</label>
                             <input
@@ -59,8 +107,8 @@ const Login = () => {
                             />
                         </div>
 
-                        <button type="submit" className="auth-button">
-                            Sign In
+                        <button type="submit" className="auth-button" disabled={loading}>
+                            {loading ? "Signing In..." : "Sign In"}
                         </button>
                     </form>
 
