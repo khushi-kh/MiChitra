@@ -38,7 +38,11 @@ const Login = () => {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("token", data.token);
-                navigate("/");
+                localStorage.setItem("userId", data.user.userId);
+                console.log("LOGIN RESPONSE:", data);
+
+
+                navigate("/home");
             } else {
                 if (response.status === 401) {
                     setError("Invalid email or password");
