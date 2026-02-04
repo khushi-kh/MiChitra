@@ -53,7 +53,7 @@ const HomePage = () => {
     ];
 
         return (
-            <div className="homepage">
+            <div className="container">
                 <div className="bg-gradient" />
                 <div className="noise-overlay" />
 
@@ -76,7 +76,7 @@ const HomePage = () => {
                         </div>
 
                         <div className="features-grid">
-                            {features.map((feature, index) => (
+                            {features.map((feature) => (
                                 <div key={feature.title} className="feature-card">
                                     <div className="feature-icon">{feature.icon}</div>
                                     <h3 className="feature-title">{feature.title}</h3>
