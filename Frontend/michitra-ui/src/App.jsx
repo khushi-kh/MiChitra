@@ -1,19 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Movies from "./pages/landingpage";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import UserHomePage from "./pages/userHome";
+import HomePage from "./pages/HomePage";
 
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Movies />} />
+                <Route path="/" element={<HomePage />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/home" element={<UserHomePage />} />
-
             </Routes>
         </BrowserRouter>
     );
