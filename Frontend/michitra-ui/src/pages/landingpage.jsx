@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import api from "../api/axios";
 import "../styles/landingpage.css";
+import "../index.css";
 
 const MovieBookingLanding = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -48,7 +49,6 @@ const MovieBookingLanding = () => {
 
     return (
         <div className="movie-booking-container">
-            {/* Background Effects */}
             <div className="bg-gradient" />
             <div className="noise-overlay" />
 
@@ -91,6 +91,7 @@ const MovieBookingLanding = () => {
 
             {/* Movie Showcase */}
             <section className="movie-showcase" id="movies">
+                <h2 className="showcase-title">Now Showing</h2>
                 <div className="showcase-grid">
                     {movies.length === 0 && (
                         <p style={{ color: "#aaa" }}>Loading movies...</p>
