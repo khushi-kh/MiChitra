@@ -1,4 +1,7 @@
-﻿const MovieGrid = ({ movies }) => {
+﻿import { useNavigate } from "react-router-dom";
+
+const MovieGrid = ({ movies }) => {
+    const navigate = useNavigate();
     return (
         <section className="movie-showcase" id="movies">
             <h2 className="showcase-title">Now Showing</h2>
@@ -8,7 +11,8 @@
                 )}
 
                 {movies.map((movie) => (
-                    <div key={movie.MovieId} className="movie-card">
+                    <div key={movie.MovieId} className="movie-card"
+                        onClick={() => navigate(`/movies/${movie.movieId}`)} >
                         <div className="movie-poster">
                             <span className="movie-poster-icon">🎬</span>
                         </div>
