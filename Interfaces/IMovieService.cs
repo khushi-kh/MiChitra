@@ -9,5 +9,6 @@ namespace MiChitra.Interfaces
         Task<MovieResponseDto> CreateMovieAsync(CreateMovieDto dto);
         Task<bool> UpdateMovieAsync(int id, UpdateMovieDto dto);
         Task<bool> DeleteMovieAsync(int id);
+        Task<IEnumerable<MovieResponseDto>> SearchMovieAsync(string query);
     }
 }

@@ -48,7 +48,7 @@ namespace MiChitra.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-                
+
             _logger.LogInformation("Adding a new movie: {MovieName}", dto.MovieName);
             var movie = await _movieService.CreateMovieAsync(dto);
             _logger.LogInformation("Movie added successfully with ID: {MovieId}", movie.MovieId);
@@ -61,7 +61,7 @@ namespace MiChitra.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-                
+
             _logger.LogInformation("Updating movie with ID: {MovieId}", id);
             var success = await _movieService.UpdateMovieAsync(id, dto);
             if (!success)
@@ -87,5 +87,24 @@ namespace MiChitra.Controllers
             _logger.LogInformation("Movie with ID {MovieId} deleted successfully", id);
             return NoContent();
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchMovie([FromQuery(Name = "query")] string query)
+        {
+            _logger.LogInformation("Raw query received: '{Query}'", query);
+
+            if (string.IsNullOrWhiteSpace(query))
+                return BadRequest("Search query cannot be empty");
+
+            var movie = await _movieService.SearchMovieAsync(query);
+
+            if (movie == null)
+                return NotFound("Movie not found");
+
+            return Ok(movie);
+        }
+
+
+
     }
 }

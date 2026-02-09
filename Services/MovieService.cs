@@ -98,6 +98,18 @@ namespace MiChitra.Services
             return movies.Select(MapToResponseDto);
         }
 
+        public async Task<IEnumerable<MovieResponseDto>> SearchMovieAsync(string query)
+        {
+            return await _context.Movies
+                .Where(m =>
+                    m.MovieName.Contains(query) ||
+                    (m.Description != null && m.Description.Contains(query))
+                )
+                .Select(m => MapToResponseDto(m))
+                .ToListAsync();
+        }
+
+
         private static MovieResponseDto MapToResponseDto(Movie movie)
         {
             return new MovieResponseDto

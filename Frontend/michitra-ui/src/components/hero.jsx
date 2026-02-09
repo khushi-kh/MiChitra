@@ -16,7 +16,7 @@
                     Discover the latest blockbusters, reserve premium seats, and enjoy exclusive benefits. Your cinematic journey starts here.
                 </p>
                 <div className="hero-buttons">
-                    <a href="#browse" className="btn-primary">Browse Movies</a>
+                    <a href="/movies" className="btn-primary">Browse Movies</a>
                     {!isAuthenticated && (
                         <a href="#learn" className="btn-secondary">Learn More</a>
                     )}

@@ -14,7 +14,8 @@ const MovieGrid = ({ movies }) => {
                     <div key={movie.MovieId} className="movie-card"
                         onClick={() => navigate(`/movies/${movie.movieId}`)} >
                         <div className="movie-poster">
-                            <span className="movie-poster-icon">🎬</span>
+                            <span className="movie-poster-icon"><img src="https://picsum.photos/200" alt="movie poster" />
+</span>
                         </div>
                         <div className="movie-info">
                             <div className="movie-title">{movie.movieName}</div>
