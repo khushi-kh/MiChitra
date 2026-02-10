@@ -1,0 +1,215 @@
+.booking-container {
+    padding: 120px 5% 60px !important;
+    min-height: 100vh !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+.booking-header {
+    text-align: center !important;
+    margin-bottom: 3rem !important;
+}
+
+.booking-title {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 3rem !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.booking-subtitle {
+    color: #b8b8c8 !important;
+    font-size: 1.1rem !important;
+}
+
+.back-button {
+    background: transparent !important;
+    color: #ffffff !important;
+    padding: 0.8rem 1.5rem !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    margin-bottom: 2rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+}
+
+.back-button:hover {
+    border-color: #e63946 !important;
+    background: rgba(230, 57, 70, 0.1) !important;
+    transform: translateX(-5px) !important;
+}
+
+.theatres-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+    gap: 1.5rem !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+}
+
+.theatre-card {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(20, 20, 31, 0.9) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 20px !important;
+    padding: 2rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.theatre-card::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 4px !important;
+    background: linear-gradient(135deg, #e63946 0%, #dc2626 100%) !important;
+    transform: scaleX(0) !important;
+    transition: transform 0.3s ease !important;
+}
+
+.theatre-card:hover {
+    transform: translateY(-5px) !important;
+    border-color: rgba(230, 57, 70, 0.3) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+}
+
+.theatre-card:hover::before {
+    transform: scaleX(1) !important;
+}
+
+.theatre-card h3 {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.theatre-card p {
+    color: #b8b8c8 !important;
+    font-size: 1rem !important;
+}
+
+.theatre-header {
+    margin-bottom: 2rem !important;
+}
+
+.theatre-name {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin-top: 1rem !important;
+}
+
+.shows-grid {
+    display: grid !important;
+    gap: 1rem !important;
+    max-width: 900px !important;
+    margin: 0 !important;
+}
+
+.show-card {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(20, 20, 31, 0.9) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 15px !important;
+    padding: 1.5rem !important;
+    display: flex !important;
+    justify-items: start !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    transition: all 0.3s ease !important;
+}
+
+.show-card:hover {
+    border-color: rgba(230, 57, 70, 0.2) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.show-info {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+}
+
+.show-time {
+    color: #ffffff !important;
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+}
+
+.show-seats {
+    color: #b8b8c8 !important;
+    font-size: 0.95rem !important;
+}
+
+.show-seats.low-seats {
+    color: #e63946 !important;
+}
+
+.book-show-button {
+    background: linear-gradient(135deg, #e63946 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    padding: 0.8rem 2rem !important;
+    border-radius: 50px !important;
+    border: none !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3) !important;
+}
+
+.book-show-button:hover:not(:disabled) {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(230, 57, 70, 0.4) !important;
+}
+
+.book-show-button:disabled {
+    background: rgba(100, 100, 100, 0.3) !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+}
+
+.loading-text {
+    color: #b8b8c8 !important;
+    font-size: 1.1rem !important;
+    text-align: center !important;
+    padding: 2rem !important;
+}
+
+.section-title {
+    color: #ffffff !important;
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 1.5rem !important;
+}
+
+@media (max-width: 768px) {
+    .booking-title {
+        font-size: 2rem !important;
+    }
+
+    .theatres-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .show-card {
+        flex-direction: column !important;
+        gap: 1rem !important;
+        text-align: center !important;
+    }
+
+    .book-show-button {
+        width: 100% !important;
+    }
+}

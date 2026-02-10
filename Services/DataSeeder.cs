@@ -8,43 +8,34 @@ namespace MiChitra.Services
     {
         public static async Task SeedAsync(MiChitraDbContext context)
         {
-            // Check if data already exists
-            var existingTheatres = await context.Theatres.ToListAsync();
-            if (existingTheatres.Any())
-            {
-                return; // Data already seeded
-            }
+            if (await context.Theatres.AnyAsync())
+                return;
             
-            // Seed parent tables first
-            var users = await SeedUsersAsync(context);
-            var theatres = await SeedTheatresAsync(context);
-            var movies = await SeedMoviesAsync(context);
+            var users = SeedUsers(context);
+            var theatres = SeedTheatres(context);
+            var movies = SeedMovies(context);
             await context.SaveChangesAsync();
             
-            // Then seed child tables
-            await SeedMovieShowsAsync(context, movies, theatres);
+            SeedMovieShows(context, movies, theatres);
             await context.SaveChangesAsync();
             
-            await SeedTicketsAsync(context, users);
+            SeedTickets(context, users);
             await context.SaveChangesAsync();
         }
 
-        private static async Task<List<Theatre>> SeedTheatresAsync(MiChitraDbContext context)
+        private static List<Theatre> SeedTheatres(MiChitraDbContext context)
         {
             var theatres = new List<Theatre>
             {
-                new Theatre { Name = "PVR Cinemas", City = "Mumbai" },
-                new Theatre { Name = "INOX", City = "Delhi" },
-                new Theatre { Name = "Cinepolis", City = "Bangalore" }
+                new Theatre { Name = "PVR Cinemas", City = "Mumbai", isActive = true },
+                new Theatre { Name = "INOX", City = "Delhi", isActive = true },
+                new Theatre { Name = "Cinepolis", City = "Bangalore", isActive = true }
             };
-            foreach (var theatre in theatres)
-            {
-                context.Theatres.Add(theatre);
-            }
+            context.Theatres.AddRange(theatres);
             return theatres;
         }
 
-        private static async Task<List<User>> SeedUsersAsync(MiChitraDbContext context)
+        private static List<User> SeedUsers(MiChitraDbContext context)
         {
             var users = new List<User>
             {
@@ -70,14 +61,11 @@ namespace MiChitra.Services
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword("Guest123@"),
                     Role = UserRole.Guest },
             };
-            foreach (var user in users)
-            {
-                context.Users.Add(user);
-            }
+            context.Users.AddRange(users);
             return users;
         }
 
-        private static async Task<List<Movie>> SeedMoviesAsync(MiChitraDbContext context)
+        private static List<Movie> SeedMovies(MiChitraDbContext context)
         {
             var movies = new List<Movie>
             {
@@ -120,89 +108,83 @@ namespace MiChitra.Services
                     Rating = 7.9m
                 }
             };
-            foreach (var movie in movies)
-            {
-                context.Movies.Add(movie);
-            }
+            context.Movies.AddRange(movies);
             return movies;
         }
 
-        private static async Task SeedMovieShowsAsync(MiChitraDbContext context, List<Movie> movies, List<Theatre> theatres)
+        private static void SeedMovieShows(MiChitraDbContext context, List<Movie> movies, List<Theatre> theatres)
         {
             var movieShows = new List<MovieShow>
             {
                 new MovieShow {
-                    MovieId = movies[0].MovieId,
-                    TheatreId = theatres[0].TheatreId,
-                    ShowTime = DateTime.Now.AddDays(1).AddHours(10), 
+                    Movie = movies[0],
+                    Theatre = theatres[0],
+                    ShowTime = DateTime.UtcNow.AddDays(1).AddHours(10), 
                     TotalSeats = 100, 
                     AvailableSeats = 98, 
-                    PricePerSeat = 250m },
+                    PricePerSeat = 250m,
+                    Status = MovieShowStatus.Available },
                 new MovieShow { 
-                    MovieId = movies[0].MovieId,
-                    TheatreId = theatres[1].TheatreId,
-                    ShowTime = DateTime.Now.AddDays(1).AddHours(14), 
+                    Movie = movies[0],
+                    Theatre = theatres[1],
+                    ShowTime = DateTime.UtcNow.AddDays(1).AddHours(14), 
                     TotalSeats = 120, 
                     AvailableSeats = 119,
-                    PricePerSeat = 300m },
+                    PricePerSeat = 300m,
+                    Status = MovieShowStatus.Available },
                 new MovieShow { 
-                    MovieId = movies[1].MovieId,
-                    TheatreId = theatres[0].TheatreId,
-                    ShowTime = DateTime.Now.AddDays(2).AddHours(18),
+                    Movie = movies[1],
+                    Theatre = theatres[0],
+                    ShowTime = DateTime.UtcNow.AddDays(2).AddHours(18),
                     TotalSeats = 100, 
                     AvailableSeats = 97, 
-                    PricePerSeat = 200m },
+                    PricePerSeat = 200m,
+                    Status = MovieShowStatus.Available },
                 new MovieShow { 
-                    MovieId = movies[2].MovieId,
-                    TheatreId = theatres[2].TheatreId,
-                    ShowTime = DateTime.Now.AddDays(1).AddHours(16), 
+                    Movie = movies[2],
+                    Theatre = theatres[2],
+                    ShowTime = DateTime.UtcNow.AddDays(1).AddHours(16), 
                     TotalSeats = 80,
                     AvailableSeats = 80,
-                    PricePerSeat = 180m },
+                    PricePerSeat = 180m,
+                    Status = MovieShowStatus.Available },
                 new MovieShow { 
-                    MovieId = movies[3].MovieId,
-                    TheatreId = theatres[1].TheatreId,
-                    ShowTime = DateTime.Now.AddDays(3).AddHours(20), 
+                    Movie = movies[3],
+                    Theatre = theatres[1],
+                    ShowTime = DateTime.UtcNow.AddDays(3).AddHours(20), 
                     TotalSeats = 120, 
                     AvailableSeats = 120,
-                    PricePerSeat = 220m }
+                    PricePerSeat = 220m,
+                    Status = MovieShowStatus.Available }
             };
-            foreach (var show in movieShows)
-            {
-                context.MovieShows.Add(show);
-            }
+            context.MovieShows.AddRange(movieShows);
         }
 
-        private static async Task SeedTicketsAsync(MiChitraDbContext context, List<User> users)
+        private static void SeedTickets(MiChitraDbContext context, List<User> users)
         {
-            var movieShows = await context.MovieShows.ToListAsync();
-            var showsList = movieShows.ToList();
-            
+            var showsList = context.MovieShows.ToList();
             var tickets = new List<Ticket>
             {
                 new Ticket { 
-                    UserId = users[1].UserId,
-                    MovieShowId = showsList[0].Id,
+                    User = users[1],
+                    MovieShow = showsList[0],
                     NumberOfSeats = 2, 
                     TotalPrice = 500m, 
-                    BookingDate = DateTime.Now.AddDays(-1) },
+                    BookingDate = DateTime.UtcNow.AddDays(-1) },
                 new Ticket { 
-                    UserId = users[2].UserId,
-                    MovieShowId = showsList[1].Id,
+                    User = users[2],
+                    MovieShow = showsList[1],
                     NumberOfSeats = 1, 
                     TotalPrice = 300m, 
-                    BookingDate = DateTime.Now.AddHours(-5) },
+                    BookingDate = DateTime.UtcNow.AddHours(-5) },
                 new Ticket { 
-                    UserId = users[1].UserId,
-                    MovieShowId = showsList[2].Id,
+                    User = users[1],
+                    MovieShow = showsList[2],
                     NumberOfSeats = 3, 
                     TotalPrice = 600m, 
-                    BookingDate = DateTime.Now.AddHours(-2) }
+                    BookingDate = DateTime.UtcNow.AddHours(-2) }
             };
-            foreach (var ticket in tickets)
-            {
-                context.Tickets.Add(ticket);
-            }
+            context.Tickets.AddRange(tickets);
         }
     }
 }

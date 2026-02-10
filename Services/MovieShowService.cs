@@ -144,7 +144,10 @@ namespace MiChitra.Services
             {
                 Id = show.Id,
                 MovieId = show.MovieId,
+                MovieName = show.Movie?.MovieName ?? string.Empty,
                 TheatreId = show.TheatreId,
+                TheatreName = show.Theatre?.Name ?? string.Empty,
+                City = show.Theatre?.City ?? string.Empty,
                 ShowTime = show.ShowTime,
                 TotalSeats = show.TotalSeats,
                 AvailableSeats = show.AvailableSeats,

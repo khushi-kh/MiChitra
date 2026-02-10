@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Navbar from "../components/navbar";
 import api from "../api/axios";
 import "../styles/movieDetails.css";
@@ -57,7 +57,10 @@ const MovieDetails = () => {
                                 <span className="meta-value">{movie.rating}</span>
                             </div>
                         </div>
-                        <button className="book-button">Book Now</button>
+                            <Link to={`/booking/${movie.movieId}`}>
+                                <button className="book-button">Book Now</button>
+                            </Link>
+
                     </div>
                 </div>
             ) : (

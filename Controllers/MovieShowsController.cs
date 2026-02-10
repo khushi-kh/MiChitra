@@ -55,6 +55,22 @@ namespace MiChitra.Controllers
             return Ok(shows);
         }
 
+        [HttpGet("movie/{movieId}/theatres")]
+        public async Task<IActionResult> GetTheatresByMovie(int movieId)
+        {
+            var shows = await _movieShowService.GetShowsByMovieIdAsync(movieId);
+            var theatres = shows.Select(s => new { s.TheatreId, s.TheatreName, s.City }).Distinct().ToList();
+            return Ok(theatres);
+        }
+
+        [HttpGet("movie/{movieId}/theatre/{theatreId}")]
+        public async Task<IActionResult> GetShowsByMovieAndTheatre(int movieId, int theatreId)
+        {
+            var shows = await _movieShowService.GetShowsByMovieIdAsync(movieId);
+            var filteredShows = shows.Where(s => s.TheatreId == theatreId).ToList();
+            return Ok(filteredShows);
+        }
+
         [Authorize(Roles ="Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateMovieShow([FromBody] CreateMovieShowDTO dto)
