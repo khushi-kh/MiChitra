@@ -58,7 +58,9 @@ namespace MiChitra.Controllers
         [HttpGet("movie/{movieId}/theatres")]
         public async Task<IActionResult> GetTheatresByMovie(int movieId)
         {
+            _logger.LogInformation("Theatres API called with movieId = {MovieId}", movieId);
             var shows = await _movieShowService.GetShowsByMovieIdAsync(movieId);
+            _logger.LogInformation("Shows found count = {Count}", shows.Count());
             var theatres = shows.Select(s => new { s.TheatreId, s.TheatreName, s.City }).Distinct().ToList();
             return Ok(theatres);
         }

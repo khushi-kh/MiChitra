@@ -26,6 +26,7 @@ const Booking = () => {
     useEffect(() => {
         api.get(`/movieshows/movie/${movieId}/theatres`)
             .then((res) => {
+                console.log("Theatres API response:", res.data);
                 setTheatres(res.data);
                 setLoading(false);
             })
@@ -76,28 +77,28 @@ const Booking = () => {
                     <>
                         <button className="back-button" onClick={() => { setSelectedTheatre(null); setShows([]); }}>← Back to Theatres</button>
                         <div className="theatre-header">
-                            <h2 className="theatre-name">{selectedTheatre.theatreName}</h2>
+                            <h2 className="theatre-name">{selectedTheatre.TheatreName}</h2>
                         </div>
 
                         {loading ? <p className="loading-text">Loading shows...</p> : (
                             <div className="shows-grid">
                                 {shows.map((show) => (
-                                    <div key={show.id} className="show-card">
+                                    <div key={show.Id} className="show-card">
                                         <div className="show-info">
-                                            <p className="show-time">{new Date(show.showTime).toLocaleString()}</p>
-                                            <p className={`show-seats ${show.availableSeats < 10 ? 'low-seats' : ''}`}>
-                                                {show.availableSeats > 0 ? `${show.availableSeats} seats available` : 'Sold Out'}
+                                            <p className="show-time">{new Date(show.ShowTime).toLocaleString()}</p>
+                                            <p className={`show-seats ${show.AvailableSeats < 10 ? 'low-seats' : ''}`}>
+                                                {show.AvailableSeats > 0 ? `${show.AvailableSeats} seats available` : 'Sold Out'}
                                             </p>
                                         </div>
                                         <button
                                             className="book-show-button"
-                                            disabled={show.availableSeats === 0}
+                                            disabled={show.AvailableSeats === 0}
                                             onClick={() => {
                                                 setSelectedShow(show);
                                                 setShowSeatModal(true);
                                             }}
                                         >
-                                            {show.availableSeats === 0 ? "Sold Out" : "Book Now"}
+                                            {show.AvailableSeats === 0 ? "Sold Out" : "Book Now"}
                                         </button>
                                     </div>
                                 ))}

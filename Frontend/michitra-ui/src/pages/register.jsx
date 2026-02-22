@@ -50,7 +50,7 @@ const Register = () => {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("token", data.token);
-                navigate("/home");
+                navigate("/");
             } else {
                 const errorData = await response.text();
                 if (errorData.includes("Username or email already exists")) {

@@ -1,7 +1,9 @@
 ﻿import { useState } from "react";
 import "../styles/seatSelection.css";
+import PaymentModal from "./paymentModal";
 
 const SeatSelection = ({ show, onClose }) => {
+    const [showPayment, setShowPayment] = useState(false);
     const rows = 5;
     const cols = 8;
 
@@ -51,11 +53,29 @@ const SeatSelection = ({ show, onClose }) => {
 
                 <div className="seat-actions">
                     <button className="secondary" onClick={onClose}>Cancel</button>
-                    <button className="primary" disabled={!selectedSeats.length}>
+                    <button
+                        className="primary"
+                        disabled={!selectedSeats.length}
+                        onClick={() => setShowPayment(true)}
+                    >
                         Proceed to Pay
                     </button>
                 </div>
             </div>
+
+            {showPayment && (
+                <PaymentModal
+                    ticketId={show.ticketId}   // pass real ticket id here
+                    amount={selectedSeats.length * show.pricePerSeat}
+                    onClose={() => setShowPayment(false)}
+                    onSuccess={(paymentResult) => {
+                        console.log("Payment Success:", paymentResult);
+                        setShowPayment(false);
+                        onClose();
+                        alert("Booking Confirmed 🎉");
+                    }}
+                />
+            )}
         </div>
     );
 };

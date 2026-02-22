@@ -110,7 +110,7 @@ namespace MiChitra.Services
             var shows = await _context.MovieShows
                 .Include(ms => ms.Movie)
                 .Include(ms => ms.Theatre)
-                .Where(ms => ms.MovieId == movieId && ms.ShowTime > DateTime.UtcNow)
+                .Where(ms => ms.MovieId == movieId)
                 .OrderBy(ms => ms.ShowTime)
                 .ToListAsync();
             return shows.Select(MapToResponseDto);
@@ -121,7 +121,7 @@ namespace MiChitra.Services
             var shows = await _context.MovieShows
                 .Include(ms => ms.Movie)
                 .Include(ms => ms.Theatre)
-                .Where(ms => ms.TheatreId == theatreId && ms.ShowTime > DateTime.UtcNow)
+                .Where(ms => ms.TheatreId == theatreId)
                 .OrderBy(ms => ms.ShowTime)
                 .ToListAsync();
             return shows.Select(MapToResponseDto);
