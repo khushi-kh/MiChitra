@@ -78,8 +78,8 @@ namespace MiChitra.Data
             modelBuilder.Entity<Payment>(entity =>
             {
                 entity.HasOne(p => p.Ticket)
-                      .WithMany()
-                      .HasForeignKey(p => p.TicketId)
+                      .WithOne(t => t.Payment)
+                      .HasForeignKey<Payment>(p => p.TicketId)
                       .OnDelete(DeleteBehavior.Cascade);
                 entity.Property(p => p.Amount).HasPrecision(10, 2);
                 entity.Property(p => p.PaymentMethod).HasConversion<string>();

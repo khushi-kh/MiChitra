@@ -14,6 +14,7 @@ namespace MiChitra.Models
         // Navigation Properties
         public User? User { get; set; }
         public MovieShow? MovieShow { get; set; }
+        public Payment? Payment { get; set; }
 
         public DateTime BookingDate { get; set; } = DateTime.UtcNow;
         public int NumberOfSeats { get; set; }

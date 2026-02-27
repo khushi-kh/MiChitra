@@ -215,6 +215,7 @@ namespace MiChitra.Services
                 .Include(t => t.MovieShow)
                 .ThenInclude(ms => ms.Movie)
                 .Include(t => t.MovieShow.Theatre)
+                .Include(t => t.Payment)
                 .Where(t => t.UserId == userId)
                 .OrderByDescending(t => t.BookingDate)
                 .ToListAsync();
@@ -264,7 +265,8 @@ namespace MiChitra.Services
                 ShowTime = ticket.MovieShow?.ShowTime ?? default,
                 PricePerSeat = ticket.MovieShow?.PricePerSeat ?? 0,
                 MovieName = ticket.MovieShow?.Movie?.MovieName,
-                TheatreName = ticket.MovieShow?.Theatre?.Name
+                TheatreName = ticket.MovieShow?.Theatre?.Name,
+                TransactionId = ticket.Payment?.TransactionId
             };
         }
     }

@@ -3,12 +3,13 @@ using MiChitra.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MiChitra.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "User,Admin")]
+    [Authorize] // any authenticated user; fine-grained checks inside
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -34,7 +35,9 @@ namespace MiChitra.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
-            var loggedInUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var idClaim = User.FindFirst(JwtRegisteredClaimNames.Sub) ?? User.FindFirst(ClaimTypes.NameIdentifier);
+            if (idClaim == null || !int.TryParse(idClaim.Value, out var loggedInUserId))
+                return Unauthorized("Invalid user identifier in token.");
             var isAdmin = User.IsInRole("Admin");
 
             if (!isAdmin && id != loggedInUserId)
@@ -52,7 +55,9 @@ namespace MiChitra.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDTO dto)
         {
-            var loggedInUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var idClaim = User.FindFirst(JwtRegisteredClaimNames.Sub) ?? User.FindFirst(ClaimTypes.NameIdentifier);
+            if (idClaim == null || !int.TryParse(idClaim.Value, out var loggedInUserId))
+                return Unauthorized("Invalid user identifier in token.");
             var isAdmin = User.IsInRole("Admin");
 
             if (!isAdmin && id != loggedInUserId)
@@ -73,6 +78,22 @@ namespace MiChitra.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        // Logged-in user profile
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetMyProfile()
+        {
+            var idClaim = User.FindFirst(JwtRegisteredClaimNames.Sub) ?? User.FindFirst(ClaimTypes.NameIdentifier);
+            if (idClaim == null || !int.TryParse(idClaim.Value, out var userId))
+                return Unauthorized("Invalid user identifier in token.");
+
+            var user = await _userService.GetUserByIdAsync(userId);
+
+            if (user == null)
+                return NotFound("User not found");
+
+            return Ok(user);
         }
 
         // ADMIN ONLY: Deactivate any user

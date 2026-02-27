@@ -6,6 +6,9 @@ import MoviesPage from "./pages/moviesPage";
 import MovieDetails from "./pages/movieDetails";
 import Booking from "./pages/booking";
 import BookingConfirmation from "./pages/bookingConfirmation";
+import Profile from "./pages/profile";
+import EditProfile from "./pages/editProfile";
+import MyBookings from "./pages/myBookings";
 
 
 function App() {
@@ -19,6 +22,9 @@ function App() {
                 <Route path="/movies/:id" element={<MovieDetails />} />
                 <Route path="/booking/:movieId" element={<Booking />} />
                 <Route path="/booking-confirmation" element={<BookingConfirmation />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/edit-profile" element={<EditProfile />} />
+                <Route path="/my-bookings" element={<MyBookings />} />
             </Routes>
         </BrowserRouter>
     );

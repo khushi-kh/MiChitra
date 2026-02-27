@@ -39,7 +39,7 @@ const Register = () => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    username: formData.email,
+                    username: formData.username,
                     email: formData.email,
                     password: formData.password,
                     fName: formData.firstName,
@@ -118,6 +118,18 @@ const Register = () => {
                                     required
                                 />
                             </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-label">Username</label>
+                            <input
+                                type="text"
+                                name="username"
+                                className="form-input"
+                                value={formData.username}
+                                onChange={handleChange}
+                                required
+                            />
                         </div>
 
                         <div className="form-group">
