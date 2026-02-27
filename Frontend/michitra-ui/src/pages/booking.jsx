@@ -9,6 +9,7 @@ const Booking = () => {
     const isAuthenticated = !!localStorage.getItem("token");
     const [scrolled, setScrolled] = useState(false);
     const { movieId } = useParams();
+
     const [theatres, setTheatres] = useState([]);
     const [selectedTheatre, setSelectedTheatre] = useState(null);
     const [shows, setShows] = useState([]);
@@ -17,28 +18,43 @@ const Booking = () => {
     const [showSeatModal, setShowSeatModal] = useState(false);
     const [selectedShow, setSelectedShow] = useState(null);
 
+    // Navbar scroll effect
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 50);
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    // Fetch theatres
     useEffect(() => {
+        setLoading(true);
         api.get(`/movieshows/movie/${movieId}/theatres`)
             .then((res) => {
-                console.log("Theatres API response:", res.data);
                 setTheatres(res.data);
                 setLoading(false);
             })
             .catch(() => setLoading(false));
     }, [movieId]);
 
+    // Check if show is expired
+    const isShowExpired = (showTime) => {
+        const now = new Date();
+        const showDate = new Date(showTime);
+        return showDate < now;
+    };
+
+    // Handle theatre click
     const handleTheatreClick = (theatre) => {
         setSelectedTheatre(theatre);
         setLoading(true);
+
         api.get(`/movieshows/movie/${movieId}/theatre/${theatre.theatreId}`)
             .then((res) => {
-                setShows(res.data);
+                // Sort shows (upcoming first)
+                const sortedShows = res.data.sort(
+                    (a, b) => new Date(a.showTime) - new Date(b.showTime)
+                );
+                setShows(sortedShows);
                 setLoading(false);
             })
             .catch(() => setLoading(false));
@@ -56,9 +72,12 @@ const Booking = () => {
                     <p className="booking-subtitle">Select a theatre and showtime</p>
                 </div>
 
+                {/* Theatre Selection */}
                 {!selectedTheatre ? (
                     <>
-                        {loading ? <p className="loading-text">Loading theatres...</p> : (
+                        {loading ? (
+                            <p className="loading-text">Loading theatres...</p>
+                        ) : (
                             <div className="theatres-grid">
                                 {theatres.map((theatre) => (
                                     <div
@@ -75,45 +94,91 @@ const Booking = () => {
                     </>
                 ) : (
                     <>
-                        <button className="back-button" onClick={() => { setSelectedTheatre(null); setShows([]); }}>← Back to Theatres</button>
+                        <button
+                            className="back-button"
+                            onClick={() => {
+                                setSelectedTheatre(null);
+                                setShows([]);
+                            }}
+                        >
+                            ← Back to Theatres
+                        </button>
+
                         <div className="theatre-header">
-                            <h2 className="theatre-name">{selectedTheatre.theatreName}</h2>
+                            <h2 className="theatre-name">
+                                {selectedTheatre.theatreName}
+                            </h2>
                         </div>
 
-                        {loading ? <p className="loading-text">Loading shows...</p> : (
+                        {/* Shows */}
+                        {loading ? (
+                            <p className="loading-text">Loading shows...</p>
+                        ) : (
                             <div className="shows-grid">
-                                {shows.map((show) => (
-                                    <div key={show.id} className="show-card">
-                                        <div className="show-info">
-                                            <p className="show-time">{new Date(show.showTime).toLocaleString()}</p>
-                                            <p className={`show-seats ${show.availableSeats < 10 ? 'low-seats' : ''}`}>
-                                                {show.availableSeats > 0 ? `${show.availableSeats} seats available` : 'Sold Out'}
-                                            </p>
-                                        </div>
-                                        <button
-                                            className="book-show-button"
-                                            disabled={show.availableSeats === 0}
-                                            onClick={() => {
-                                                setSelectedShow(show);
-                                                setShowSeatModal(true);
-                                            }}
+                                {shows.map((show) => {
+                                    const expired = isShowExpired(show.showTime);
+                                    const soldOut = show.availableSeats === 0;
+
+                                    return (
+                                        <div
+                                            key={show.id}
+                                            className={`show-card ${expired ? "expired-show" : ""
+                                                }`}
                                         >
-                                            {show.availableSeats === 0 ? "Sold Out" : "Book Now"}
-                                        </button>
-                                    </div>
-                                ))}
+                                            <div className="show-info">
+                                                <p className="show-time">
+                                                    {new Date(
+                                                        show.showTime
+                                                    ).toLocaleString()}
+                                                </p>
+
+                                                <p
+                                                    className={`show-seats ${show.availableSeats < 10 &&
+                                                            show.availableSeats > 0
+                                                            ? "low-seats"
+                                                            : ""
+                                                        }`}
+                                                >
+                                                    {expired
+                                                        ? "Show Ended"
+                                                        : soldOut
+                                                            ? "Sold Out"
+                                                            : `${show.availableSeats} seats available`}
+                                                </p>
+                                            </div>
+
+                                            <button
+                                                className="book-show-button"
+                                                disabled={soldOut || expired}
+                                                onClick={() => {
+                                                    if (!expired && !soldOut) {
+                                                        setSelectedShow(show);
+                                                        setShowSeatModal(true);
+                                                    }
+                                                }}
+                                            >
+                                                {expired
+                                                    ? "Show Ended"
+                                                    : soldOut
+                                                        ? "Sold Out"
+                                                        : "Book Now"}
+                                            </button>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         )}
                     </>
                 )}
             </div>
 
+            {/* Seat Modal */}
             {showSeatModal && selectedShow && (
                 <SeatSelection
                     show={{
                         ...selectedShow,
                         movieName: selectedShow.movieName,
-                        theatreName: selectedTheatre.theatreName
+                        theatreName: selectedTheatre.theatreName,
                     }}
                     onClose={() => setShowSeatModal(false)}
                 />
