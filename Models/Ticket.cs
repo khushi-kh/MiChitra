@@ -17,6 +17,7 @@ namespace MiChitra.Models
 
         public DateTime BookingDate { get; set; } = DateTime.UtcNow;
         public int NumberOfSeats { get; set; }
+        public string? SeatNumbers { get; set; }
         public decimal TotalPrice { get; set; }
         public TicketStatus Status { get; set; } = TicketStatus.Reserved;
         public DateTime? ReservationExpiry { get; set; }

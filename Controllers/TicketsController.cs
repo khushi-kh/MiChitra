@@ -8,7 +8,7 @@ namespace MiChitra.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,User")]
+    [Authorize] // any authenticated user can book/cancel tickets
     public class TicketsController : ControllerBase
     {
         private readonly ITicketService _ticketService;
@@ -41,6 +41,13 @@ namespace MiChitra.Controllers
         {
             var tickets = await _ticketService.GetTicketsByUserIdAsync(userId);
             return Ok(tickets);
+        }
+
+        [HttpGet("booked-seats/{movieShowId}")]
+        public async Task<IActionResult> GetBookedSeats(int movieShowId)
+        {
+            var bookedSeats = await _ticketService.GetBookedSeatsAsync(movieShowId);
+            return Ok(bookedSeats);
         }
 
         [HttpPost("book")]

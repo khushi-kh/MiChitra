@@ -9,7 +9,7 @@ namespace MiChitra.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "User,Admin")]
+    [Authorize] // any authenticated user can pay/refund, ownership checked per ticket
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;

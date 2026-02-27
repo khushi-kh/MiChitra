@@ -31,7 +31,8 @@ const PaymentModal = ({ ticketId, amount, onClose, onSuccess }) => {
 
             onSuccess(res.data);
         } catch (err) {
-            setError(err.response?.data || "Payment failed");
+            const errorMsg = err.response?.data?.message || err.response?.data || "Payment failed";
+            setError(errorMsg);
         } finally {
             setLoading(false);
         }

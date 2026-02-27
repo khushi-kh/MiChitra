@@ -4,7 +4,8 @@ import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
 import MoviesPage from "./pages/moviesPage";
 import MovieDetails from "./pages/movieDetails";
-import Booking from "./pages/booking"
+import Booking from "./pages/booking";
+import BookingConfirmation from "./pages/bookingConfirmation";
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/movies" element={<MoviesPage />} />
                 <Route path="/movies/:id" element={<MovieDetails />} />
                 <Route path="/booking/:movieId" element={<Booking />} />
+                <Route path="/booking-confirmation" element={<BookingConfirmation />} />
             </Routes>
         </BrowserRouter>
     );

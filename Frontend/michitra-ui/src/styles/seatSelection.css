@@ -59,6 +59,12 @@
         background: #4CAF50;
     }
 
+    .seat.booked {
+        background: #f44336;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
 .seat-actions {
     display: flex;
     justify-content: space-between;

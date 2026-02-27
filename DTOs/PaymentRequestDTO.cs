@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MiChitra.DTOs
 {
-    public class PaymentRequestDTO
+    public class PaymentRequestDTO : IValidatableObject
     {
         [Required]
         public int TicketId { get; set; }
@@ -11,22 +11,37 @@ namespace MiChitra.DTOs
         [Required]
         public PaymentMethod PaymentMethod { get; set; }
 
-        [Required]
-        public string CardNumber { get; set; } = string.Empty;
+        public string? CardNumber { get; set; }
 
         [Required]
         public decimal Amount { get; set; }
 
-        [Required]
-        public string CardHolderName { get; set; } = string.Empty;
+        public string? CardHolderName { get; set; }
 
-        [Required]
-        public string ExpiryMonth { get; set; } = string.Empty;
+        public string? Expiry { get; set; }
 
-        [Required]
-        public string ExpiryYear { get; set; } = string.Empty;
+        public string? CVV { get; set; }
 
-        [Required]
-        public string CVV { get; set; } = string.Empty;
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var requiresCard =
+                PaymentMethod == PaymentMethod.CreditCard ||
+                PaymentMethod == PaymentMethod.DebitCard;
+
+            if (!requiresCard)
+                yield break;
+
+            if (string.IsNullOrWhiteSpace(CardNumber))
+                yield return new ValidationResult("Card number is required for card payments", new[] { nameof(CardNumber) });
+
+            if (string.IsNullOrWhiteSpace(CardHolderName))
+                yield return new ValidationResult("Card holder name is required for card payments", new[] { nameof(CardHolderName) });
+
+            if (string.IsNullOrWhiteSpace(Expiry))
+                yield return new ValidationResult("Expiry is required for card payments", new[] { nameof(Expiry) });
+
+            if (string.IsNullOrWhiteSpace(CVV))
+                yield return new ValidationResult("CVV is required for card payments", new[] { nameof(CVV) });
+        }
     }
 }

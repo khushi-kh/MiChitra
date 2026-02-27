@@ -1,4 +1,4 @@
-﻿using MiChitra.Interfaces;
+using MiChitra.Interfaces;
 using MiChitra.Models;
 using MiChitra.Data;
 using MiChitra.DTOs;
@@ -21,37 +21,78 @@ namespace MiChitra.Services
         {
             _logger.LogInformation("Processing payment for booking {TicketId} with amount {Amount}", request.TicketId, request.Amount);
 
-            // Simulate processing payment delay
-            await Task.Delay(1000);
-
-            // Simulate payment success rate
-            bool isSuccess = true;
-
-            var payment = new Payment
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                TicketId = request.TicketId,
-                Amount = request.Amount,
-                PaymentMethod = request.PaymentMethod,
-                PaymentStatus = isSuccess ? PaymentStatus.Completed : PaymentStatus.Failed,
-                TransactionId = GenerateTransactionIdAsync(),
-                PaymentDate = DateTime.UtcNow
-            };
+                // Simulate processing payment delay
+                await Task.Delay(1000);
 
-            _context.Payments.Add(payment);
-            await _context.SaveChangesAsync();
+                var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.TicketId == request.TicketId);
+                if (ticket == null)
+                    throw new InvalidOperationException("Ticket not found");
 
-            var result = new PaymentResponseDTO
+                if (ticket.Status == TicketStatus.Cancelled || ticket.Status == TicketStatus.Expired)
+                    throw new InvalidOperationException($"Cannot pay for a ticket with status: {ticket.Status}");
+
+                if (ticket.Status == TicketStatus.Booked)
+                    throw new InvalidOperationException("Ticket is already paid");
+
+                if (ticket.ReservationExpiry.HasValue && ticket.ReservationExpiry.Value <= DateTime.UtcNow)
+                {
+                    ticket.Status = TicketStatus.Expired;
+                    ticket.UpdatedAt = DateTime.UtcNow;
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    throw new InvalidOperationException("Reservation expired. Please book again.");
+                }
+
+                if (request.Amount != ticket.TotalPrice)
+                    throw new InvalidOperationException("Payment amount does not match ticket total");
+
+                // Simulate payment success rate
+                bool isSuccess = true;
+
+                var payment = new Payment
+                {
+                    TicketId = request.TicketId,
+                    Amount = request.Amount,
+                    PaymentMethod = request.PaymentMethod,
+                    PaymentStatus = isSuccess ? PaymentStatus.Completed : PaymentStatus.Failed,
+                    TransactionId = GenerateTransactionId(),
+                    PaymentDate = DateTime.UtcNow
+                };
+
+                _context.Payments.Add(payment);
+
+                // Update ticket status to Booked if payment successful
+                if (isSuccess)
+                {
+                    ticket.Status = TicketStatus.Booked;
+                    ticket.ReservationExpiry = null;
+                    ticket.UpdatedAt = DateTime.UtcNow;
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                var result = new PaymentResponseDTO
+                {
+                    TransactionId = payment.TransactionId,
+                    TicketId = payment.TicketId,
+                    Amount = payment.Amount,
+                    PaymentDate = payment.PaymentDate,
+                    Status = payment.PaymentStatus,
+                    Message = isSuccess ? "Payment processed successfully" : "Payment failed"
+                };
+
+                _logger.LogInformation("Payment processed with ID: {PaymentId}, Status: {Status}", result.TransactionId, result.Status);
+                return result;
+            }
+            catch
             {
-                TransactionId = payment.TransactionId,
-                TicketId = payment.TicketId,
-                Amount = payment.Amount,
-                PaymentDate = payment.PaymentDate,
-                Status = payment.PaymentStatus,
-                Message = isSuccess ? "Payment processed successfully" : "Payment failed"
-            };
-
-            _logger.LogInformation("Payment processed with ID: {PaymentId}, Status: {Status}", result.TransactionId, result.Status);
-            return result;
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         public async Task<PaymentResponseDTO?> GetPaymentByIdAsync(string transactionId)
@@ -77,7 +118,7 @@ namespace MiChitra.Services
         public async Task<PaymentResponseDTO> ProcessRefundAsync(int ticketId) {
             _logger.LogInformation("Processing refund for ticket {TicketId}", ticketId);
 
-            var payment = await _context.Payments.FindAsync(ticketId);
+            var payment = await _context.Payments.FirstOrDefaultAsync(p => p.TicketId == ticketId);
 
             if (payment == null || payment.PaymentStatus != PaymentStatus.Completed) {
                 return new PaymentResponseDTO
@@ -88,33 +129,56 @@ namespace MiChitra.Services
                 };
             }
 
-            // Simulate refund processing delay
-            await Task.Delay(500);
-
-            // Simulate refund success rate as 95%
-            var isSuccess = Random.Shared.NextDouble() > 0.05;
-
-            if (isSuccess)
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                payment.PaymentStatus = PaymentStatus.Refunded;
-                payment.UpdatedAt = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
+                // Simulate refund processing delay
+                await Task.Delay(500);
+
+                // Simulate refund success rate as 95%
+                var isSuccess = Random.Shared.NextDouble() > 0.05;
+
+                if (isSuccess)
+                {
+                    payment.PaymentStatus = PaymentStatus.Refunded;
+                    payment.UpdatedAt = DateTime.UtcNow;
+
+                    // Update ticket status to Cancelled
+                    var ticket = await _context.Tickets.FindAsync(ticketId);
+                    if (ticket != null)
+                    {
+                        ticket.Status = TicketStatus.Cancelled;
+                        ticket.UpdatedAt = DateTime.UtcNow;
+                    }
+
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                else
+                {
+                    await transaction.RollbackAsync();
+                }
+
+                _logger.LogInformation("Refund processed for payment ID: {PaymentId}, Status: {Status}", payment.TransactionId, isSuccess ? PaymentStatus.Refunded : PaymentStatus.RefundFailed);
+
+                return new PaymentResponseDTO
+                {
+                    TicketId = ticketId,
+                    Amount = payment.Amount,
+                    Status = isSuccess ? PaymentStatus.Refunded : PaymentStatus.RefundFailed,
+                    Message = isSuccess ? "Refund processed successfully" : "Refund failed",
+                    TransactionId = payment.TransactionId
+                };
             }
-
-            _logger.LogInformation("Refund processed for payment ID: {PaymentId}, Status: {Status}", payment.TransactionId, PaymentStatus.Refunded);
-
-            return new PaymentResponseDTO
+            catch
             {
-                TicketId = ticketId,
-                Amount = payment.Amount,
-                Status = isSuccess ? PaymentStatus.Refunded : PaymentStatus.RefundFailed,
-                Message = isSuccess ? "Refund processed successfully" : "Refund failed",
-                TransactionId = payment.TransactionId
-            };
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     
 
-        private static string GenerateTransactionIdAsync()
+        private static string GenerateTransactionId()
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var random = new Random();

@@ -22,6 +22,8 @@ namespace MiChitra.Services
             var tickets = await _context.Tickets
                 .Include(t => t.MovieShow)
                 .ThenInclude(ms => ms.Movie)
+                .Include(t => t.MovieShow)
+                .ThenInclude(ms => ms.Theatre)
                 .Include(t => t.User)
                 .ToListAsync();
             return tickets.Select(MapToResponseDto);
@@ -32,6 +34,8 @@ namespace MiChitra.Services
             var ticket = await _context.Tickets
                 .Include(t => t.MovieShow)
                 .ThenInclude(ms => ms.Movie)
+                .Include(t => t.MovieShow)
+                .ThenInclude(ms => ms.Theatre)
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(t => t.TicketId == id);
             return ticket == null ? null : MapToResponseDto(ticket);
@@ -43,6 +47,8 @@ namespace MiChitra.Services
             var ticket = await _context.Tickets
                 .Include(t => t.MovieShow)
                 .ThenInclude(ms => ms.Movie)
+                .Include(t => t.MovieShow)
+                .ThenInclude(ms => ms.Theatre)
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(t => t.TicketId == ticketId);
 
@@ -71,6 +77,39 @@ namespace MiChitra.Services
                 if (movieShow.ShowTime <= DateTime.UtcNow)
                     throw new InvalidOperationException("Cannot book tickets for past shows");
 
+                // Validate requested seats (if provided) and ensure they are not already reserved/booked
+                var requestedSeats = (dto.SeatNumbers ?? new List<string>())
+                    .Where(s => !string.IsNullOrWhiteSpace(s))
+                    .Select(s => s.Trim())
+                    .ToList();
+
+                if (requestedSeats.Count > 0)
+                {
+                    var distinctRequested = requestedSeats.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                    if (distinctRequested.Count != requestedSeats.Count)
+                        throw new InvalidOperationException("Duplicate seat numbers selected");
+
+                    if (distinctRequested.Count != dto.NumberOfSeats)
+                        throw new InvalidOperationException("Number of selected seats does not match NumberOfSeats");
+
+                    var existingSeatStrings = await _context.Tickets
+                        .Where(t =>
+                            t.MovieShowId == dto.MovieShowId &&
+                            t.Status != TicketStatus.Cancelled &&
+                            t.Status != TicketStatus.Expired &&
+                            t.SeatNumbers != null)
+                        .Select(t => t.SeatNumbers!)
+                        .ToListAsync();
+
+                    var blockedSeats = existingSeatStrings
+                        .SelectMany(s => s.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                        .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                    var conflicting = distinctRequested.Where(s => blockedSeats.Contains(s)).ToList();
+                    if (conflicting.Count > 0)
+                        throw new InvalidOperationException($"Selected seats are no longer available: {string.Join(", ", conflicting)}");
+                }
+
                 // Calculate total price
                 var totalPrice = dto.NumberOfSeats * movieShow.PricePerSeat;
 
@@ -92,9 +131,12 @@ namespace MiChitra.Services
                     UserId = dto.UserId,
                     MovieShowId = dto.MovieShowId,
                     NumberOfSeats = dto.NumberOfSeats,
+                    SeatNumbers = requestedSeats.Count > 0 ? string.Join(",", requestedSeats) : null,
                     TotalPrice = totalPrice,
                     BookingDate = DateTime.UtcNow,
-                    Status = TicketStatus.Booked
+                    Status = TicketStatus.Reserved,
+                    ReservationExpiry = DateTime.UtcNow.AddMinutes(10),
+                    UpdatedAt = DateTime.UtcNow
                 };
 
                 _context.Tickets.Add(ticket);
@@ -108,6 +150,8 @@ namespace MiChitra.Services
                 var bookedTicket = await _context.Tickets
                     .Include(t => t.MovieShow)
                     .ThenInclude(ms => ms.Movie)
+                    .Include(t => t.MovieShow)
+                    .ThenInclude(ms => ms.Theatre)
                     .Include(t => t.User)
                     .FirstAsync(t => t.TicketId == ticket.TicketId);
 
@@ -186,6 +230,26 @@ namespace MiChitra.Services
             return tickets.Select(MapToResponseDto);
         }
 
+        public async Task<List<string>> GetBookedSeatsAsync(int movieShowId)
+        {
+            var tickets = await _context.Tickets
+                .Where(t =>
+                    t.MovieShowId == movieShowId &&
+                    t.Status != TicketStatus.Cancelled &&
+                    t.Status != TicketStatus.Expired)
+                .ToListAsync();
+
+            var bookedSeats = new List<string>();
+            foreach (var ticket in tickets)
+            {
+                if (!string.IsNullOrEmpty(ticket.SeatNumbers))
+                {
+                    bookedSeats.AddRange(ticket.SeatNumbers.Split(','));
+                }
+            }
+            return bookedSeats;
+        }
+
         private static TicketResponseDTO MapToResponseDto(Ticket ticket)
         {
             return new TicketResponseDTO
@@ -196,7 +260,11 @@ namespace MiChitra.Services
                 BookingDate = ticket.BookingDate,
                 NumberOfSeats = ticket.NumberOfSeats,
                 TotalPrice = ticket.TotalPrice,
-                Status = ticket.Status
+                Status = ticket.Status,
+                ShowTime = ticket.MovieShow?.ShowTime ?? default,
+                PricePerSeat = ticket.MovieShow?.PricePerSeat ?? 0,
+                MovieName = ticket.MovieShow?.Movie?.MovieName,
+                TheatreName = ticket.MovieShow?.Theatre?.Name
             };
         }
     }

@@ -13,5 +13,6 @@ namespace MiChitra.Interfaces
         Task<bool> CancelTicketAsync(int ticketId);
         Task<IEnumerable<TicketResponseDTO>> GetTicketsByUserIdAsync(int userId);
         Task<IEnumerable<TicketResponseDTO>> GetTicketsByShowIdAsync(int showId);
+        Task<List<string>> GetBookedSeatsAsync(int movieShowId);
     }
 }

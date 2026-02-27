@@ -1,15 +1,59 @@
-﻿import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/seatSelection.css";
 import PaymentModal from "./paymentModal";
+import api from "../api/axios";
 
 const SeatSelection = ({ show, onClose }) => {
+    const navigate = useNavigate();
     const [showPayment, setShowPayment] = useState(false);
+    const [ticketId, setTicketId] = useState(null);
+    const [bookingError, setBookingError] = useState("");
     const rows = 5;
     const cols = 8;
 
     const [selectedSeats, setSelectedSeats] = useState([]);
+    const [bookedSeats, setBookedSeats] = useState([]);
+
+    useEffect(() => {
+        const fetchBookedSeats = async () => {
+            try {
+                const response = await api.get(`/tickets/booked-seats/${show.id}`);
+                setBookedSeats(response.data);
+            } catch (error) {
+                console.error("Failed to fetch booked seats:", error);
+            }
+        };
+        fetchBookedSeats();
+    }, [show.id]);
+
+    const handleProceedToPay = async () => {
+        setBookingError("");
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                setBookingError("Please login to book tickets");
+                return;
+            }
+            
+            const userId = JSON.parse(atob(token.split(".")[1])).sub;
+            const response = await api.post("/Tickets/book", {
+                userId: parseInt(userId),
+                movieShowId: show.id,
+                numberOfSeats: selectedSeats.length,
+                seatNumbers: selectedSeats
+            });
+            setTicketId(response.data?.ticketId ?? response.data?.TicketId ?? response.data?.ticketID ?? null);
+            setShowPayment(true);
+        } catch (error) {
+            console.error("Booking error:", error);
+            const errorMsg = error.response?.data?.message || error.response?.data || "Failed to book ticket";
+            setBookingError(errorMsg);
+        }
+    };
 
     const toggleSeat = (seat) => {
+        if (bookedSeats.includes(seat)) return;
         setSelectedSeats((prev) =>
             prev.includes(seat)
                 ? prev.filter((s) => s !== seat)
@@ -31,11 +75,12 @@ const SeatSelection = ({ show, onClose }) => {
                             {Array.from({ length: cols }).map((_, c) => {
                                 const seatId = `${r}-${c}`;
                                 const isSelected = selectedSeats.includes(seatId);
+                                const isBooked = bookedSeats.includes(seatId);
 
                                 return (
                                     <div
                                         key={seatId}
-                                        className={`seat ${isSelected ? "selected" : "available"}`}
+                                        className={`seat ${isBooked ? "booked" : isSelected ? "selected" : "available"}`}
                                         onClick={() => toggleSeat(seatId)}
                                     >
                                         {r + 1}-{c + 1}
@@ -51,28 +96,36 @@ const SeatSelection = ({ show, onClose }) => {
                     Total: ₹{selectedSeats.length * show.pricePerSeat}
                 </div>
 
+                {bookingError && <p className="error">{bookingError}</p>}
+
                 <div className="seat-actions">
                     <button className="secondary" onClick={onClose}>Cancel</button>
                     <button
                         className="primary"
                         disabled={!selectedSeats.length}
-                        onClick={() => setShowPayment(true)}
+                        onClick={handleProceedToPay}
                     >
                         Proceed to Pay
                     </button>
                 </div>
             </div>
 
-            {showPayment && (
+            {showPayment && ticketId && (
                 <PaymentModal
-                    ticketId={show.ticketId}   // pass real ticket id here
+                    ticketId={ticketId}
                     amount={selectedSeats.length * show.pricePerSeat}
                     onClose={() => setShowPayment(false)}
                     onSuccess={(paymentResult) => {
-                        console.log("Payment Success:", paymentResult);
-                        setShowPayment(false);
-                        onClose();
-                        alert("Booking Confirmed 🎉");
+                        navigate("/booking-confirmation", {
+                            state: {
+                                movieName: show.movieName,
+                                theatreName: show.theatreName,
+                                showTime: show.showTime,
+                                seats: selectedSeats,
+                                amount: selectedSeats.length * show.pricePerSeat,
+                                transactionId: paymentResult.transactionId
+                            }
+                        });
                     }}
                 />
             )}

@@ -15,5 +15,7 @@ namespace MiChitra.DTOs
         [Required]
         [Range(1, 10, ErrorMessage = "Number of seats must be between 1 and 10")]
         public int NumberOfSeats { get; set; }
+
+        public List<string>? SeatNumbers { get; set; }
     }
 }
