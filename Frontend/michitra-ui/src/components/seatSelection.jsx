@@ -43,7 +43,10 @@ const SeatSelection = ({ show, onClose }) => {
                 numberOfSeats: selectedSeats.length,
                 seatNumbers: selectedSeats
             });
-            setTicketId(response.data?.ticketId ?? response.data?.TicketId ?? response.data?.ticketID ?? null);
+            console.log("Booking response:", response.data);
+            const id = response.data.ticketId || response.data.TicketId;
+            console.log("Extracted ticketId:", id);
+            setTicketId(id);
             setShowPayment(true);
         } catch (error) {
             console.error("Booking error:", error);
@@ -118,6 +121,7 @@ const SeatSelection = ({ show, onClose }) => {
                     onSuccess={(paymentResult) => {
                         navigate("/booking-confirmation", {
                             state: {
+                                ticketId: ticketId,
                                 movieName: show.movieName,
                                 theatreName: show.theatreName,
                                 showTime: show.showTime,

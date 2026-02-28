@@ -38,6 +38,18 @@ const MyBookings = () => {
         if (isAuthenticated) fetchBookings();
     }, [isAuthenticated]);
 
+    const handleCancelTicket = async (ticketId) => {
+        if (!window.confirm("Are you sure you want to cancel this booking?")) return;
+        
+        try {
+            await api.put(`/tickets/cancel/${ticketId}`);
+            alert("Ticket cancelled successfully");
+            setBookings(bookings.map(b => b.ticketId === ticketId ? {...b, status: "Cancelled"} : b));
+        } catch (error) {
+            alert(error.response?.data || "Failed to cancel ticket");
+        }
+    };
+
     const getStatusClass = (status) => {
         switch (status) {
             case "Booked":
@@ -145,6 +157,11 @@ const MyBookings = () => {
                                         <span className="detail-value">#{booking.ticketId}</span>
                                     </div>
                                 </div>
+                                {booking.status === "Booked" && new Date(booking.showTime) > new Date() && (
+                                    <button className="cancel-btn" onClick={() => handleCancelTicket(booking.ticketId)}>
+                                        Cancel Ticket
+                                    </button>
+                                )}
                             </div>
                         ))}
                     </div>

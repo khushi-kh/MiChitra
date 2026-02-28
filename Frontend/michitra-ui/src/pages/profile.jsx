@@ -111,7 +111,7 @@ const Profile = () => {
                                         strokeDashoffset={`-${confirmedPercent * 5.03}`}
                                         transform="rotate(-90 100 100)"
                                     />
-                                    <text x="100" y="95" textAnchor="middle" className="chart-total-label">Total</text>
+                                    <text x="100" y="85" textAnchor="middle" className="chart-total-label">Total</text>
                                     <text x="100" y="115" textAnchor="middle" className="chart-total-value">{total}</text>
                                 </svg>
                             </div>

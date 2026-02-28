@@ -65,6 +65,33 @@
     font-weight: 600;
 }
 
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cancel-button {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.cancel-button:hover:not(:disabled) {
+    background: #b91c1c;
+}
+
+.cancel-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .home-button {
     background: #4CAF50;
     color: white;
