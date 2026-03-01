@@ -32,12 +32,19 @@ const Booking = () => {
         setLoading(true);
         api.get(`/movieshows/movie/${movieId}/theatres`)
             .then((res) => {
-                setTheatres(res.data);
-                if (theatreIdFromUrl) {
-                    const theatre = res.data.find(t => t.theatreId === parseInt(theatreIdFromUrl));
-                    if (theatre) handleTheatreClick(theatre);
-                }
-                setLoading(false);
+                const now = new Date();
+                api.get(`/movieshows/movie/${movieId}`)
+                    .then((showsRes) => {
+                        const activeShows = showsRes.data.filter(show => new Date(show.showTime) > now);
+                        const activeTheatreIds = [...new Set(activeShows.map(s => s.theatreId))];
+                        const activeTheatres = res.data.filter(t => activeTheatreIds.includes(t.theatreId));
+                        setTheatres(activeTheatres);
+                        if (theatreIdFromUrl) {
+                            const theatre = activeTheatres.find(t => t.theatreId === parseInt(theatreIdFromUrl));
+                            if (theatre) handleTheatreClick(theatre);
+                        }
+                        setLoading(false);
+                    });
             })
             .catch(() => setLoading(false));
     }, [movieId, theatreIdFromUrl]);
@@ -75,7 +82,7 @@ const Booking = () => {
             <div className="booking-container">
                 <div className="booking-header">
                     <h1 className="booking-title">Book Your Tickets</h1>
-                    <p className="booking-subtitle">Select a theatre and showtime</p>
+                    <p className={`booking-subtitle ${theatres.length === 0 && !loading ? "no-shows" : ""}`}>{theatres.length === 0 && !loading ? "No available shows" : "Select a theatre and showtime"}</p>
                 </div>
 
                 {/* Theatre Selection */}
@@ -132,6 +139,9 @@ const Booking = () => {
                                                 }`}
                                         >
                                             <div className="show-info">
+                                                <p className="show-movie-name">
+                                                    {show.movieName}
+                                                </p>
                                                 <p className="show-time">
                                                     {new Date(
                                                         show.showTime

@@ -23,6 +23,12 @@
     font-size: 1.1rem !important;
 }
 
+.booking-subtitle.no-shows {
+    color: #e63946 !important;
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+}
+
 .back-button {
     background: transparent !important;
     color: #ffffff !important;
