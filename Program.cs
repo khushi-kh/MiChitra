@@ -31,6 +31,8 @@ builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPaymentService, MockPaymentService>();
+builder.Services.AddHostedService<TicketExpirationService>();
+builder.Services.AddHostedService<TicketCompletionService>();
 
 // Add controllers
 builder.Services.AddControllers().AddJsonOptions(options =>

@@ -135,7 +135,7 @@ namespace MiChitra.Services
                     TotalPrice = totalPrice,
                     BookingDate = DateTime.UtcNow,
                     Status = TicketStatus.Reserved,
-                    ReservationExpiry = DateTime.UtcNow.AddMinutes(10),
+                    ReservationExpiry = DateTime.UtcNow.AddMinutes(5),
                     UpdatedAt = DateTime.UtcNow
                 };
 
@@ -214,7 +214,8 @@ namespace MiChitra.Services
             var tickets = await _context.Tickets
                 .Include(t => t.MovieShow)
                 .ThenInclude(ms => ms.Movie)
-                .Include(t => t.MovieShow.Theatre)
+                .Include(t => t.MovieShow)
+                .ThenInclude(ms => ms.Theatre)
                 .Include(t => t.Payment)
                 .Where(t => t.UserId == userId)
                 .OrderByDescending(t => t.BookingDate)
@@ -266,7 +267,9 @@ namespace MiChitra.Services
                 PricePerSeat = ticket.MovieShow?.PricePerSeat ?? 0,
                 MovieName = ticket.MovieShow?.Movie?.MovieName,
                 TheatreName = ticket.MovieShow?.Theatre?.Name,
-                TransactionId = ticket.Payment?.TransactionId
+                City = ticket.MovieShow?.Theatre?.City,
+                TransactionId = ticket.Payment?.TransactionId,
+                ReservationExpiry = ticket.ReservationExpiry
             };
         }
     }

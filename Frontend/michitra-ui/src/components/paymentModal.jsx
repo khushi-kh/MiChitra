@@ -16,6 +16,12 @@ const PaymentModal = ({ ticketId, amount, onClose, onSuccess }) => {
 
     const handlePay = async () => {
         setError("");
+
+        if ((method === "CreditCard" || method === "DebitCard") && !isValidLuhn(card.number)) {
+            setError("Invalid card number");
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -36,6 +42,25 @@ const PaymentModal = ({ ticketId, amount, onClose, onSuccess }) => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const isValidLuhn = (cardNumber) => {
+        if (!cardNumber) return false;
+        const digits = cardNumber.replace(/\s|-/g, "");
+        if (!/^\d+$/.test(digits)) return false;
+
+        let sum = 0;
+        let alternate = false;
+        for (let i = digits.length - 1; i >= 0; i--) {
+            let n = parseInt(digits[i]);
+            if (alternate) {
+                n *= 2;
+                if (n > 9) n -= 9;
+            }
+            sum += n;
+            alternate = !alternate;
+        }
+        return sum % 10 === 0;
     };
 
     return (

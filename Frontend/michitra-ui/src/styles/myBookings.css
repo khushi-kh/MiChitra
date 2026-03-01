@@ -169,6 +169,30 @@
     box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4) !important;
 }
 
+.pay-now-btn {
+    margin-top: 1rem !important;
+    width: 100% !important;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+    color: #ffffff !important;
+    padding: 0.8rem 1.5rem !important;
+    border-radius: 8px !important;
+    border: none !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.pay-now-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4) !important;
+}
+
+.expires-timer {
+    color: #eab308 !important;
+    font-weight: 700 !important;
+}
+
 .empty-state {
     text-align: center !important;
     padding: 4rem 2rem !important;
@@ -224,4 +248,39 @@
     .booking-header-section {
         flex-direction: column !important;
     }
+}
+.pagination {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 1.5rem !important;
+    margin-top: 3rem !important;
+}
+
+.pagination-btn {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #ffffff !important;
+    padding: 0.8rem 1.5rem !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #e63946 0%, #dc2626 100%) !important;
+    border-color: transparent !important;
+    box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3) !important;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.3 !important;
+    cursor: not-allowed !important;
+}
+
+.pagination-info {
+    color: #b8b8c8 !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
 }

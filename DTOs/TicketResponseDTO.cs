@@ -17,6 +17,8 @@ namespace MiChitra.DTOs
 
         public string? MovieName { get; set; }
         public string? TheatreName { get; set; }
+        public string? City { get; set; }
         public string? TransactionId { get; set; }
+        public DateTime? ReservationExpiry { get; set; }
     }
 }
