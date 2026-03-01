@@ -1,11 +1,26 @@
 ﻿import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../api/axios"; // adjust path if needed
 
 const Navbar = ({ isAuthenticated, scrolled }) => {
     const user = JSON.parse(localStorage.getItem("user") || "null");
     const [query, setQuery] = useState("");
+    const [cities, setCities] = useState([]);
+    const [showCitiesDropdown, setShowCitiesDropdown] = useState(false);
     const navigate = useNavigate();
+
+
+    useEffect(() => {
+        const fetchCities = async () => {
+            try {
+                const response = await api.get('/theatres/cities');
+                setCities(response.data);
+            } catch (error) {
+                console.error('Failed to fetch cities:', error);
+            }
+        };
+        fetchCities();
+    }, []);
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -53,7 +68,32 @@ const Navbar = ({ isAuthenticated, scrolled }) => {
             <ul className="nav-links">
                 <li><Link to="/movies" className="nav-link">Movies</Link></li>
                 <li><Link to="/theatres" className="nav-link">Theatres</Link></li>
-                <li><Link to="/cities" className="nav-link">Cities</Link></li>
+                <li className="nav-dropdown" onMouseEnter={() => setShowCitiesDropdown(true)} onMouseLeave={() => setShowCitiesDropdown(false)}>
+                    <span className="nav-link">
+                        Cities ▼
+                    </span>
+                    {showCitiesDropdown && (
+                        <div className="mega-dropdown">
+                            <div className="mega-dropdown-header">Popular Cities</div>
+                            <div className="mega-dropdown-columns">
+                                <div className="mega-dropdown-column">
+                                    {cities.slice(0, 5).map((city, index) => (
+                                        <Link 
+                                            key={index} 
+                                            to={`/theatres?city=${city}`} 
+                                            className="mega-dropdown-item"
+                                        >
+                                            {city}
+                                        </Link>
+                                    ))}
+                                    <Link to="/cities" className="mega-dropdown-item" style={{fontWeight: 600, color: '#e63946'}}>
+                                        View All →
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </li>
 
                 {/* Conditional rendering based on authentication status */}
                 {!isAuthenticated ? (

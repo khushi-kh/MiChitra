@@ -47,6 +47,14 @@ namespace MiChitra.Controllers
             return Ok(theatres);
         }
 
+        [HttpGet("cities")]
+        public async Task<IActionResult> GetAllCities()
+        {
+            _logger.LogInformation("Fetching all cities");
+            var cities = await _theatreService.GetAllCitiesAsync();
+            return Ok(cities);
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddTheatre([FromBody] CreateTheatreDTO dto)

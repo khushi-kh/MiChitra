@@ -95,6 +95,17 @@ namespace MiChitra.Services
             return theatres.Select(MapToResponseDto);
         }
 
+        public async Task<IEnumerable<string>> GetAllCitiesAsync()
+        {
+            var cities = await _context.Theatres
+                .Where(t => t.isActive)
+                .Select(t => t.City)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToListAsync();
+            return cities;
+        }
+
         private static TheatreResponseDTO MapToResponseDto(Theatre theatre)
         {
             return new TheatreResponseDTO

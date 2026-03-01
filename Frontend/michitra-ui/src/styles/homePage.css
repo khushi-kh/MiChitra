@@ -400,6 +400,106 @@
         background: rgba(255, 255, 255, 0.12);
     }
 
+/* Dropdown Styles */
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-dropdown .nav-link {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0;
+    color: #b8b8c8;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    position: relative;
+    outline: none;
+    display: inline-block;
+}
+
+.nav-dropdown .nav-link:hover {
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.nav-dropdown .nav-link:focus {
+    outline: none;
+    border: none;
+}
+
+.nav-dropdown .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #e63946 0%, #dc2626 100%);
+    transition: width 0.3s ease;
+}
+
+.nav-dropdown .nav-link:hover::after {
+    width: 100%;
+}
+
+/* Mega Dropdown */
+.mega-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(26, 26, 46, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+    z-index: 1001;
+    margin-top: 1rem;
+    padding: 2rem;
+    min-width: 600px;
+    max-width: 900px;
+}
+
+.mega-dropdown-header {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(230, 57, 70, 0.3);
+}
+
+.mega-dropdown-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2rem;
+}
+
+.mega-dropdown-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mega-dropdown-item {
+    padding: 0.6rem 1rem;
+    color: #b8b8c8;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+.mega-dropdown-item:hover {
+    background: rgba(230, 57, 70, 0.15);
+    color: #ffffff;
+    transform: translateX(5px);
+}
+
 
 /* Features Section */
 .features {
