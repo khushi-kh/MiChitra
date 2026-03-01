@@ -89,6 +89,8 @@ const MyBookings = () => {
                 return "status-cancelled";
             case "Reserved":
                 return "status-reserved";
+            case "Expired":
+                return "status-expired";
             default:
                 return "status-expired";
         }

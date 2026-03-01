@@ -38,7 +38,7 @@ namespace MiChitra.Services
 
             foreach (var ticket in expiredTickets)
             {
-                ticket.Status = TicketStatus.Cancelled;
+                ticket.Status = TicketStatus.Expired;
                 ticket.UpdatedAt = DateTime.UtcNow;
                 ticket.MovieShow.AvailableSeats += ticket.NumberOfSeats;
 
