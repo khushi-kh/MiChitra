@@ -88,7 +88,7 @@ const HomePage = () => {
                 )}
 
                 {/* Movies Grid */}
-                <MovieGrid movies={movies} />
+                <MovieGrid movies={movies} limit={4} showViewAll={true} />
 
                 {/* CTA Section */}
                 <section className="cta-section">

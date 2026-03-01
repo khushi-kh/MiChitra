@@ -19,6 +19,8 @@ const Booking = () => {
 
     const [showSeatModal, setShowSeatModal] = useState(false);
     const [selectedShow, setSelectedShow] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
 
     // Navbar scroll effect
     useEffect(() => {
@@ -91,18 +93,27 @@ const Booking = () => {
                         {loading ? (
                             <p className="loading-text">Loading theatres...</p>
                         ) : (
-                            <div className="theatres-grid">
-                                {theatres.map((theatre) => (
-                                    <div
-                                        key={theatre.theatreId}
-                                        className="theatre-card"
-                                        onClick={() => handleTheatreClick(theatre)}
-                                    >
-                                        <h3>{theatre.theatreName}</h3>
-                                        <p>{theatre.city}</p>
+                            <>
+                                <div className="theatres-grid">
+                                    {theatres.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((theatre) => (
+                                        <div
+                                            key={theatre.theatreId}
+                                            className="theatre-card"
+                                            onClick={() => handleTheatreClick(theatre)}
+                                        >
+                                            <h3>{theatre.theatreName}</h3>
+                                            <p>{theatre.city}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                                {theatres.length > itemsPerPage && (
+                                    <div className="pagination">
+                                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>←</button>
+                                        <span>Page {currentPage} of {Math.ceil(theatres.length / itemsPerPage)}</span>
+                                        <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(theatres.length / itemsPerPage), p + 1))} disabled={currentPage === Math.ceil(theatres.length / itemsPerPage)}>→</button>
                                     </div>
-                                ))}
-                            </div>
+                                )}
+                            </>
                         )}
                     </>
                 ) : (

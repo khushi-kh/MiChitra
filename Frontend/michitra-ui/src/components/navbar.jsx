@@ -52,7 +52,7 @@ const Navbar = ({ isAuthenticated, scrolled }) => {
 
             <ul className="nav-links">
                 <li><Link to="/movies" className="nav-link">Movies</Link></li>
-                <li><Link to="/theatre" className="nav-link">Theatre</Link></li>
+                <li><Link to="/theatres" className="nav-link">Theatres</Link></li>
                 <li><Link to="/cities" className="nav-link">Cities</Link></li>
 
                 {/* Conditional rendering based on authentication status */}
