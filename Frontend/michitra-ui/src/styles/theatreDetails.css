@@ -1,0 +1,115 @@
+.theatre-details-container {
+    min-height: 100vh;
+    background: #0a0a0a;
+    color: #fff;
+    position: relative;
+}
+
+.theatre-details-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 120px 20px 60px;
+}
+
+.theatre-header {
+    text-align: center;
+    margin-bottom: 60px;
+    padding: 40px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.theatre-header h1 {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.theatre-location {
+    font-size: 1.2rem;
+    color: #aaa;
+    margin-bottom: 8px;
+}
+
+.theatre-capacity {
+    font-size: 1rem;
+    color: #888;
+}
+
+.movies-section h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.theatre-movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.theatre-movies-grid .movie-card img {
+    height: 280px;
+}
+
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.movie-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.movie-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+}
+
+.movie-card img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+}
+
+.movie-card-info {
+    padding: 20px;
+}
+
+.movie-card-info h3 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+}
+
+.movie-price {
+    color: #667eea;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.no-movies {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #888;
+    padding: 60px 20px;
+}
+
+@media (max-width: 768px) {
+    .theatre-header h1 {
+        font-size: 2rem;
+    }
+
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+}

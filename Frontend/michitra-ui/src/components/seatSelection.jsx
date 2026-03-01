@@ -32,8 +32,7 @@ const SeatSelection = ({ show, onClose }) => {
         try {
             const token = localStorage.getItem("token");
             if (!token) {
-                setBookingError("Please login to book tickets");
-                return;
+                navigate('/login');
             }
             
             const userId = JSON.parse(atob(token.split(".")[1])).sub;

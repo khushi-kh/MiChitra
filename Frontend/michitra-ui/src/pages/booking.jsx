@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import api from "../api/axios";
 import Navbar from "../components/navbar";
 import SeatSelection from "../components/SeatSelection";
@@ -9,6 +9,8 @@ const Booking = () => {
     const isAuthenticated = !!localStorage.getItem("token");
     const [scrolled, setScrolled] = useState(false);
     const { movieId } = useParams();
+    const [searchParams] = useSearchParams();
+    const theatreIdFromUrl = searchParams.get("theatreId");
 
     const [theatres, setTheatres] = useState([]);
     const [selectedTheatre, setSelectedTheatre] = useState(null);
@@ -31,10 +33,14 @@ const Booking = () => {
         api.get(`/movieshows/movie/${movieId}/theatres`)
             .then((res) => {
                 setTheatres(res.data);
+                if (theatreIdFromUrl) {
+                    const theatre = res.data.find(t => t.theatreId === parseInt(theatreIdFromUrl));
+                    if (theatre) handleTheatreClick(theatre);
+                }
                 setLoading(false);
             })
             .catch(() => setLoading(false));
-    }, [movieId]);
+    }, [movieId, theatreIdFromUrl]);
 
     // Check if show is expired
     const isShowExpired = (showTime) => {

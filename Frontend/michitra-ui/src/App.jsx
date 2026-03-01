@@ -9,6 +9,8 @@ import BookingConfirmation from "./pages/bookingConfirmation";
 import Profile from "./pages/profile";
 import EditProfile from "./pages/editProfile";
 import MyBookings from "./pages/myBookings";
+import TheatrePage from "./pages/theatrePage";
+import TheatreDetails from "./pages/theatreDetails";
 
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/edit-profile" element={<EditProfile />} />
                 <Route path="/my-bookings" element={<MyBookings />} />
+                <Route path="/theatres" element={<TheatrePage />} />
+                <Route path="/theatres/:id" element={<TheatreDetails />} />
             </Routes>
         </BrowserRouter>
     );
