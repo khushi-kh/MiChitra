@@ -24,6 +24,13 @@ namespace MiChitra.Services
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
+                // Validate card expiry for card payments
+                if ((request.PaymentMethod == PaymentMethod.CreditCard || request.PaymentMethod == PaymentMethod.DebitCard) && !string.IsNullOrEmpty(request.Expiry))
+                {
+                    if (!IsValidExpiry(request.Expiry))
+                        throw new InvalidOperationException("Card has expired or invalid expiry date");
+                }
+
                 // Simulate processing payment delay
                 await Task.Delay(1000);
 
@@ -184,6 +191,24 @@ namespace MiChitra.Services
             var random = new Random();
             return new string(Enumerable.Repeat(chars, 12)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        private static bool IsValidExpiry(string expiry)
+        {
+            if (string.IsNullOrEmpty(expiry) || !System.Text.RegularExpressions.Regex.IsMatch(expiry, @"^\d{2}/\d{2}$"))
+                return false;
+            
+            var parts = expiry.Split('/');
+            if (!int.TryParse(parts[0], out int month) || !int.TryParse(parts[1], out int year))
+                return false;
+            
+            if (month < 1 || month > 12)
+                return false;
+            
+            var currentYear = DateTime.UtcNow.Year % 100;
+            var currentMonth = DateTime.UtcNow.Month;
+            
+            return year > currentYear || (year == currentYear && month >= currentMonth);
         }
 
     }

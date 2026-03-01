@@ -22,6 +22,11 @@ const PaymentModal = ({ ticketId, amount, onClose, onSuccess }) => {
             return;
         }
 
+        if ((method === "CreditCard" || method === "DebitCard") && !isValidExpiry(card.expiry)) {
+            setError("Card has expired or invalid expiry date");
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -63,6 +68,16 @@ const PaymentModal = ({ ticketId, amount, onClose, onSuccess }) => {
         return sum % 10 === 0;
     };
 
+    const isValidExpiry = (expiry) => {
+        if (!expiry || !/^\d{2}\/\d{2}$/.test(expiry)) return false;
+        const [month, year] = expiry.split('/').map(Number);
+        if (month < 1 || month > 12) return false;
+        const now = new Date();
+        const currentYear = now.getFullYear() % 100;
+        const currentMonth = now.getMonth() + 1;
+        return year > currentYear || (year === currentYear && month >= currentMonth);
+    };
+
     return (
         <div className="payment-modal-overlay">
             <div className="payment-modal">
@@ -86,7 +101,11 @@ const PaymentModal = ({ ticketId, amount, onClose, onSuccess }) => {
                         <input
                             placeholder="Card Number"
                             value={card.number}
-                            onChange={(e) => setCard({ ...card, number: e.target.value })}
+                            onChange={(e) => {
+                                const value = e.target.value.replace(/\D/g, '').slice(0, 16);
+                                setCard({ ...card, number: value });
+                            }}
+                            maxLength={16}
                         />
                         <input
                             placeholder="Name on Card"
