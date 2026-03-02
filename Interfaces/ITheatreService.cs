@@ -10,6 +10,7 @@ namespace MiChitra.Interfaces
         Task<TheatreResponseDTO> CreateTheatreAsync(CreateTheatreDTO dto);
         Task<bool> UpdateTheatreAsync(int id, UpdateTheatreDTO dto);
         Task<bool> DeactivateTheatreAsync(int id);
+        Task<bool> ActivateTheatreAsync(int id);
         Task<IEnumerable<string>> GetAllCitiesAsync();
     }
 }

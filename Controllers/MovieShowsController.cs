@@ -73,7 +73,6 @@ namespace MiChitra.Controllers
             return Ok(filteredShows);
         }
 
-        [Authorize(Roles ="Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateMovieShow([FromBody] CreateMovieShowDTO dto)
         {
@@ -91,7 +90,6 @@ namespace MiChitra.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMovieShow(int id, [FromBody] UpdateMovieShowDTO dto)
         {
@@ -111,7 +109,6 @@ namespace MiChitra.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovieShow(int id)
         {

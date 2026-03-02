@@ -20,7 +20,34 @@ namespace MiChitra.Services
         public async Task<AuthResponse> LoginAsync(LoginDTO dto)
         {
             var user = await _userService.GetByUsernameAsync(dto.Username);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            
+            // If not found by username, try email
+            if (user == null)
+            {
+                user = await _userService.GetByEmailAsync(dto.Username);
+            }
+            
+            if (user == null)
+            {
+                _logger.LogWarning("User not found: {Username}", dto.Username);
+                throw new UnauthorizedAccessException("Invalid username or password");
+            }
+            
+            _logger.LogInformation("Attempting password verification for user: {Username}", user.Username);
+            _logger.LogInformation("Stored hash starts with: {HashPrefix}", user.PasswordHash?.Substring(0, Math.Min(10, user.PasswordHash?.Length ?? 0)));
+            
+            bool passwordValid;
+            try
+            {
+                passwordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "BCrypt verification failed for user: {Username}", user.Username);
+                throw new UnauthorizedAccessException("Invalid username or password");
+            }
+            
+            if (!passwordValid)
             {
                 _logger.LogWarning("Invalid login attempt for username: {Username}", dto.Username);
                 throw new UnauthorizedAccessException("Invalid username or password");

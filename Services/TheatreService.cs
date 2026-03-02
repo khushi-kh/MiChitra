@@ -79,6 +79,17 @@ namespace MiChitra.Services
             return true;
         }
 
+        public async Task<bool> ActivateTheatreAsync(int id)
+        {
+            var theatre = await _context.Theatres.FindAsync(id);
+            if (theatre == null) return false;
+
+            theatre.isActive = true;
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Theatre activated with ID: {TheatreId}", id);
+            return true;
+        }
+
         public async Task<IEnumerable<TheatreResponseDTO>> GetTheatresByCityAsync(string city)
         {
             var theatres = await _context.Theatres

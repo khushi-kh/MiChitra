@@ -104,7 +104,7 @@ const Navbar = ({ isAuthenticated, scrolled }) => {
                 ) : (
                     <>
                         <li>
-                            <Link to="/profile" className="nav-profile">
+                                <Link to="/profile" className="nav-profile" style={{ color: "#e63946"}}>
                                 {user?.fName || "Profile"}
                             </Link>
                         </li>

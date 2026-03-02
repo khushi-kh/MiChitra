@@ -13,6 +13,7 @@ namespace MiChitra.Interfaces
         Task<UserResponseDTO> CreateUserAsync(RegisterDTO dto);
         Task<bool> UpdateUserAsync(int id, UpdateUserDTO dto);
         Task<bool> DeactivateUserAsync(int id);
+        Task<bool> UpdateUserRoleAsync(int id, UserRole role);
 
         // Added: helpers used by AuthService and others
         Task<User?> GetByUsernameAsync(string username);

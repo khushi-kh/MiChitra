@@ -199,7 +199,7 @@ const MyBookings = () => {
                                         <span className="detail-label">Ticket ID</span>
                                         <span className="detail-value">#{booking.ticketId}</span>
                                     </div>
-                                    {booking.status === "Reserved" && booking.reservationExpiry && (
+                                    {booking.status === "Reserved" && booking.reservationExpiry && new Date(booking.reservationExpiry) > new Date() && (
                                         <div className="booking-detail">
                                             <span className="detail-label">Expires in</span>
                                             <span className="detail-value expires-timer">

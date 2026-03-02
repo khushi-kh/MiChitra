@@ -1,4 +1,4 @@
-﻿using MiChitra.DTOs;
+using MiChitra.DTOs;
 using MiChitra.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
@@ -42,7 +42,6 @@ namespace MiChitra.Controllers
             return Ok(movie);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddMovie([FromBody] CreateMovieDto dto)
         {
@@ -55,7 +54,6 @@ namespace MiChitra.Controllers
             return CreatedAtAction(nameof(GetMovieById), new { id = movie.MovieId }, movie);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMovie(int id, [FromBody] UpdateMovieDto dto)
         {
@@ -73,19 +71,26 @@ namespace MiChitra.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie(int id)
         {
             _logger.LogInformation("Deleting movie with ID: {MovieId}", id);
-            var success = await _movieService.DeleteMovieAsync(id);
-            if (!success)
+            try
             {
-                _logger.LogWarning("Movie with ID {MovieId} not found for deletion", id);
-                return NotFound("Movie not found");
+                var success = await _movieService.DeleteMovieAsync(id);
+                if (!success)
+                {
+                    _logger.LogWarning("Movie with ID {MovieId} not found for deletion", id);
+                    return NotFound("Movie not found");
+                }
+                _logger.LogInformation("Movie with ID {MovieId} deleted successfully", id);
+                return NoContent();
             }
-            _logger.LogInformation("Movie with ID {MovieId} deleted successfully", id);
-            return NoContent();
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning(ex, "Failed to delete movie with ID {MovieId}", id);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("search")]

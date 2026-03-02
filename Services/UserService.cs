@@ -93,6 +93,17 @@ namespace MiChitra.Services
             return true;
         }
 
+        public async Task<bool> UpdateUserRoleAsync(int id, UserRole role)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) return false;
+
+            user.Role = role;
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("User role updated for ID: {UserId} to {Role}", id, role);
+            return true;
+        }
+
         public async Task<User?> GetByUsernameAsync(string username)
         {
             return await _context.Users

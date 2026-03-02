@@ -1,0 +1,192 @@
+.manage-users {
+    min-height: 100vh;
+    background: #0a0a0f;
+    position: relative;
+}
+
+.manage-users::before {
+    content: '';
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at 20% 50%, rgba(230, 57, 70, 0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 50%, rgba(220, 38, 38, 0.08) 0%, transparent 50%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.manage-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: rgba(26, 26, 46, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(230, 57, 70, 0.2);
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.manage-nav h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #e63946 0%, #dc2626 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-add {
+    padding: 0.7rem 1.8rem;
+    background: linear-gradient(135deg, #e63946 0%, #dc2626 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+}
+
+.btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(230, 57, 70, 0.4);
+}
+
+.btn-back {
+    padding: 0.7rem 1.8rem;
+    background: transparent;
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    border-color: #e63946;
+    background: rgba(230, 57, 70, 0.1);
+}
+
+.manage-content {
+    padding: 8rem 5%;
+    position: relative;
+    z-index: 10;
+}
+
+.users-table {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.user-row {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(20, 20, 31, 0.9) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.user-row:hover {
+    border-color: rgba(230, 57, 70, 0.3);
+    transform: translateX(5px);
+}
+
+.user-info {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.user-info h3 {
+    font-family: 'Playfair Display', serif;
+    color: #ffffff;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.user-info p {
+    color: #b8b8c8;
+    font-size: 0.9rem;
+}
+
+.user-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-edit {
+    padding: 0.6rem 1.8rem;
+    background: rgba(15, 23, 42, 0.9);
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff' viewBox='0 0 16 16'%3e%3cpath d='M3.204 5.106a.5.5 0 0 1 .672-.223L8 7.293l4.124-2.41a.5.5 0 1 1 .496.868l-4.25 2.485a.5.5 0 0 1-.496 0l-4.25-2.485a.5.5 0 0 1-.22-.672z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    padding-right: 2.5rem;
+    min-width: 150px;
+}
+
+.btn-edit:hover {
+    border-color: #e63946;
+    background: rgba(230, 57, 70, 0.12);
+}
+
+.btn-edit:focus {
+    outline: none;
+    box-shadow: 0 0 0 1px rgba(230, 57, 70, 0.6);
+}
+
+.btn-edit option {
+    background-color: #020617;
+    color: #f9fafb;
+}
+
+.btn-delete {
+    padding: 0.6rem 1.5rem;
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+    border: 2px solid rgba(220, 38, 38, 0.3);
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.btn-delete[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-delete:hover:not([disabled]) {
+    background: rgba(220, 38, 38, 0.2);
+    border-color: #dc2626;
+}
+

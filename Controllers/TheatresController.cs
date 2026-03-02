@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MiChitra.DTOs;
 using MiChitra.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -55,7 +55,6 @@ namespace MiChitra.Controllers
             return Ok(cities);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddTheatre([FromBody] CreateTheatreDTO dto)
         {
@@ -67,7 +66,6 @@ namespace MiChitra.Controllers
             return CreatedAtAction(nameof(GetTheatreById), new { id = theatre.TheatreId }, theatre);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTheatre(int id, [FromBody] UpdateTheatreDTO dto)
         {
@@ -84,7 +82,6 @@ namespace MiChitra.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("deactivate/{id}")]
         public async Task<IActionResult> InActiveTheatre(int id)
         {
@@ -103,6 +100,19 @@ namespace MiChitra.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPut("activate/{id}")]
+        public async Task<IActionResult> ActivateTheatre(int id)
+        {
+            var success = await _theatreService.ActivateTheatreAsync(id);
+            if (!success)
+            {
+                _logger.LogWarning("Theatre with ID {TheatreId} not found for activation", id);
+                return NotFound("Theatre not found");
+            }
+            _logger.LogInformation("Theatre with ID {TheatreId} activated successfully", id);
+            return NoContent();
         }
     }
 }

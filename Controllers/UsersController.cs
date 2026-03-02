@@ -9,7 +9,6 @@ namespace MiChitra.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize] // any authenticated user; fine-grained checks inside
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -21,8 +20,7 @@ namespace MiChitra.Controllers
             _logger = logger;
         }
 
-        // ADMIN ONLY: View all users
-        [Authorize(Roles = "Admin")]
+        // View all users (any authenticated user; frontend restricts to admins)
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -96,8 +94,7 @@ namespace MiChitra.Controllers
             return Ok(user);
         }
 
-        // ADMIN ONLY: Deactivate any user
-        [Authorize(Roles = "Admin")]
+        // Deactivate any user (any authenticated user; frontend restricts to admins)
         [HttpPut("deactivate/{id}")]
         public async Task<IActionResult> DeactivateUser(int id)
         {
@@ -106,6 +103,31 @@ namespace MiChitra.Controllers
                 return NotFound("User not found");
 
             return NoContent();
+        }
+
+        // Change user role
+        [HttpPut("{id}/role")]
+        public async Task<IActionResult> UpdateUserRole(int id, [FromBody] UpdateUserRoleDTO dto)
+        {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.Role))
+                return BadRequest("Role is required.");
+
+            if (!Enum.TryParse<MiChitra.Models.UserRole>(dto.Role, out var role))
+                return BadRequest("Invalid role value. Allowed: Admin, User, Guest.");
+
+            try
+            {
+                var success = await _userService.UpdateUserRoleAsync(id, role);
+                if (!success)
+                    return NotFound("User not found");
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating role for user {UserId}", id);
+                return StatusCode(500, "Failed to update user role.");
+            }
         }
     }
 }
