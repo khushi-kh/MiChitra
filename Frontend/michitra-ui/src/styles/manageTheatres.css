@@ -167,3 +167,37 @@
     border-color: #dc2626;
 }
 
+@media (max-width: 768px) {
+    .manage-nav {
+        padding: 1rem 1.2rem;
+    }
+
+    .manage-nav h1 {
+        font-size: 1.3rem;
+    }
+
+    .nav-actions {
+        gap: 0.5rem;
+    }
+
+    .btn-add,
+    .btn-back {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+
+    .manage-content {
+        padding: 6rem 4%;
+    }
+
+    .theatre-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .theatre-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

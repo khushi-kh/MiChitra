@@ -92,3 +92,36 @@
     text-align: right;
     opacity: 0.85;
 }
+
+@media (max-width: 600px) {
+    .seat-modal {
+        padding: 1.2rem;
+        width: 95%;
+    }
+
+    .seats {
+        overflow-x: auto;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .seat-row {
+        flex-shrink: 0;
+    }
+
+    .seat {
+        width: 26px;
+        height: 26px;
+        font-size: 8px;
+    }
+
+    .seat-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .primary,
+    .secondary {
+        width: 100%;
+    }
+}
