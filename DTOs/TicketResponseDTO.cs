@@ -20,5 +20,7 @@ namespace MiChitra.DTOs
         public string? City { get; set; }
         public string? TransactionId { get; set; }
         public DateTime? ReservationExpiry { get; set; }
+
+        public List<string>? SeatNumbers { get; set; }
     }
 }

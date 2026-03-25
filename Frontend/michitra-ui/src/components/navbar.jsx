@@ -4,7 +4,6 @@ import api from "../api/axios"; // adjust path if needed
 
 const Navbar = ({ isAuthenticated, scrolled }) => {
     const user = JSON.parse(localStorage.getItem("user") || "null");
-    console.log(user);
     const [query, setQuery] = useState("");
     const [showAdminDropdown, setShowAdminDropdown] = useState(false);
     const [cities, setCities] = useState([]);

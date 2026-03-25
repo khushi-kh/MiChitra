@@ -9,8 +9,10 @@ const SeatSelection = ({ show, onClose }) => {
     const [showPayment, setShowPayment] = useState(false);
     const [ticketId, setTicketId] = useState(null);
     const [bookingError, setBookingError] = useState("");
-    const rows = 5;
-    const cols = 8;
+
+    const totalSeats = show?.totalSeats ?? 40;
+    const cols = Math.ceil(Math.sqrt(totalSeats));
+    const rows = Math.ceil(totalSeats / cols);
 
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [bookedSeats, setBookedSeats] = useState([]);
@@ -19,13 +21,29 @@ const SeatSelection = ({ show, onClose }) => {
         const fetchBookedSeats = async () => {
             try {
                 const response = await api.get(`/tickets/booked-seats/${show.id}`);
-                setBookedSeats(response.data);
+             
+                const normalized = (response.data || []).map((s) => {
+                    if (!s) return s;
+                    const seat = s.trim();
+                    if (/^\d+\-\d+$/.test(seat)) {
+                        const [rStr, cStr] = seat.split("-");
+                        const rNum = Number(rStr);
+                        const cNum = Number(cStr);
+                        if (!Number.isNaN(rNum) && !Number.isNaN(cNum)) {
+                            return `${String.fromCharCode(97 + rNum)}${cNum + 1}`;
+                        }
+                    }
+                    const m = seat.match(/^([A-Za-z])(\d+)$/);
+                    if (m) return `${m[1].toLowerCase()}${m[2]}`;
+                    return seat.toLowerCase();
+                });
+                setBookedSeats(normalized);
             } catch (error) {
                 console.error("Failed to fetch booked seats:", error);
             }
         };
-        fetchBookedSeats();
-    }, [show.id]);
+        if (show?.id) fetchBookedSeats();
+    }, [show?.id]);
 
     const handleProceedToPay = async () => {
         setBookingError("");
@@ -33,9 +51,16 @@ const SeatSelection = ({ show, onClose }) => {
             const token = localStorage.getItem("token");
             if (!token) {
                 navigate('/login');
+                return;
             }
-            
+
             const userId = JSON.parse(atob(token.split(".")[1])).sub;
+            console.log("Booking payload about to send:", {
+                userId: JSON.parse(atob(localStorage.getItem("token").split(".")[1])).sub,
+                movieShowId: show.id,
+                numberOfSeats: selectedSeats.length,
+                seatNumbers: selectedSeats
+            });
             const response = await api.post("/Tickets/book", {
                 userId: parseInt(userId),
                 movieShowId: show.id,
@@ -63,9 +88,15 @@ const SeatSelection = ({ show, onClose }) => {
         );
     };
 
+    // inline CSS vars to allow responsive sizing in the stylesheet
+    const cssVars = {
+        ["--cols"]: cols,
+        ["--rows"]: rows
+    };
+
     return (
         <div className="seat-modal-overlay">
-            <div className="seat-modal">
+            <div className="seat-modal" style={cssVars}>
 
                 {/* Header */}
                 <div className="seat-modal-header">
@@ -81,7 +112,18 @@ const SeatSelection = ({ show, onClose }) => {
                         {Array.from({ length: rows }).map((_, r) => (
                             <div key={r} className="seat-row">
                                 {Array.from({ length: cols }).map((_, c) => {
-                                    const seatId = `${r}-${c}`;
+                                    const seatIndex = r * cols + c;
+                                    if (seatIndex >= totalSeats) {
+                                        // render an invisible placeholder to preserve grid geometry
+                                        return (
+                                            <div
+                                                key={`empty-${r}-${c}`}
+                                                className="seat empty"
+                                                style={{ visibility: "hidden", pointerEvents: "none", border: "none", background: "transparent" }}
+                                            />
+                                        );
+                                    }
+                                    const seatId = `${String.fromCharCode(97 + r)}${c + 1}`; // a1, b2, ...
                                     const isSelected = selectedSeats.includes(seatId);
                                     const isBooked = bookedSeats.includes(seatId);
                                     return (
@@ -90,7 +132,7 @@ const SeatSelection = ({ show, onClose }) => {
                                             className={`seat ${isBooked ? "booked" : isSelected ? "selected" : "available"}`}
                                             onClick={() => toggleSeat(seatId)}
                                         >
-                                            {r + 1}-{c + 1}
+                                            {seatId}
                                         </div>
                                     );
                                 })}

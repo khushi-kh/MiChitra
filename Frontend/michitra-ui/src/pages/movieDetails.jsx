@@ -57,8 +57,10 @@ const MovieDetails = () => {
                                 <span className="meta-value">{movie.rating}</span>
                             </div>
                         </div>
-                            <Link to={`/booking/${movie.movieId}`}>
-                                <button className="book-button">Book Now</button>
+                            <Link to={`/booking/${movie.movieId}`} style={movie.availabilityStatus === "Sold Out" ? { pointerEvents: "none" } : {}}>
+                                <button className="book-button" disabled={movie.availabilityStatus === "Sold Out"}>
+                                    {movie.availabilityStatus === "Sold Out" ? "Sold Out" : "Book Now"}
+                                </button>
                             </Link>
 
                     </div>
