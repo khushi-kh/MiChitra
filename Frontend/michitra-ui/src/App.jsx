@@ -21,6 +21,8 @@ import ManageBookings from "./pages/manageBookings";
 import ManageUsers from "./pages/manageUsers";
 import TheatreForm from "./pages/theatreForm";
 import ShowForm from "./pages/showForm";
+import ForgotPassword from "./pages/forgotPassword";
+import ResetPassword from "./pages/resetPassword";
 import ProtectedRoute from "./components/ProtectedRoute"; 
 
 
@@ -31,6 +33,8 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/movies" element={<MoviesPage />} />
                 <Route path="/movies/:id" element={<MovieDetails />} />
                 <Route path="/booking/:movieId" element={<Booking />} />

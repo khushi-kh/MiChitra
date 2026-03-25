@@ -106,3 +106,22 @@
 .home-button:hover {
     background: #45a049;
 }
+
+@media (max-width: 768px) {
+    .confirmation-card {
+        padding: 2rem 1.2rem;
+    }
+
+    .confirmation-card h1 {
+        font-size: 1.5rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .cancel-button,
+    .home-button {
+        width: 100%;
+    }
+}

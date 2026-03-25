@@ -20,6 +20,8 @@ namespace MiChitra.DTOs
 
         public string? Expiry { get; set; }
 
+        [StringLength(3, MinimumLength = 3, ErrorMessage = "CVV must be exactly 3 digits")]
+        [RegularExpression(@"^\d{3}$", ErrorMessage = "CVV must be exactly 3 digits")]
         public string? CVV { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -42,6 +44,9 @@ namespace MiChitra.DTOs
 
             if (string.IsNullOrWhiteSpace(CVV))
                 yield return new ValidationResult("CVV is required for card payments", new[] { nameof(CVV) });
+
+            if (!string.IsNullOrWhiteSpace(CVV) && (CVV.Length != 3 || !CVV.All(char.IsDigit)))
+                yield return new ValidationResult("CVV must be exactly 3 digits", new[] { nameof(CVV) });
 
             if (!IsValidLuhn(CardNumber))
                 yield return new ValidationResult("Invalid card number", new[] { nameof(CardNumber) });

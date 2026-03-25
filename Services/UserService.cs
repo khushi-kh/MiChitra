@@ -32,11 +32,11 @@ namespace MiChitra.Services
         public async Task<UserResponseDTO> CreateUserAsync(RegisterDTO dto)
         {
             // Check if username or email already exists
-            var existingUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username == dto.Username || u.Email == dto.Email);
-            
-            if (existingUser != null)
-                throw new InvalidOperationException("Username or email already exists");
+            if (await _context.Users.AnyAsync(u => u.Username == dto.Username))
+                throw new InvalidOperationException("Username already exists");
+
+            if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
+                throw new InvalidOperationException("Email already exists");
 
             var user = new User
             {
@@ -122,6 +122,19 @@ namespace MiChitra.Services
             if (user == null) return false;
 
             return BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+        }
+
+        public async Task<bool> ForgotPasswordAsync(int id, string currentPassword, string newPassword)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) return false;
+
+            if (!BCrypt.Net.BCrypt.Verify(currentPassword, user.PasswordHash))
+                throw new InvalidOperationException("Current password is incorrect.");
+
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         private static UserResponseDTO MapToResponseDto(User user)

@@ -66,50 +66,70 @@ const SeatSelection = ({ show, onClose }) => {
     return (
         <div className="seat-modal-overlay">
             <div className="seat-modal">
-                <h2>Select Seats</h2>
-                <p>{new Date(show.showTime).toLocaleString()}</p>
 
-                <div className="screen">SCREEN THIS WAY</div>
+                {/* Header */}
+                <div className="seat-modal-header">
+                    <h2>Select Seats</h2>
+                    <p>{show.movieName} &mdash; {new Date(show.showTime).toLocaleString()}</p>
+                </div>
 
-                <div className="seats">
-                    {Array.from({ length: rows }).map((_, r) => (
-                        <div key={r} className="seat-row">
-                            {Array.from({ length: cols }).map((_, c) => {
-                                const seatId = `${r}-${c}`;
-                                const isSelected = selectedSeats.includes(seatId);
-                                const isBooked = bookedSeats.includes(seatId);
+                {/* Seating area */}
+                <div className="seat-modal-seating">
+                    <div className="screen">SCREEN</div>
 
-                                return (
-                                    <div
-                                        key={seatId}
-                                        className={`seat ${isBooked ? "booked" : isSelected ? "selected" : "available"}`}
-                                        onClick={() => toggleSeat(seatId)}
-                                    >
-                                        {r + 1}-{c + 1}
-                                    </div>
-                                );
-                            })}
+                    <div className="seats">
+                        {Array.from({ length: rows }).map((_, r) => (
+                            <div key={r} className="seat-row">
+                                {Array.from({ length: cols }).map((_, c) => {
+                                    const seatId = `${r}-${c}`;
+                                    const isSelected = selectedSeats.includes(seatId);
+                                    const isBooked = bookedSeats.includes(seatId);
+                                    return (
+                                        <div
+                                            key={seatId}
+                                            className={`seat ${isBooked ? "booked" : isSelected ? "selected" : "available"}`}
+                                            onClick={() => toggleSeat(seatId)}
+                                        >
+                                            {r + 1}-{c + 1}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="seat-legend">
+                        <div className="legend-item"><div className="legend-dot available"></div>Available</div>
+                        <div className="legend-item"><div className="legend-dot selected"></div>Selected</div>
+                        <div className="legend-item"><div className="legend-dot booked"></div>Booked</div>
+                    </div>
+                </div>
+
+                {/* Sidebar: summary + actions */}
+                <div className="seat-modal-sidebar">
+                    <span className="sidebar-title">Booking Summary</span>
+
+                    <div className="seat-summary">
+                        <div className="seat-summary-row">
+                            <span>Seats</span>
+                            <span>{selectedSeats.length}</span>
                         </div>
-                    ))}
+                        <div className="seat-summary-row">
+                            <span>Total</span>
+                            <span className="seat-summary-total">₹{selectedSeats.length * show.pricePerSeat}</span>
+                        </div>
+                    </div>
+
+                    {bookingError && <p className="error">{bookingError}</p>}
+
+                    <div className="seat-actions">
+                        <button className="primary" disabled={!selectedSeats.length} onClick={handleProceedToPay}>
+                            Proceed to Pay
+                        </button>
+                        <button className="secondary" onClick={onClose}>Cancel</button>
+                    </div>
                 </div>
 
-                <div className="seat-summary">
-                    Selected Seats: {selectedSeats.length}
-                    Total: ₹{selectedSeats.length * show.pricePerSeat}
-                </div>
-
-                {bookingError && <p className="error">{bookingError}</p>}
-
-                <div className="seat-actions">
-                    <button className="secondary" onClick={onClose}>Cancel</button>
-                    <button
-                        className="primary"
-                        disabled={!selectedSeats.length}
-                        onClick={handleProceedToPay}
-                    >
-                        Proceed to Pay
-                    </button>
-                </div>
             </div>
 
             {showPayment && ticketId && (

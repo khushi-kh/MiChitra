@@ -4,10 +4,14 @@ import api from "../api/axios"; // adjust path if needed
 
 const Navbar = ({ isAuthenticated, scrolled }) => {
     const user = JSON.parse(localStorage.getItem("user") || "null");
+    console.log(user);
     const [query, setQuery] = useState("");
+    const [showAdminDropdown, setShowAdminDropdown] = useState(false);
     const [cities, setCities] = useState([]);
     const [showCitiesDropdown, setShowCitiesDropdown] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
+    const isAdmin = user?.role === "Admin";
 
 
     useEffect(() => {
@@ -51,7 +55,6 @@ const Navbar = ({ isAuthenticated, scrolled }) => {
                     : "rgba(10, 10, 15, 0.8)",
             }}
         >
-            {/* common navbar elements */ }
             <div>
                 <a href="/" className="logo">MiChitra</a>
             </div>
@@ -73,20 +76,20 @@ const Navbar = ({ isAuthenticated, scrolled }) => {
                         Cities ▼
                     </span>
                     {showCitiesDropdown && (
-                        <div className="mega-dropdown">
-                            <div className="mega-dropdown-header">Popular Cities</div>
-                            <div className="mega-dropdown-columns">
-                                <div className="mega-dropdown-column">
+                        <div className="menu-dropdown">
+                            <div className="menu-dropdown-header">Popular Cities</div>
+                            <div className="menu-dropdown-columns">
+                                <div className="menu-dropdown-column">
                                     {cities.slice(0, 5).map((city, index) => (
-                                        <Link 
-                                            key={index} 
-                                            to={`/theatres?city=${city}`} 
-                                            className="mega-dropdown-item"
+                                        <Link
+                                            key={index}
+                                            to={`/theatres?city=${city}`}
+                                            className="menu-dropdown-item"
                                         >
                                             {city}
                                         </Link>
                                     ))}
-                                    <Link to="/cities" className="mega-dropdown-item" style={{fontWeight: 600, color: '#e63946'}}>
+                                    <Link to="/cities" className="menu-dropdown-item" style={{fontWeight: 600, color: '#e63946'}}>
                                         View All →
                                     </Link>
                                 </div>
@@ -95,19 +98,36 @@ const Navbar = ({ isAuthenticated, scrolled }) => {
                     )}
                 </li>
 
-                {/* Conditional rendering based on authentication status */}
                 {!isAuthenticated ? (
                     <>
-                        <li><Link to="/login" className="nav-login">Sign In</Link></li>
-                        <li><Link to="/register" className="nav-register">Sign Up</Link></li>
+                        <li className="nav-auth-group">
+                            <Link to="/login" className="nav-login">Sign In</Link>
+                            <Link to="/register" className="nav-register">Sign Up</Link>
+                        </li>
                     </>
                 ) : (
                     <>
-                        <li>
-                                <Link to="/profile" className="nav-profile" style={{ color: "#e63946"}}>
-                                {user?.fName || "Profile"}
-                            </Link>
-                        </li>
+                            {isAdmin? (
+                                <li className="nav-dropdown" onMouseEnter={() => setShowAdminDropdown(true)}
+                                    onMouseLeave={() => setShowAdminDropdown(false)}>
+
+                                    <span className="nav-profile" style={{ color: "#e63946", cursor: "pointer" }}>
+                                        {user?.fName || "Admin"}▼
+                                    </span>
+                                    {showAdminDropdown && (
+                                        <div className="menu-dropdown">
+                                            <Link to="/profile" className="menu-dropdown-item">Profile</Link>
+                                            <Link to="/admin" className="menu-dropdown-item">Admin Dashboard</Link>
+                                        </div>
+                                    )}
+                                </li> 
+                            ) : (
+                                    <li>
+                                        <Link to="/profile" className="nav-profile" style={{ color: "#e63946" }}>
+                                            {user?.fName || "Profile"}
+                                        </Link>
+                                </li>
+                            )}
                         <li>
                             <button
                                 className="nav-logout"
@@ -122,6 +142,47 @@ const Navbar = ({ isAuthenticated, scrolled }) => {
                     </>
                 )}
             </ul>
+
+            <button className="nav-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            {menuOpen && (
+                <div className="nav-mobile-menu">
+                    <form className="nav-mobile-search" onSubmit={(e) => { handleSearch(e); setMenuOpen(false); }}>
+                        <input
+                            type="text"
+                            placeholder="Search movies..."
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                        />
+                    </form>
+                    <Link to="/movies" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Movies</Link>
+                    <Link to="/theatres" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Theatres</Link>
+                    <Link to="/cities" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Cities</Link>
+                    {!isAuthenticated ? (
+                        <>
+                            <Link to="/login" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>Sign In</Link>
+                            <Link to="/register" className="nav-mobile-link nav-mobile-register" onClick={() => setMenuOpen(false)}>Sign Up</Link>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/profile" className="nav-mobile-link" onClick={() => setMenuOpen(false)}>{user?.fName || "Profile"}</Link>
+                            <button
+                                className="nav-mobile-link nav-mobile-logout"
+                                onClick={() => {
+                                    localStorage.removeItem("token");
+                                    window.location.href = "/";
+                                }}
+                            >
+                                Logout
+                            </button>
+                        </>
+                    )}
+                </div>
+            )}
         </nav>
     );
 };

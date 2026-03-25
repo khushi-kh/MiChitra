@@ -19,5 +19,6 @@ namespace MiChitra.Interfaces
         Task<User?> GetByUsernameAsync(string username);
         Task<User?> GetByEmailAsync(string email);
         Task<bool> ValidateUserCredentialsAsync(string username, string password);
+        Task<bool> ForgotPasswordAsync(int id, string currentPassword, string newPassword);
     }
 }

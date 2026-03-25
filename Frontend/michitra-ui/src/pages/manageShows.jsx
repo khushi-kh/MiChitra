@@ -53,7 +53,7 @@ const ManageShows = () => {
                         <div key={show.id} className="show-row">
                             <div className="show-info">
                                 <div>
-                                    <h3>{show.movieTitle}</h3>
+                                    <h3>{show.movieName}</h3>
                                     <p>
                                         {show.theatreName} • {show.city} •{" "}
                                         {new Date(show.showTime || show.startTime).toLocaleString()}

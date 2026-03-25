@@ -118,6 +118,7 @@ const Login = () => {
 
                     <div className="auth-footer">
                         <p>Don't have an account? <Link to="/register" className="auth-link">Create Account</Link></p>
+                        <p style={{ marginTop: "0.5rem" }}><Link to="/forgot-password" className="auth-link">Forgot Password?</Link></p>
                     </div>
                 </div>
             </div>

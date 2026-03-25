@@ -2,7 +2,7 @@
 
 .auth-container {
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     background: #0a0a0f;
     font-family: 'Outfit', sans-serif;
     color: #ffffff;
@@ -10,7 +10,9 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    padding: 2rem 1rem;
+    box-sizing: border-box;
 }
 
 .bg-gradient {
@@ -33,7 +35,8 @@
 .auth-content {
     position: relative;
     z-index: 10;
-    width: 420px;
+    width: 100%;
+    max-width: 420px;
 }
 
 .auth-card {
@@ -177,15 +180,10 @@
 }
 
 @media (max-width: 768px) {
-    .auth-content {
-        width: calc(100vw - 2rem);
-        max-width: 420px;
-    }
-    
     .auth-card {
-        padding: 2rem;
+        padding: 1.5rem;
     }
-    
+
     .form-row {
         grid-template-columns: 1fr;
         gap: 0;

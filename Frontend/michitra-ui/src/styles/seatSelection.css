@@ -1,94 +1,308 @@
-﻿.seat-modal-overlay {
+.seat-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(6px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
+    padding: clamp(0.5rem, 2vw, 1.5rem);
+    box-sizing: border-box;
 }
 
+/* ── Desktop: side-by-side layout ── */
 .seat-modal {
+    --cols: 8;
+    --rows: 5;
+    --gap: clamp(5px, 1vw, 9px);
+    --seat-size: min(
+        /* fit horizontally inside left panel (~60vw - padding - gaps) */
+        calc((min(58vw, 420px) - 2rem - (var(--cols) - 1) * var(--gap)) / var(--cols)),
+        /* fit vertically (viewport - chrome - header - screen - legend - gap rows) */
+        calc((100dvh - 14rem - (var(--rows) - 1) * var(--gap)) / var(--rows))
+    );
+
     background: #0f111a;
-    padding: 2rem;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 700px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    width: min(94vw, 820px);
+    max-height: calc(100dvh - 2rem);
     color: white;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "header  sidebar"
+        "seating sidebar";
+    gap: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ── Left: header + screen + seats ── */
+.seat-modal-left {
+    grid-area: unset;
+    display: contents;
+}
+
+.seat-modal-header {
+    grid-area: header;
+    padding: 1.2rem 1.5rem 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.seat-modal-header h2 {
+    margin: 0 0 0.2rem;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+.seat-modal-header p {
+    margin: 0;
+    color: #b8b8c8;
+    font-size: clamp(0.75rem, 1.5vw, 0.88rem);
+}
+
+.seat-modal-seating {
+    grid-area: seating;
+    padding: 1rem 1.5rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    justify-content: center;
 }
 
 .screen {
     text-align: center;
-    background: linear-gradient(to right, #444, #aaa, #444);
-    padding: 6px;
-    margin: 1rem 0 2rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
+    background: linear-gradient(to right, #333, #999, #333);
+    padding: 4px 0;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    color: #0f111a;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    width: 100%;
 }
 
 .seats {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--gap);
     align-items: center;
 }
 
 .seat-row {
     display: flex;
-    gap: 10px;
+    gap: var(--gap);
 }
 
 .seat {
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
+    width: var(--seat-size);
+    height: var(--seat-size);
+    border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
+    font-size: calc(var(--seat-size) * 0.28);
     cursor: pointer;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    flex-shrink: 0;
+    transition: transform 0.1s ease, background 0.15s ease;
+    user-select: none;
+    box-sizing: border-box;
 }
 
-    .seat.available {
-        background: rgba(255,255,255,0.1);
-    }
+.seat:hover:not(.booked) {
+    transform: scale(1.12);
+    border-color: rgba(255, 255, 255, 0.5);
+}
 
-    .seat.selected {
-        background: #4CAF50;
-    }
+.seat.available { background: rgba(255, 255, 255, 0.07); }
+.seat.selected  { background: #22c55e; border-color: #16a34a; }
+.seat.booked    { background: rgba(239, 68, 68, 0.3); border-color: rgba(239, 68, 68, 0.25); cursor: not-allowed; }
 
-    .seat.booked {
-        background: #f44336;
-        cursor: not-allowed;
-        opacity: 0.6;
-    }
+.seat-legend {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    color: #b8b8c8;
+}
+
+.legend-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.legend-dot.available { background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255,255,255,0.18); }
+.legend-dot.selected  { background: #22c55e; }
+.legend-dot.booked    { background: rgba(239, 68, 68, 0.3); }
+
+/* ── Right sidebar: summary + actions ── */
+.seat-modal-sidebar {
+    grid-area: sidebar;
+    width: clamp(160px, 22vw, 220px);
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 1.5rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.sidebar-title {
+    font-size: 0.78rem;
+    color: #b8b8c8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+}
+
+.seat-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding: 0.8rem;
+    font-size: 0.85rem;
+    color: #b8b8c8;
+}
+
+.seat-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.seat-summary-total {
+    color: #4ade80;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.error {
+    color: #f87171;
+    font-size: 0.8rem;
+    padding: 0.5rem 0.7rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 8px;
+    margin: 0;
+}
 
 .seat-actions {
     display: flex;
-    justify-content: space-between;
-    margin-top: 1.5rem;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: auto;
 }
 
 .primary {
-    background: #4CAF50;
+    background: linear-gradient(135deg, #e63946 0%, #dc2626 100%);
     border: none;
-    padding: 10px 18px;
-    border-radius: 6px;
     color: white;
+    padding: 0.75rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+    width: 100%;
+}
+
+.primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+}
+
+.primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 .secondary {
     background: transparent;
-    border: 1px solid #666;
-    padding: 10px 18px;
-    border-radius: 6px;
-    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #b8b8c8;
+    padding: 0.65rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    width: 100%;
 }
 
-.seat-summary {
-    margin-top: 1rem;
-    text-align: right;
-    opacity: 0.85;
+.secondary:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+}
+
+/* ── Mobile: stack vertically, full screen ── */
+@media (max-width: 600px) {
+    .seat-modal-overlay {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    .seat-modal {
+        --seat-size: calc((100vw - 2rem - (var(--cols) - 1) * var(--gap)) / var(--cols));
+
+        width: 100vw;
+        max-height: 100dvh;
+        border-radius: 20px 20px 0 0;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+            "header"
+            "seating"
+            "sidebar";
+    }
+
+    .seat-modal-sidebar {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 1rem 1.2rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+        justify-content: space-between;
+    }
+
+    .sidebar-title { display: none; }
+
+    .seat-summary {
+        flex-direction: row;
+        gap: 1rem;
+        flex: 1;
+        padding: 0.6rem 0.8rem;
+    }
+
+    .seat-actions {
+        flex-direction: row;
+        margin-top: 0;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .primary, .secondary {
+        width: auto;
+        padding: 0.65rem 1.1rem;
+        font-size: 0.85rem;
+    }
 }

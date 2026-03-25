@@ -137,3 +137,30 @@
     font-size: 1rem;
     line-height: 1.6;
 }
+
+@media (max-width: 768px) {
+    .admin-nav {
+        padding: 1rem 1.2rem;
+    }
+
+    .admin-nav h1 {
+        font-size: 1.3rem;
+    }
+
+    .logout-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+
+    .admin-content {
+        padding: 6rem 4%;
+    }
+
+    .welcome-section h2 {
+        font-size: 2rem;
+    }
+
+    .welcome-section p {
+        font-size: 1rem;
+    }
+}

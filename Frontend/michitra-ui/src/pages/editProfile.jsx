@@ -53,7 +53,9 @@ const EditProfile = () => {
     }, [isAuthenticated]);
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        if (name === "contactNumber" && !/^\d*$/.test(value)) return;
+        setFormData({ ...formData, [name]: value });
         setError("");
         setSuccess("");
     };
@@ -64,12 +66,22 @@ const EditProfile = () => {
         setError("");
         setSuccess("");
 
+        if (formData.contactNumber.length !== 10) {
+            setError("Invalid Contact Number");
+            setSaving(false);
+            return;
+        }
+
         try {
             await api.put(`/users/${userId}`, formData);
             setSuccess("Profile updated successfully!");
             setTimeout(() => navigate("/profile"), 1500);
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to update profile");
+            const msg = err.response?.data?.message || err.response?.data || "";
+            if (typeof msg === "string" && msg.toLowerCase().includes("email already"))
+                setError("Email already registered. Please use a different email.");
+            else
+                setError(msg || "Failed to update profile");
         } finally {
             setSaving(false);
         }
@@ -137,6 +149,7 @@ const EditProfile = () => {
                                     value={formData.contactNumber}
                                     onChange={handleChange}
                                     className="form-input"
+                                    maxLength={10}
                                     required
                                 />
                             </div>

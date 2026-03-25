@@ -20,13 +20,16 @@ namespace MiChitra.Services
         public async Task<IEnumerable<MovieResponseDto>> GetAllMoviesAsync()
         {
             var movies = await _context.Movies.ToListAsync();
-            return movies.Select(MapToResponseDto);
+            var showStatuses = await GetMovieShowStatusesAsync(movies.Select(m => m.MovieId));
+            return movies.Select(m => MapToResponseDto(m, showStatuses.GetValueOrDefault(m.MovieId)));
         }
 
         public async Task<MovieResponseDto?> GetMovieByIdAsync(int id)
         {
             var movie = await _context.Movies.FindAsync(id);
-            return movie == null ? null : MapToResponseDto(movie);
+            if (movie == null) return null;
+            var showStatuses = await GetMovieShowStatusesAsync([id]);
+            return MapToResponseDto(movie, showStatuses.GetValueOrDefault(id));
         }
 
         public async Task<MovieResponseDto> CreateMovieAsync(CreateMovieDto dto)
@@ -87,7 +90,8 @@ namespace MiChitra.Services
             var movies = await _context.Movies
                 .Where(m => m.Language.ToLower() == language.ToLower())
                 .ToListAsync();
-            return movies.Select(MapToResponseDto);
+            var showStatuses = await GetMovieShowStatusesAsync(movies.Select(m => m.MovieId));
+            return movies.Select(m => MapToResponseDto(m, showStatuses.GetValueOrDefault(m.MovieId)));
         }
 
         public async Task<IEnumerable<MovieResponseDto>> GetMoviesByRatingAsync(decimal minRating)
@@ -95,22 +99,41 @@ namespace MiChitra.Services
             var movies = await _context.Movies
                 .Where(m => m.Rating >= minRating)
                 .ToListAsync();
-            return movies.Select(MapToResponseDto);
+            var showStatuses = await GetMovieShowStatusesAsync(movies.Select(m => m.MovieId));
+            return movies.Select(m => MapToResponseDto(m, showStatuses.GetValueOrDefault(m.MovieId)));
         }
 
         public async Task<IEnumerable<MovieResponseDto>> SearchMovieAsync(string query)
         {
-            return await _context.Movies
-                .Where(m =>
-                    m.MovieName.Contains(query) ||
-                    (m.Description != null && m.Description.Contains(query))
-                )
-                .Select(m => MapToResponseDto(m))
+            var movies = await _context.Movies
+                .Where(m => m.MovieName.Contains(query) || (m.Description != null && m.Description.Contains(query)))
                 .ToListAsync();
+            var showStatuses = await GetMovieShowStatusesAsync(movies.Select(m => m.MovieId));
+            return movies.Select(m => MapToResponseDto(m, showStatuses.GetValueOrDefault(m.MovieId)));
         }
 
+        private async Task<Dictionary<int, string>> GetMovieShowStatusesAsync(IEnumerable<int> movieIds)
+        {
+            var now = DateTime.UtcNow;
+            var shows = await _context.MovieShows
+                .Where(s => movieIds.Contains(s.MovieId) && s.ShowTime > now)
+                .Select(s => new { s.MovieId, s.AvailableSeats })
+                .ToListAsync();
 
-        private static MovieResponseDto MapToResponseDto(Movie movie)
+            return shows
+                .GroupBy(s => s.MovieId)
+                .ToDictionary(
+                    g => g.Key,
+                    g =>
+                    {
+                        if (g.All(s => s.AvailableSeats == 0)) return "Sold Out";
+                        if (g.Any(s => s.AvailableSeats <= 10)) return "Almost Full";
+                        return "Available";
+                    }
+                );
+        }
+
+        private static MovieResponseDto MapToResponseDto(Movie movie, string? availabilityStatus = null)
         {
             return new MovieResponseDto
             {
@@ -118,7 +141,8 @@ namespace MiChitra.Services
                 MovieName = movie.MovieName,
                 Description = movie.Description,
                 Language = movie.Language,
-                Rating = movie.Rating
+                Rating = movie.Rating,
+                AvailabilityStatus = availabilityStatus ?? "No Shows"
             };
         }
     }

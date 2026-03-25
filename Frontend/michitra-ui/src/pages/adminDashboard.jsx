@@ -20,7 +20,7 @@ const AdminDashboard = () => {
     return (
         <div className="admin-dashboard">
             <nav className="admin-nav">
-                <h1>MiChitra Admin</h1>
+                <a href="/" className="logo">MiChitra</a>
                 <button onClick={handleLogout} className="logout-btn">Logout</button>
             </nav>
             

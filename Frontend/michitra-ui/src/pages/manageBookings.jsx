@@ -39,12 +39,6 @@ const ManageBookings = () => {
             <div className="manage-nav">
                 <h1>View &amp; Manage Bookings</h1>
                 <div className="nav-actions">
-                    <button
-                        onClick={() => navigate("/admin/shows")}
-                        className="btn-add"
-                    >
-                        Book Ticket for User
-                    </button>
                     <button onClick={() => navigate("/admin")} className="btn-back">
                         Back
                     </button>
