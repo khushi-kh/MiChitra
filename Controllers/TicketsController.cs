@@ -57,6 +57,9 @@ namespace MiChitra.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            _logger.LogInformation("BookTicket called. UserId={UserId}, MovieShowId={MovieShowId}, NumberOfSeats={NumberOfSeats}, SeatNumbers={SeatNumbers}",
+                dto?.UserId, dto?.MovieShowId, dto?.NumberOfSeats, dto?.SeatNumbers);
+
             try
             {
                 var ticket = await _ticketService.BookTicketAsync(dto);

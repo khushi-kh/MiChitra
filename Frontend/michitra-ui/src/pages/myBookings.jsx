@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import PaymentModal from "../components/paymentModal";
@@ -40,6 +40,7 @@ const MyBookings = () => {
             try {
                 const res = await api.get("/bookings/user");
                 setBookings(res.data);
+                console.log("Fetched bookings:", res.data);
             } catch (error) {
                 console.error("Error fetching bookings:", error);
             } finally {
@@ -52,11 +53,11 @@ const MyBookings = () => {
 
     const handleCancelTicket = async (ticketId) => {
         if (!window.confirm("Are you sure you want to cancel this booking?")) return;
-        
+
         try {
             await api.put(`/tickets/cancel/${ticketId}`);
             alert("Ticket cancelled successfully");
-            setBookings(bookings.map(b => b.ticketId === ticketId ? {...b, status: "Cancelled"} : b));
+            setBookings(bookings.map(b => b.ticketId === ticketId ? { ...b, status: "Cancelled" } : b));
         } catch (error) {
             alert(error.response?.data || "Failed to cancel ticket");
         }
@@ -64,8 +65,8 @@ const MyBookings = () => {
 
     const handlePaymentSuccess = (paymentData) => {
         setPaymentModal(null);
-        setBookings(bookings.map(b => 
-            b.ticketId === paymentData.ticketId ? {...b, status: "Booked", transactionId: paymentData.transactionId} : b
+        setBookings(bookings.map(b =>
+            b.ticketId === paymentData.ticketId ? { ...b, status: "Booked", transactionId: paymentData.transactionId } : b
         ));
         alert("Payment successful!");
     };
@@ -96,6 +97,8 @@ const MyBookings = () => {
         }
     };
 
+   
+  
     const filteredBookings = bookings.filter((booking) => {
         if (filter === "all") return true;
         if (filter === "confirmed") return booking.status === "Booked" || booking.status === "Completed";
@@ -153,95 +156,99 @@ const MyBookings = () => {
                     </div>
                 ) : (
                     <>
-                    <div className="bookings-grid">
-                        {paginatedBookings.map((booking) => (
-                            <div key={booking.ticketId} className="booking-card">
-                                <div className="booking-header-section">
-                                    <h3 className="booking-movie">{booking.movieName}</h3>
-                                    <span className={`booking-status ${getStatusClass(booking.status)}`}>
-                                        {booking.status}
-                                    </span>
-                                </div>
-                                <div className="booking-details">
-                                    <div className="booking-detail">
-                                        <span className="detail-label">Theatre</span>
-                                        <span className="detail-value">{booking.theatreName}</span>
-                                    </div>
-                                    <div className="booking-detail">
-                                        <span className="detail-label">City</span>
-                                        <span className="detail-value">{booking.city ?? "N/A"}</span>
-                                    </div>
-                                    <div className="booking-detail">
-                                        <span className="detail-label">Show Time</span>
-                                        <span className="detail-value">
-                                            {new Date(booking.showTime).toLocaleString()}
-                                        </span>
-                                    </div>
-                                    <div className="booking-detail">
-                                        <span className="detail-label">Seats</span>
-                                        <span className="detail-value">{booking.numberOfSeats}</span>
-                                    </div>
-                                    <div className="booking-detail">
-                                        <span className="detail-label">Total Price</span>
-                                        <span className="detail-value">₹{booking.totalPrice}</span>
-                                    </div>
-                                    <div className="booking-detail">
-                                        <span className="detail-label">Transaction ID</span>
-                                        <span className="detail-value">{booking.transactionId || "N/A"}</span>
-                                    </div>
-                                    <div className="booking-detail">
-                                        <span className="detail-label">Booking Date</span>
-                                        <span className="detail-value">
-                                            {new Date(booking.bookingDate).toLocaleDateString()}
-                                        </span>
-                                    </div>
-                                    <div className="booking-detail">
-                                        <span className="detail-label">Ticket ID</span>
-                                        <span className="detail-value">#{booking.ticketId}</span>
-                                    </div>
-                                    {booking.status === "Reserved" && booking.reservationExpiry && new Date(booking.reservationExpiry) > new Date() && (
-                                        <div className="booking-detail">
-                                            <span className="detail-label">Expires in</span>
-                                            <span className="detail-value expires-timer">
-                                                {getTimeRemaining(booking.reservationExpiry)}
+                        <div className="bookings-grid">
+                            {paginatedBookings.map((booking) => {
+                                return (
+                                    <div key={booking.ticketId} className="booking-card">
+                                        <div className="booking-header-section">
+                                            <h3 className="booking-movie">{booking.movieName}</h3>
+                                            <span className={`booking-status ${getStatusClass(booking.status)}`}>
+                                                {booking.status}
                                             </span>
                                         </div>
-                                    )}
-                                </div>
-                                {booking.status === "Reserved" && (
-                                    <button className="pay-now-btn" onClick={() => setPaymentModal(booking)}>
-                                        Pay Now
-                                    </button>
-                                )}
-                                {booking.status === "Booked" && new Date(booking.showTime) > new Date() && (
-                                    <button className="cancel-btn" onClick={() => handleCancelTicket(booking.ticketId)}>
-                                        Cancel Ticket
-                                    </button>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                    {totalPages > 1 && (
-                        <div className="pagination">
-                            <button
-                                className="pagination-btn"
-                                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                                disabled={currentPage === 1}
-                            >
-                                Previous
-                            </button>
-                            <span className="pagination-info">
-                                Page {currentPage} of {totalPages}
-                            </span>
-                            <button
-                                className="pagination-btn"
-                                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                                disabled={currentPage === totalPages}
-                            >
-                                Next
-                            </button>
+                                        <div className="booking-details">
+                                            <div className="booking-detail">
+                                                <span className="detail-label">Theatre</span>
+                                                <span className="detail-value">{booking.theatreName}</span>
+                                            </div>
+                                            <div className="booking-detail">
+                                                <span className="detail-label">City</span>
+                                                <span className="detail-value">{booking.city ?? "N/A"}</span>
+                                            </div>
+                                            <div className="booking-detail">
+                                                <span className="detail-label">Show Time</span>
+                                                <span className="detail-value">
+                                                    {new Date(booking.showTime).toLocaleString()}
+                                                </span>
+                                            </div>
+                                            <div className="booking-detail">
+                                                <span className="detail-label">Seats</span>
+                                                <span className="detail-value">
+                                                    {booking.numberOfSeats}
+                                                </span>
+                                            </div>
+                                            <div className="booking-detail">
+                                                <span className="detail-label">Total Price</span>
+                                                <span className="detail-value">₹{booking.totalPrice}</span>
+                                            </div>
+                                            <div className="booking-detail">
+                                                <span className="detail-label">Transaction ID</span>
+                                                <span className="detail-value">{booking.transactionId || "N/A"}</span>
+                                            </div>
+                                            <div className="booking-detail">
+                                                <span className="detail-label">Booking Date</span>
+                                                <span className="detail-value">
+                                                    {new Date(booking.bookingDate).toLocaleDateString()}
+                                                </span>
+                                            </div>
+                                            <div className="booking-detail">
+                                                <span className="detail-label">Ticket ID</span>
+                                                <span className="detail-value">#{booking.ticketId}</span>
+                                            </div>
+                                            {booking.status === "Reserved" && booking.reservationExpiry && new Date(booking.reservationExpiry) > new Date() && (
+                                                <div className="booking-detail">
+                                                    <span className="detail-label">Expires in</span>
+                                                    <span className="detail-value expires-timer">
+                                                        {getTimeRemaining(booking.reservationExpiry)}
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                        {booking.status === "Reserved" && (
+                                            <button className="pay-now-btn" onClick={() => setPaymentModal(booking)}>
+                                                Pay Now
+                                            </button>
+                                        )}
+                                        {booking.status === "Booked" && new Date(booking.showTime) > new Date() && (
+                                            <button className="cancel-btn" onClick={() => handleCancelTicket(booking.ticketId)}>
+                                                Cancel Ticket
+                                            </button>
+                                        )}
+                                    </div>
+                                )
+                            })}
                         </div>
-                    )}
+                        {totalPages > 1 && (
+                            <div className="pagination">
+                                <button
+                                    className="pagination-btn"
+                                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                                    disabled={currentPage === 1}
+                                >
+                                    Previous
+                                </button>
+                                <span className="pagination-info">
+                                    Page {currentPage} of {totalPages}
+                                </span>
+                                <button
+                                    className="pagination-btn"
+                                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                                    disabled={currentPage === totalPages}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        )}
                     </>
                 )}
             </div>

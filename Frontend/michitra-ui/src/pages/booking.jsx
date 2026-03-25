@@ -65,10 +65,10 @@ const Booking = () => {
 
         api.get(`/movieshows/movie/${movieId}/theatre/${theatre.theatreId}`)
             .then((res) => {
-                // Sort shows (upcoming first)
-                const sortedShows = res.data.sort(
-                    (a, b) => new Date(a.showTime) - new Date(b.showTime)
-                );
+                const now = new Date();
+                const sortedShows = res.data
+                    .filter((show) => new Date(show.showTime) >= now)
+                    .sort((a, b) => new Date(a.showTime) - new Date(b.showTime));
                 setShows(sortedShows);
                 setLoading(false);
             })
