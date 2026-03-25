@@ -117,11 +117,10 @@ namespace MiChitra.Services
                 movieShow.AvailableSeats -= dto.NumberOfSeats;
 
                 // Update show status based on availability
-                var occupancyPercentage = (double)(movieShow.TotalSeats - movieShow.AvailableSeats) / movieShow.TotalSeats;
-                movieShow.Status = occupancyPercentage switch
+                movieShow.Status = movieShow.AvailableSeats switch
                 {
-                    >= 1.0 => MovieShowStatus.SoldOut,
-                    >= 0.8 => MovieShowStatus.AlmostFull,
+                    0 => MovieShowStatus.SoldOut,
+                    <= 10 => MovieShowStatus.AlmostFull,
                     _ => MovieShowStatus.Available
                 };
 
@@ -188,11 +187,10 @@ namespace MiChitra.Services
                 ticket.MovieShow.AvailableSeats += ticket.NumberOfSeats;
 
                 // Update show status
-                var occupancyPercentage = (double)(ticket.MovieShow.TotalSeats - ticket.MovieShow.AvailableSeats) / ticket.MovieShow.TotalSeats;
-                ticket.MovieShow.Status = occupancyPercentage switch
+                ticket.MovieShow.Status = ticket.MovieShow.AvailableSeats switch
                 {
-                    >= 1.0 => MovieShowStatus.SoldOut,
-                    >= 0.8 => MovieShowStatus.AlmostFull,
+                    0 => MovieShowStatus.SoldOut,
+                    <= 10 => MovieShowStatus.AlmostFull,
                     _ => MovieShowStatus.Available
                 };
 

@@ -11,6 +11,10 @@ const Profile = () => {
     const [user, setUser] = useState(null);
     const [bookingStats, setBookingStats] = useState({ confirmed: 0, cancelled: 0 });
     const [loading, setLoading] = useState(true);
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [passwordForm, setPasswordForm] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
+    const [passwordError, setPasswordError] = useState("");
+    const [passwordSuccess, setPasswordSuccess] = useState("");
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -83,6 +87,7 @@ const Profile = () => {
                                 </div>
                             </div>
                             <button className="edit-profile-btn" onClick={() => navigate("/edit-profile")}>Edit Profile</button>
+                            <button className="change-password-btn" onClick={() => { setShowPasswordModal(true); setPasswordError(""); setPasswordSuccess(""); setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" }); }}>Change Password</button>
                         </div>
 
                         {/* Right Card - Booking Analytics */}
@@ -134,6 +139,41 @@ const Profile = () => {
                     </div>
                 )}
             </div>
+
+            {showPasswordModal && (
+                <div className="modal-overlay" onClick={() => setShowPasswordModal(false)}>
+                    <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+                        <h3 className="modal-title">Change Password</h3>
+                        {passwordError && <p className="modal-error">{passwordError}</p>}
+                        {passwordSuccess && <p className="modal-success">{passwordSuccess}</p>}
+                        <input className="modal-input" type="password" placeholder="Current Password"
+                            value={passwordForm.currentPassword}
+                            onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })} />
+                        <input className="modal-input" type="password" placeholder="New Password"
+                            value={passwordForm.newPassword}
+                            onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })} />
+                        <input className="modal-input" type="password" placeholder="Confirm New Password"
+                            value={passwordForm.confirmPassword}
+                            onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })} />
+                        <div className="modal-actions">
+                            <button className="modal-cancel-btn" onClick={() => setShowPasswordModal(false)}>Cancel</button>
+                            <button className="modal-submit-btn" onClick={async () => {
+                                const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                                setPasswordError(""); setPasswordSuccess("");
+                                if (passwordForm.newPassword !== passwordForm.confirmPassword) { setPasswordError("New passwords do not match."); return; }
+                                if (!PASSWORD_REGEX.test(passwordForm.newPassword)) { setPasswordError("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."); return; }
+                                try {
+                                    await api.put("/users/reset-password", { currentPassword: passwordForm.currentPassword, newPassword: passwordForm.newPassword });
+                                    setPasswordSuccess("Password changed successfully.");
+                                    setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+                                } catch (err) {
+                                    setPasswordError(err.response?.data || "Failed to change password.");
+                                }
+                            }}>Update</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

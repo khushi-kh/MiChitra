@@ -50,7 +50,7 @@ namespace MiChitra.Controllers
 
         // USER: update only own profile
         // ADMIN: update any user
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDTO dto)
         {
             var idClaim = User.FindFirst(JwtRegisteredClaimNames.Sub) ?? User.FindFirst(ClaimTypes.NameIdentifier);
@@ -127,6 +127,57 @@ namespace MiChitra.Controllers
             {
                 _logger.LogError(ex, "Error updating role for user {UserId}", id);
                 return StatusCode(500, "Failed to update user role.");
+            }
+        }
+        // Forgot password without being logged in (by username)
+        [HttpPut("forgot-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ForgotPasswordDTO dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _userService.GetByUsernameAsync(dto.Username);
+            if (user == null)
+                return NotFound("User not found.");
+
+            try
+            {
+                var success = await _userService.ForgotPasswordAsync(user.UserId, dto.CurrentPassword, dto.NewPassword);
+                if (!success)
+                    return NotFound("User not found.");
+
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // Reset password for logged-in user
+        [HttpPut("reset-password")]
+        [Authorize]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO dto)
+        {
+            var idClaim = User.FindFirst(JwtRegisteredClaimNames.Sub) ?? User.FindFirst(ClaimTypes.NameIdentifier);
+            if (idClaim == null || !int.TryParse(idClaim.Value, out var userId))
+                return Unauthorized("Invalid user identifier in token.");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var success = await _userService.ForgotPasswordAsync(userId, dto.CurrentPassword, dto.NewPassword);
+                if (!success)
+                    return NotFound("User not found");
+
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

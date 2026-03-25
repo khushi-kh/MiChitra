@@ -52,11 +52,27 @@ const Register = () => {
                 localStorage.setItem("token", data.token);
                 navigate("/");
             } else {
-                const errorData = await response.text();
-                if (errorData.includes("Username or email already exists")) {
-                    setError("Email is already registered");
-                } else {
-                    setError(errorData || "Registration failed");
+                const errorText = await response.text();
+                try {
+                    const errorJson = JSON.parse(errorText);
+                    if (errorJson.errors) {
+                        const firstError = Object.values(errorJson.errors).flat()[0];
+                        setError(firstError);
+                    } else if (errorText.includes("Username already exists")) {
+                        setError("Username is not available.");
+                    } else if (errorText.includes("Email already exists")) {
+                        setError("Email is already registered.");
+                    } else {
+                        setError(errorJson.title || errorText || "Registration failed");
+                    }
+                } catch {
+                    if (errorText.includes("Username already exists")) {
+                        setError("Username is not available.");
+                    } else if (errorText.includes("Email already exists")) {
+                        setError("Email is already registered.");
+                    } else {
+                        setError(errorText || "Registration failed");
+                    }
                 }
             }
         } catch (err) {

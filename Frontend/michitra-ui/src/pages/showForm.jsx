@@ -71,6 +71,8 @@ const ShowForm = () => {
             });
     };
 
+    const today = new Date().toISOString().slice(0, 16);
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -119,6 +121,7 @@ const ShowForm = () => {
                         name="showTime"
                         value={formData.showTime}
                         onChange={handleChange}
+                        min={today}
                         required
                     />
 

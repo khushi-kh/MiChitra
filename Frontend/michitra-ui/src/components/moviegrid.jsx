@@ -32,6 +32,9 @@ const MovieGrid = ({ movies, limit, showViewAll }) => {
                             <div className="movie-meta">
                                 {movie.language} • {movie.rating}
                             </div>
+                            <span className={`movie-status movie-status--${movie.availabilityStatus?.toLowerCase().replace(' ', '-')}`}>
+                                {movie.availabilityStatus}
+                            </span>
                         </div>
                     </div>
                 ))}

@@ -7,5 +7,6 @@ namespace MiChitra.DTOs
         public string Description { get; set; } = string.Empty;
         public string Language { get; set; } = string.Empty;
         public decimal Rating { get; set; }
+        public string AvailabilityStatus { get; set; } = "Available";
     }
 }
