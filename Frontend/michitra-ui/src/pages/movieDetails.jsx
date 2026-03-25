@@ -57,9 +57,9 @@ const MovieDetails = () => {
                                 <span className="meta-value">{movie.rating}</span>
                             </div>
                         </div>
-                            <Link to={`/booking/${movie.movieId}`} style={movie.availabilityStatus === "Sold Out" ? { pointerEvents: "none" } : {}}>
-                                <button className="book-button" disabled={movie.availabilityStatus === "Sold Out"}>
-                                    {movie.availabilityStatus === "Sold Out" ? "Sold Out" : "Book Now"}
+                            <Link to={`/booking/${movie.movieId}`} style={(movie.availabilityStatus === "Sold Out" || movie.availabilityStatus === "No Shows") ? { pointerEvents: "none" } : {}}>
+                                <button className="book-button" disabled={movie.availabilityStatus === "Sold Out" || movie.availabilityStatus === "No Shows"}>
+                                    {movie.availabilityStatus === "Sold Out" ? "Sold Out" : movie.availabilityStatus === "No Shows" ? "No Shows Available" : "Book Now"}
                                 </button>
                             </Link>
 
