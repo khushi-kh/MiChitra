@@ -7,6 +7,7 @@ const Register = () => {
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
+        username: "",
         email: "",
         password: "",
         confirmPassword: ""
@@ -50,6 +51,7 @@ const Register = () => {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem("token", data.token);
+                localStorage.setItem("user", JSON.stringify(data.user));
                 navigate("/");
             } else {
                 const errorText = await response.text();

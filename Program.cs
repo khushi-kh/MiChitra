@@ -151,7 +151,7 @@ builder.Services.AddAuthentication(options =>
     // Use JWT-standard claim types without automatic remapping
     JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
-    options.RequireHttpsMetadata = true;
+    options.RequireHttpsMetadata = false;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -205,8 +205,6 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseRateLimiter();
-
-app.UseHttpsRedirection();
 
 app.UseCors("AllowReact");
 

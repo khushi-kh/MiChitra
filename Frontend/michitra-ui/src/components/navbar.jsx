@@ -132,6 +132,7 @@ const Navbar = ({ isAuthenticated, scrolled }) => {
                                 className="nav-logout"
                                 onClick={() => {
                                     localStorage.removeItem("token");
+                                    localStorage.removeItem("user");
                                     window.location.href = "/";
                                 }}
                             >
@@ -173,6 +174,7 @@ const Navbar = ({ isAuthenticated, scrolled }) => {
                                 className="nav-mobile-link nav-mobile-logout"
                                 onClick={() => {
                                     localStorage.removeItem("token");
+                                    localStorage.removeItem("user");
                                     window.location.href = "/";
                                 }}
                             >

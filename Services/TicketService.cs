@@ -30,7 +30,7 @@ namespace MiChitra.Services
                 TotalPrice = ticket.TotalPrice,
                 Status = ticket.Status,
                 ShowTime = ticket.MovieShow?.ShowTime ?? default,
-                PricePerSeat = ticket.MovieShow?.PricePerSeat ?? 0m,
+                PricePerSeat = ticket.MovieShow?.PricePerSeat ?? 0,
                 MovieName = ticket.MovieShow?.Movie?.MovieName,
                 TheatreName = ticket.MovieShow?.Theatre?.Name,
                 City = ticket.MovieShow?.Theatre?.City,
