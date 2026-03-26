@@ -1,0 +1,339 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="4bee628f-a01f-4142-b3ec-211b3933d0bb" name="khush@LAPTOP-EGGER0BD 2026-03-26 18:28:32" runUser="LAPTOP-EGGER0BD\khush" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-03-26T18:28:32.0382083+05:30" queuing="2026-03-26T18:28:32.0382090+05:30" start="2026-03-26T18:28:31.3586160+05:30" finish="2026-03-26T18:28:32.9774739+05:30" />
+  <TestSettings name="default" id="68a1de2a-5fda-4d47-bb1e-c9eb5c8d81b8">
+    <Deployment runDeploymentRoot="khush_LAPTOP-EGGER0BD_2026-03-26_18_28_32" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="102f9f5e-b400-478f-8e8b-07e1dab23048" testId="c2a1d9aa-2679-3eef-1971-c5dd5f50ad4f" testName="GenerateToken_ValidUser_ReturnsNonEmptyToken" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0029580" startTime="2026-03-26T18:28:31.9419328+05:30" endTime="2026-03-26T18:28:31.9448909+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="102f9f5e-b400-478f-8e8b-07e1dab23048" />
+    <UnitTestResult executionId="0c0883d6-60b0-4423-a85c-7fb9d28dbca8" testId="31faec98-f3c5-330e-f783-6131a14c1ae6" testName="ValidateToken_TamperedToken_ReturnsNull" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0005320" startTime="2026-03-26T18:28:31.9775469+05:30" endTime="2026-03-26T18:28:31.9780787+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0c0883d6-60b0-4423-a85c-7fb9d28dbca8" />
+    <UnitTestResult executionId="59e6246f-4ee5-48a5-99d2-df70df612b29" testId="deba8a3b-69c4-71e0-d896-ea50ccaab042" testName="GetBookedSeatsAsync_ReturnsBookedSeats" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0040720" startTime="2026-03-26T18:28:32.8094312+05:30" endTime="2026-03-26T18:28:32.8135030+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="59e6246f-4ee5-48a5-99d2-df70df612b29" />
+    <UnitTestResult executionId="06841ba4-03a8-40fa-a9d5-19747bf482cc" testId="a632ff8d-8b05-cb5c-a0fd-83e5db0fc8ea" testName="CancelTicketAsync_AlreadyCancelled_ReturnsTrue" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0020560" startTime="2026-03-26T18:28:32.7945025+05:30" endTime="2026-03-26T18:28:32.7965587+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="06841ba4-03a8-40fa-a9d5-19747bf482cc" />
+    <UnitTestResult executionId="29bc6e53-78f6-47dc-b7a8-7c57a3e0234b" testId="8b6cc809-69af-85b9-4d3e-20efbba1b04c" testName="UpdateTheatreAsync_ExistingId_UpdatesAndReturnsTrue" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0015790" startTime="2026-03-26T18:28:32.7288514+05:30" endTime="2026-03-26T18:28:32.7304297+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="29bc6e53-78f6-47dc-b7a8-7c57a3e0234b" />
+    <UnitTestResult executionId="1aeb9c9c-0474-421d-ad1a-02617a7b65da" testId="571173fa-320b-5c01-2b9e-9637bce31e3f" testName="GetActiveTheatresAsync_ReturnsOnlyActiveTheatres" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0042450" startTime="2026-03-26T18:28:32.6956159+05:30" endTime="2026-03-26T18:28:32.6998601+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1aeb9c9c-0474-421d-ad1a-02617a7b65da" />
+    <UnitTestResult executionId="e2e64d06-5f3c-41fa-993a-f61b0064de23" testId="2edb52f5-69b4-241a-c538-c6ae7799c40a" testName="DeactivateTheatreAsync_NoActiveShows_DeactivatesAndReturnsTrue" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0037530" startTime="2026-03-26T18:28:32.6857190+05:30" endTime="2026-03-26T18:28:32.6894719+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e2e64d06-5f3c-41fa-993a-f61b0064de23" />
+    <UnitTestResult executionId="ba6c9e4f-0836-444c-95e9-53b12c07bafa" testId="e4f8ade9-ea28-0801-9e52-7dea79feb50b" testName="GetUserIdFromToken_InvalidToken_ReturnsNull" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0146300" startTime="2026-03-26T18:28:31.9449091+05:30" endTime="2026-03-26T18:28:31.9595392+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ba6c9e4f-0836-444c-95e9-53b12c07bafa" />
+    <UnitTestResult executionId="d992de69-a288-46f1-b1f2-97d82f2633f7" testId="ebc9cd19-f152-6deb-a650-a12b0d2a3d8a" testName="GetMovieByIdAsync_WithAlmostFullShow_ReturnsStatusAlmostFull" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0021779" startTime="2026-03-26T18:28:32.6653660+05:30" endTime="2026-03-26T18:28:32.6675435+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d992de69-a288-46f1-b1f2-97d82f2633f7" />
+    <UnitTestResult executionId="ba25a48f-4c29-4ec0-bf6d-53f6fb60e375" testId="6bd7f53a-a8d4-59d6-6fef-5ac4cc775e54" testName="BookTicketAsync_ZeroSeats_ThrowsInvalidOperationException" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0013930" startTime="2026-03-26T18:28:32.7930899+05:30" endTime="2026-03-26T18:28:32.7944827+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ba25a48f-4c29-4ec0-bf6d-53f6fb60e375" />
+    <UnitTestResult executionId="45d46f86-e7e0-4c4c-9264-93c56bb2c75b" testId="8f598dad-a3e7-9d5c-484a-bc809785865f" testName="GetAllMoviesAsync_EmptyDb_ReturnsEmpty" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0198110" startTime="2026-03-26T18:28:32.6402765+05:30" endTime="2026-03-26T18:28:32.6600870+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="45d46f86-e7e0-4c4c-9264-93c56bb2c75b" />
+    <UnitTestResult executionId="097307a7-fdcf-43de-ad1d-c1315059a097" testId="7640e2b4-314e-be66-ac69-a1620bcdd021" testName="GetTicketByIdAsync_NonExistingId_ReturnsNull" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0010690" startTime="2026-03-26T18:28:32.8713131+05:30" endTime="2026-03-26T18:28:32.8723819+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="097307a7-fdcf-43de-ad1d-c1315059a097" />
+    <UnitTestResult executionId="37de5ee8-922e-43b3-8c3f-696281a49560" testId="b258c749-c009-5b17-2008-f9437056f881" testName="GetBookedSeatsAsync_NoBookings_ReturnsEmpty" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0057810" startTime="2026-03-26T18:28:32.8036202+05:30" endTime="2026-03-26T18:28:32.8094003+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="37de5ee8-922e-43b3-8c3f-696281a49560" />
+    <UnitTestResult executionId="ff24e02b-685c-4aa1-9c82-958803b7e33c" testId="e6e19832-63b9-e6a7-1022-9259d4f40496" testName="DeactivateTheatreAsync_NonExistingId_ReturnsFalse" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0046320" startTime="2026-03-26T18:28:32.6894996+05:30" endTime="2026-03-26T18:28:32.6941310+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff24e02b-685c-4aa1-9c82-958803b7e33c" />
+    <UnitTestResult executionId="811ed562-49a4-4ba1-98b6-35fa8ba81f65" testId="5c28fd28-c1d4-18d4-f82f-eceadd8a2d44" testName="GenerateToken_TokenIsValidJwtFormat" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0256640" startTime="2026-03-26T18:28:31.9162182+05:30" endTime="2026-03-26T18:28:31.9418821+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="811ed562-49a4-4ba1-98b6-35fa8ba81f65" />
+    <UnitTestResult executionId="5a143c7e-314a-4a3d-b662-d31221973c97" testId="0cac1852-af16-a08b-4d79-8d1960c4b1da" testName="GetMovieByIdAsync_NonExistingId_ReturnsNull" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0011520" startTime="2026-03-26T18:28:32.6642013+05:30" endTime="2026-03-26T18:28:32.6653529+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5a143c7e-314a-4a3d-b662-d31221973c97" />
+    <UnitTestResult executionId="e5ea86e6-4335-4ba7-8b3b-27dd51fccb0c" testId="5e146a21-7508-53f5-e143-fc5a0f8c2e8a" testName="GetUserRoleFromToken_InvalidToken_ReturnsNull" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0005810" startTime="2026-03-26T18:28:31.9743229+05:30" endTime="2026-03-26T18:28:31.9749041+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e5ea86e6-4335-4ba7-8b3b-27dd51fccb0c" />
+    <UnitTestResult executionId="cdc8fad3-0a0b-400f-8e4e-9a8bd77693df" testId="65f10f85-f960-467a-5eed-1a71fc6f28b6" testName="DeleteMovieAsync_NoActiveShows_DeletesAndReturnsTrue" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0408170" startTime="2026-03-26T18:28:32.5344838+05:30" endTime="2026-03-26T18:28:32.5752998+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cdc8fad3-0a0b-400f-8e4e-9a8bd77693df" />
+    <UnitTestResult executionId="16e5d287-2198-4877-a524-62b63b5d3879" testId="5b9ec7e7-27a9-2790-7b0b-3c25aeae1194" testName="BookTicketAsync_NotEnoughSeats_ThrowsInvalidOperationException" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0271370" startTime="2026-03-26T18:28:32.7382878+05:30" endTime="2026-03-26T18:28:32.7654240+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="16e5d287-2198-4877-a524-62b63b5d3879" />
+    <UnitTestResult executionId="63ee3b51-232c-48a2-a83c-362dabfc11b8" testId="5fc988f9-25ba-0a40-5aec-29f33ed539d0" testName="GetTicketsByUserIdAsync_ReturnsOnlyUserTickets" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0028279" startTime="2026-03-26T18:28:32.9062940+05:30" endTime="2026-03-26T18:28:32.9091221+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="63ee3b51-232c-48a2-a83c-362dabfc11b8" />
+    <UnitTestResult executionId="0fff00e2-a752-4829-87a5-862735b14bb7" testId="217b4296-073d-0046-5cdc-f45bd2f7d14a" testName="GetTheatresByCityAsync_ReturnsOnlyMatchingCity" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0010160" startTime="2026-03-26T18:28:32.7278165+05:30" endTime="2026-03-26T18:28:32.7288328+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0fff00e2-a752-4829-87a5-862735b14bb7" />
+    <UnitTestResult executionId="18efefe0-2b75-4053-a73a-8310a2c7c35c" testId="f8f02eec-1a9a-9061-ee15-be0d5aa25fc6" testName="CancelTicketAsync_ExistingTicket_CancelsAndRestoresSeats" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0016440" startTime="2026-03-26T18:28:32.7965763+05:30" endTime="2026-03-26T18:28:32.7982200+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="18efefe0-2b75-4053-a73a-8310a2c7c35c" />
+    <UnitTestResult executionId="ee9e39ba-131d-4c70-82d0-fdd84d3dad22" testId="26f59675-98ad-4eb3-2d05-33956e9b7680" testName="UpdateMovieAsync_ExistingId_UpdatesAndReturnsTrue" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0030350" startTime="2026-03-26T18:28:32.6774388+05:30" endTime="2026-03-26T18:28:32.6804736+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ee9e39ba-131d-4c70-82d0-fdd84d3dad22" />
+    <UnitTestResult executionId="70596eaa-85bb-4856-ac8e-deb088549d7b" testId="09447e94-4249-6f42-7300-77ce0d33454c" testName="UpdateMovieAsync_NonExistingId_ReturnsFalse" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0009750" startTime="2026-03-26T18:28:32.6805027+05:30" endTime="2026-03-26T18:28:32.6814772+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="70596eaa-85bb-4856-ac8e-deb088549d7b" />
+    <UnitTestResult executionId="3c4e629f-38ec-438d-8fe7-c3452ae69656" testId="95adcd2a-ed66-7902-5eb0-300d6b6e8b39" testName="SearchMovieAsync_NoMatch_ReturnsEmpty" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0010510" startTime="2026-03-26T18:28:32.6763707+05:30" endTime="2026-03-26T18:28:32.6774219+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3c4e629f-38ec-438d-8fe7-c3452ae69656" />
+    <UnitTestResult executionId="060c10fb-f613-4934-9f41-128bf241b101" testId="166a0395-1651-33a8-145e-91bfc69f9927" testName="BookTicketAsync_InvalidShowId_ThrowsInvalidOperationException" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0067890" startTime="2026-03-26T18:28:32.7314775+05:30" endTime="2026-03-26T18:28:32.7382667+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="060c10fb-f613-4934-9f41-128bf241b101" />
+    <UnitTestResult executionId="c8ad3591-d288-4645-b80c-f70b0689ed3d" testId="e5ba5004-860d-a018-f519-4caf4b8168bb" testName="GetAllCitiesAsync_ReturnsDistinctActiveCities" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0096510" startTime="2026-03-26T18:28:32.6998839+05:30" endTime="2026-03-26T18:28:32.7095347+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c8ad3591-d288-4645-b80c-f70b0689ed3d" />
+    <UnitTestResult executionId="5df85fb4-396e-43bc-a7a8-a870d641b7a0" testId="2999dcdc-91bd-5c66-00fe-e005243a9448" testName="GetTicketsByUserIdAsync_NoTickets_ReturnsEmpty" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0338620" startTime="2026-03-26T18:28:32.8724049+05:30" endTime="2026-03-26T18:28:32.9062660+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5df85fb4-396e-43bc-a7a8-a870d641b7a0" />
+    <UnitTestResult executionId="80477604-ab28-47e7-9196-f08098b17506" testId="3df7318c-a3db-9379-3178-7f1dc26c7ccd" testName="Constructor_ShortKey_ThrowsInvalidOperationException" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0131450" startTime="2026-03-26T18:28:31.9019630+05:30" endTime="2026-03-26T18:28:31.9150515+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="80477604-ab28-47e7-9196-f08098b17506" />
+    <UnitTestResult executionId="828c7b31-1030-4999-b644-1aa710b9b87f" testId="28de6682-f703-650d-4ccf-69e2c78b227f" testName="DeleteMovieAsync_NonExistingId_ReturnsFalse" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0260759" startTime="2026-03-26T18:28:32.5753312+05:30" endTime="2026-03-26T18:28:32.6014065+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="828c7b31-1030-4999-b644-1aa710b9b87f" />
+    <UnitTestResult executionId="8dd12009-44df-4b24-84bd-9cf1e6fcc476" testId="5675d897-292b-2a8c-58cb-23bd07c45c91" testName="GetUserIdFromToken_ValidToken_ReturnsCorrectUserId" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0147260" startTime="2026-03-26T18:28:31.9595687+05:30" endTime="2026-03-26T18:28:31.9742942+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8dd12009-44df-4b24-84bd-9cf1e6fcc476" />
+    <UnitTestResult executionId="3b122edd-5668-442c-8bde-4566392417a7" testId="9bba40d0-a3d0-ee92-b4cb-718612254237" testName="GetTheatresByCityAsync_CaseInsensitive_ReturnsResults" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0057780" startTime="2026-03-26T18:28:32.7220174+05:30" endTime="2026-03-26T18:28:32.7277949+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3b122edd-5668-442c-8bde-4566392417a7" />
+    <UnitTestResult executionId="41b48468-b505-46ff-af9f-4ec9fb90e894" testId="9a6afd09-a127-a7de-c1f4-1a2722a5b611" testName="SearchMovieAsync_MatchingName_ReturnsResults" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0074410" startTime="2026-03-26T18:28:32.6689046+05:30" endTime="2026-03-26T18:28:32.6763447+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="41b48468-b505-46ff-af9f-4ec9fb90e894" />
+    <UnitTestResult executionId="ce765d2f-c67c-416c-a69b-a3bb46442899" testId="c618aa4c-8d34-7057-34c0-984ea0930901" testName="GetTicketByIdAsync_ExistingId_ReturnsTicket" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0577420" startTime="2026-03-26T18:28:32.8135409+05:30" endTime="2026-03-26T18:28:32.8712823+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ce765d2f-c67c-416c-a69b-a3bb46442899" />
+    <UnitTestResult executionId="437d1d92-39e8-4889-a149-df9dcbcf2ea2" testId="eacd9e73-f8cd-a9cb-ca92-283fbb3f2be5" testName="GetTheatreByIdAsync_NonExistingId_ReturnsNull" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0006790" startTime="2026-03-26T18:28:32.7213222+05:30" endTime="2026-03-26T18:28:32.7220012+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="437d1d92-39e8-4889-a149-df9dcbcf2ea2" />
+    <UnitTestResult executionId="490b16c8-8c5c-44a5-ae80-602c26b10802" testId="7b39e7c9-6717-d6db-84c1-f24706454bf7" testName="DeactivateTheatreAsync_WithActiveShows_ThrowsInvalidOperationException" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0014480" startTime="2026-03-26T18:28:32.6941513+05:30" endTime="2026-03-26T18:28:32.6955993+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="490b16c8-8c5c-44a5-ae80-602c26b10802" />
+    <UnitTestResult executionId="af7ad888-c650-41f7-a0fe-35de3bdd760e" testId="fd660864-a89e-226e-80f3-99c280faeb30" testName="ValidateToken_InvalidToken_ReturnsNull" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0001810" startTime="2026-03-26T18:28:31.9773563+05:30" endTime="2026-03-26T18:28:31.9775373+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="af7ad888-c650-41f7-a0fe-35de3bdd760e" />
+    <UnitTestResult executionId="f6464c46-eb55-4a34-aa75-c277cd06c9a7" testId="02073565-7acb-04ce-fc14-623a44a0b611" testName="ValidateToken_ValidToken_ReturnsPrincipal" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0002290" startTime="2026-03-26T18:28:31.9780953+05:30" endTime="2026-03-26T18:28:31.9783246+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f6464c46-eb55-4a34-aa75-c277cd06c9a7" />
+    <UnitTestResult executionId="e3184232-05c5-4f99-8e90-a62c99578959" testId="ac3c07a2-7508-8110-5a1f-d67250a9de4a" testName="ActivateTheatreAsync_InactiveTheatre_ActivatesAndReturnsTrue" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0019880" startTime="2026-03-26T18:28:32.6817867+05:30" endTime="2026-03-26T18:28:32.6837748+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e3184232-05c5-4f99-8e90-a62c99578959" />
+    <UnitTestResult executionId="f4fdd991-acf5-4c28-8fc0-f14a4f5d1b39" testId="99ce77ce-89c5-e53e-2140-a45591db9c81" testName="GetAllMoviesAsync_ReturnsAllMovies" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0024960" startTime="2026-03-26T18:28:32.6601156+05:30" endTime="2026-03-26T18:28:32.6626113+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f4fdd991-acf5-4c28-8fc0-f14a4f5d1b39" />
+    <UnitTestResult executionId="c82e03ca-a26f-47ae-a9d1-eba746d0eced" testId="b3d60f72-e711-c569-fa7c-04dbb7ce7177" testName="UpdateTheatreAsync_NonExistingId_ReturnsFalse" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0008280" startTime="2026-03-26T18:28:32.7304520+05:30" endTime="2026-03-26T18:28:32.7312798+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c82e03ca-a26f-47ae-a9d1-eba746d0eced" />
+    <UnitTestResult executionId="27065a03-bceb-4373-81c1-4b4ad40e7111" testId="655229de-0a41-b245-54d4-2767642b4944" testName="CreateTheatreAsync_ValidDto_PersistsAndReturnsTheatre" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0018990" startTime="2026-03-26T18:28:32.6838002+05:30" endTime="2026-03-26T18:28:32.6856987+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="27065a03-bceb-4373-81c1-4b4ad40e7111" />
+    <UnitTestResult executionId="84e51764-5569-4ca2-9844-c2972c4cb626" testId="125ad453-8f11-e410-0d41-91353b4e2a28" testName="CreateMovieAsync_ValidDto_PersistsAndReturnsMovie" computerName="LAPTOP-EGGER0BD" duration="00:00:00.1006830" startTime="2026-03-26T18:28:32.4337712+05:30" endTime="2026-03-26T18:28:32.5344540+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="84e51764-5569-4ca2-9844-c2972c4cb626" />
+    <UnitTestResult executionId="e21deada-ca07-4f08-be9f-0d7f28f8f212" testId="9cafe4b4-4dac-9876-b5f6-d1982e084193" testName="GetAllTheatresAsync_ReturnsAllTheatres" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0106480" startTime="2026-03-26T18:28:32.7095594+05:30" endTime="2026-03-26T18:28:32.7202066+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e21deada-ca07-4f08-be9f-0d7f28f8f212" />
+    <UnitTestResult executionId="77b9b863-2373-4e81-981f-88621d6a4670" testId="1deb3323-0417-13f8-b429-9a320a614105" testName="BookTicketAsync_ValidRequest_CreatesTicketAndReducesSeats" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0276090" startTime="2026-03-26T18:28:32.7654522+05:30" endTime="2026-03-26T18:28:32.7930604+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="77b9b863-2373-4e81-981f-88621d6a4670" />
+    <UnitTestResult executionId="e4ecf454-c2ff-42a8-bf82-8c05ea7d404a" testId="31deabf2-6fee-fc71-a42c-aede3cef321c" testName="DeleteMovieAsync_WithActiveShows_ThrowsInvalidOperationException" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0388070" startTime="2026-03-26T18:28:32.6014359+05:30" endTime="2026-03-26T18:28:32.6402424+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e4ecf454-c2ff-42a8-bf82-8c05ea7d404a" />
+    <UnitTestResult executionId="ff7fcba0-975f-4099-956f-a8af5f53590b" testId="24557fab-d648-e54b-1879-916a22954545" testName="CancelTicketAsync_NonExistingTicket_ReturnsFalse" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0053540" startTime="2026-03-26T18:28:32.7982468+05:30" endTime="2026-03-26T18:28:32.8036004+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff7fcba0-975f-4099-956f-a8af5f53590b" />
+    <UnitTestResult executionId="91399b08-fe3e-4c15-9d1e-8fe04cb1559f" testId="86031f14-634b-1a73-c0f5-9e0935723ede" testName="GetTheatreByIdAsync_ExistingId_ReturnsTheatre" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0010740" startTime="2026-03-26T18:28:32.7202320+05:30" endTime="2026-03-26T18:28:32.7213059+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="91399b08-fe3e-4c15-9d1e-8fe04cb1559f" />
+    <UnitTestResult executionId="04ffa1e4-cf38-4d60-b5d0-776389f88c95" testId="aa957a75-3de5-d48c-68b5-2f65f929867c" testName="CreateMovieAsync_SetsAvailabilityStatusToNoShows" computerName="LAPTOP-EGGER0BD" duration="00:00:00.4517350" startTime="2026-03-26T18:28:31.9820052+05:30" endTime="2026-03-26T18:28:32.4337401+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="04ffa1e4-cf38-4d60-b5d0-776389f88c95" />
+    <UnitTestResult executionId="b6084bb3-c2b0-4194-81f5-94d255983a4e" testId="85dfd27a-ef05-d4c4-aeaa-c31d0175df91" testName="GetMovieByIdAsync_ExistingId_ReturnsMovie" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0015540" startTime="2026-03-26T18:28:32.6626290+05:30" endTime="2026-03-26T18:28:32.6641829+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6084bb3-c2b0-4194-81f5-94d255983a4e" />
+    <UnitTestResult executionId="f4851877-f10c-4ebb-b3ec-cf61d992150b" testId="7c0be76a-11e4-351e-0279-be9db0938930" testName="GetMovieByIdAsync_WithSoldOutShow_ReturnsStatusSoldOut" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0013220" startTime="2026-03-26T18:28:32.6675644+05:30" endTime="2026-03-26T18:28:32.6688859+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f4851877-f10c-4ebb-b3ec-cf61d992150b" />
+    <UnitTestResult executionId="0f9f0a50-45a5-48fe-8870-a10f5963e6d8" testId="5a2abf4e-dfe6-b947-233b-21af7a7f6a74" testName="GetUserRoleFromToken_ValidToken_ReturnsCorrectRole" computerName="LAPTOP-EGGER0BD" duration="00:00:00.0024190" startTime="2026-03-26T18:28:31.9749215+05:30" endTime="2026-03-26T18:28:31.9773399+05:30" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0f9f0a50-45a5-48fe-8870-a10f5963e6d8" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="BookTicketAsync_ZeroSeats_ThrowsInvalidOperationException" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="6bd7f53a-a8d4-59d6-6fef-5ac4cc775e54">
+      <Execution id="ba25a48f-4c29-4ec0-bf6d-53f6fb60e375" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="BookTicketAsync_ZeroSeats_ThrowsInvalidOperationException" />
+    </UnitTest>
+    <UnitTest name="DeactivateTheatreAsync_WithActiveShows_ThrowsInvalidOperationException" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="7b39e7c9-6717-d6db-84c1-f24706454bf7">
+      <Execution id="490b16c8-8c5c-44a5-ae80-602c26b10802" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="DeactivateTheatreAsync_WithActiveShows_ThrowsInvalidOperationException" />
+    </UnitTest>
+    <UnitTest name="BookTicketAsync_ValidRequest_CreatesTicketAndReducesSeats" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="1deb3323-0417-13f8-b429-9a320a614105">
+      <Execution id="77b9b863-2373-4e81-981f-88621d6a4670" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="BookTicketAsync_ValidRequest_CreatesTicketAndReducesSeats" />
+    </UnitTest>
+    <UnitTest name="CancelTicketAsync_ExistingTicket_CancelsAndRestoresSeats" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="f8f02eec-1a9a-9061-ee15-be0d5aa25fc6">
+      <Execution id="18efefe0-2b75-4053-a73a-8310a2c7c35c" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="CancelTicketAsync_ExistingTicket_CancelsAndRestoresSeats" />
+    </UnitTest>
+    <UnitTest name="BookTicketAsync_NotEnoughSeats_ThrowsInvalidOperationException" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="5b9ec7e7-27a9-2790-7b0b-3c25aeae1194">
+      <Execution id="16e5d287-2198-4877-a524-62b63b5d3879" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="BookTicketAsync_NotEnoughSeats_ThrowsInvalidOperationException" />
+    </UnitTest>
+    <UnitTest name="GetMovieByIdAsync_WithAlmostFullShow_ReturnsStatusAlmostFull" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="ebc9cd19-f152-6deb-a650-a12b0d2a3d8a">
+      <Execution id="d992de69-a288-46f1-b1f2-97d82f2633f7" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="GetMovieByIdAsync_WithAlmostFullShow_ReturnsStatusAlmostFull" />
+    </UnitTest>
+    <UnitTest name="SearchMovieAsync_NoMatch_ReturnsEmpty" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="95adcd2a-ed66-7902-5eb0-300d6b6e8b39">
+      <Execution id="3c4e629f-38ec-438d-8fe7-c3452ae69656" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="SearchMovieAsync_NoMatch_ReturnsEmpty" />
+    </UnitTest>
+    <UnitTest name="GetMovieByIdAsync_ExistingId_ReturnsMovie" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="85dfd27a-ef05-d4c4-aeaa-c31d0175df91">
+      <Execution id="b6084bb3-c2b0-4194-81f5-94d255983a4e" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="GetMovieByIdAsync_ExistingId_ReturnsMovie" />
+    </UnitTest>
+    <UnitTest name="GetAllCitiesAsync_ReturnsDistinctActiveCities" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="e5ba5004-860d-a018-f519-4caf4b8168bb">
+      <Execution id="c8ad3591-d288-4645-b80c-f70b0689ed3d" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="GetAllCitiesAsync_ReturnsDistinctActiveCities" />
+    </UnitTest>
+    <UnitTest name="GetUserRoleFromToken_InvalidToken_ReturnsNull" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="5e146a21-7508-53f5-e143-fc5a0f8c2e8a">
+      <Execution id="e5ea86e6-4335-4ba7-8b3b-27dd51fccb0c" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.JwtServiceTests" name="GetUserRoleFromToken_InvalidToken_ReturnsNull" />
+    </UnitTest>
+    <UnitTest name="GetTheatresByCityAsync_CaseInsensitive_ReturnsResults" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="9bba40d0-a3d0-ee92-b4cb-718612254237">
+      <Execution id="3b122edd-5668-442c-8bde-4566392417a7" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="GetTheatresByCityAsync_CaseInsensitive_ReturnsResults" />
+    </UnitTest>
+    <UnitTest name="GetUserRoleFromToken_ValidToken_ReturnsCorrectRole" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="5a2abf4e-dfe6-b947-233b-21af7a7f6a74">
+      <Execution id="0f9f0a50-45a5-48fe-8870-a10f5963e6d8" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.JwtServiceTests" name="GetUserRoleFromToken_ValidToken_ReturnsCorrectRole" />
+    </UnitTest>
+    <UnitTest name="GenerateToken_ValidUser_ReturnsNonEmptyToken" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="c2a1d9aa-2679-3eef-1971-c5dd5f50ad4f">
+      <Execution id="102f9f5e-b400-478f-8e8b-07e1dab23048" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.JwtServiceTests" name="GenerateToken_ValidUser_ReturnsNonEmptyToken" />
+    </UnitTest>
+    <UnitTest name="GetUserIdFromToken_InvalidToken_ReturnsNull" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="e4f8ade9-ea28-0801-9e52-7dea79feb50b">
+      <Execution id="ba6c9e4f-0836-444c-95e9-53b12c07bafa" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.JwtServiceTests" name="GetUserIdFromToken_InvalidToken_ReturnsNull" />
+    </UnitTest>
+    <UnitTest name="GetTicketsByUserIdAsync_NoTickets_ReturnsEmpty" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="2999dcdc-91bd-5c66-00fe-e005243a9448">
+      <Execution id="5df85fb4-396e-43bc-a7a8-a870d641b7a0" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="GetTicketsByUserIdAsync_NoTickets_ReturnsEmpty" />
+    </UnitTest>
+    <UnitTest name="GetTheatreByIdAsync_ExistingId_ReturnsTheatre" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="86031f14-634b-1a73-c0f5-9e0935723ede">
+      <Execution id="91399b08-fe3e-4c15-9d1e-8fe04cb1559f" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="GetTheatreByIdAsync_ExistingId_ReturnsTheatre" />
+    </UnitTest>
+    <UnitTest name="CancelTicketAsync_AlreadyCancelled_ReturnsTrue" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="a632ff8d-8b05-cb5c-a0fd-83e5db0fc8ea">
+      <Execution id="06841ba4-03a8-40fa-a9d5-19747bf482cc" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="CancelTicketAsync_AlreadyCancelled_ReturnsTrue" />
+    </UnitTest>
+    <UnitTest name="GetTicketByIdAsync_ExistingId_ReturnsTicket" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="c618aa4c-8d34-7057-34c0-984ea0930901">
+      <Execution id="ce765d2f-c67c-416c-a69b-a3bb46442899" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="GetTicketByIdAsync_ExistingId_ReturnsTicket" />
+    </UnitTest>
+    <UnitTest name="UpdateTheatreAsync_ExistingId_UpdatesAndReturnsTrue" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="8b6cc809-69af-85b9-4d3e-20efbba1b04c">
+      <Execution id="29bc6e53-78f6-47dc-b7a8-7c57a3e0234b" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="UpdateTheatreAsync_ExistingId_UpdatesAndReturnsTrue" />
+    </UnitTest>
+    <UnitTest name="CreateMovieAsync_SetsAvailabilityStatusToNoShows" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="aa957a75-3de5-d48c-68b5-2f65f929867c">
+      <Execution id="04ffa1e4-cf38-4d60-b5d0-776389f88c95" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="CreateMovieAsync_SetsAvailabilityStatusToNoShows" />
+    </UnitTest>
+    <UnitTest name="CreateMovieAsync_ValidDto_PersistsAndReturnsMovie" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="125ad453-8f11-e410-0d41-91353b4e2a28">
+      <Execution id="84e51764-5569-4ca2-9844-c2972c4cb626" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="CreateMovieAsync_ValidDto_PersistsAndReturnsMovie" />
+    </UnitTest>
+    <UnitTest name="GetTicketByIdAsync_NonExistingId_ReturnsNull" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="7640e2b4-314e-be66-ac69-a1620bcdd021">
+      <Execution id="097307a7-fdcf-43de-ad1d-c1315059a097" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="GetTicketByIdAsync_NonExistingId_ReturnsNull" />
+    </UnitTest>
+    <UnitTest name="GenerateToken_TokenIsValidJwtFormat" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="5c28fd28-c1d4-18d4-f82f-eceadd8a2d44">
+      <Execution id="811ed562-49a4-4ba1-98b6-35fa8ba81f65" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.JwtServiceTests" name="GenerateToken_TokenIsValidJwtFormat" />
+    </UnitTest>
+    <UnitTest name="UpdateMovieAsync_ExistingId_UpdatesAndReturnsTrue" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="26f59675-98ad-4eb3-2d05-33956e9b7680">
+      <Execution id="ee9e39ba-131d-4c70-82d0-fdd84d3dad22" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="UpdateMovieAsync_ExistingId_UpdatesAndReturnsTrue" />
+    </UnitTest>
+    <UnitTest name="DeleteMovieAsync_NonExistingId_ReturnsFalse" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="28de6682-f703-650d-4ccf-69e2c78b227f">
+      <Execution id="828c7b31-1030-4999-b644-1aa710b9b87f" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="DeleteMovieAsync_NonExistingId_ReturnsFalse" />
+    </UnitTest>
+    <UnitTest name="DeactivateTheatreAsync_NonExistingId_ReturnsFalse" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="e6e19832-63b9-e6a7-1022-9259d4f40496">
+      <Execution id="ff24e02b-685c-4aa1-9c82-958803b7e33c" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="DeactivateTheatreAsync_NonExistingId_ReturnsFalse" />
+    </UnitTest>
+    <UnitTest name="DeleteMovieAsync_NoActiveShows_DeletesAndReturnsTrue" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="65f10f85-f960-467a-5eed-1a71fc6f28b6">
+      <Execution id="cdc8fad3-0a0b-400f-8e4e-9a8bd77693df" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="DeleteMovieAsync_NoActiveShows_DeletesAndReturnsTrue" />
+    </UnitTest>
+    <UnitTest name="Constructor_ShortKey_ThrowsInvalidOperationException" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="3df7318c-a3db-9379-3178-7f1dc26c7ccd">
+      <Execution id="80477604-ab28-47e7-9196-f08098b17506" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.JwtServiceTests" name="Constructor_ShortKey_ThrowsInvalidOperationException" />
+    </UnitTest>
+    <UnitTest name="ValidateToken_InvalidToken_ReturnsNull" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="fd660864-a89e-226e-80f3-99c280faeb30">
+      <Execution id="af7ad888-c650-41f7-a0fe-35de3bdd760e" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.JwtServiceTests" name="ValidateToken_InvalidToken_ReturnsNull" />
+    </UnitTest>
+    <UnitTest name="GetAllMoviesAsync_EmptyDb_ReturnsEmpty" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="8f598dad-a3e7-9d5c-484a-bc809785865f">
+      <Execution id="45d46f86-e7e0-4c4c-9264-93c56bb2c75b" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="GetAllMoviesAsync_EmptyDb_ReturnsEmpty" />
+    </UnitTest>
+    <UnitTest name="GetAllTheatresAsync_ReturnsAllTheatres" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="9cafe4b4-4dac-9876-b5f6-d1982e084193">
+      <Execution id="e21deada-ca07-4f08-be9f-0d7f28f8f212" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="GetAllTheatresAsync_ReturnsAllTheatres" />
+    </UnitTest>
+    <UnitTest name="GetUserIdFromToken_ValidToken_ReturnsCorrectUserId" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="5675d897-292b-2a8c-58cb-23bd07c45c91">
+      <Execution id="8dd12009-44df-4b24-84bd-9cf1e6fcc476" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.JwtServiceTests" name="GetUserIdFromToken_ValidToken_ReturnsCorrectUserId" />
+    </UnitTest>
+    <UnitTest name="UpdateMovieAsync_NonExistingId_ReturnsFalse" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="09447e94-4249-6f42-7300-77ce0d33454c">
+      <Execution id="70596eaa-85bb-4856-ac8e-deb088549d7b" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="UpdateMovieAsync_NonExistingId_ReturnsFalse" />
+    </UnitTest>
+    <UnitTest name="BookTicketAsync_InvalidShowId_ThrowsInvalidOperationException" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="166a0395-1651-33a8-145e-91bfc69f9927">
+      <Execution id="060c10fb-f613-4934-9f41-128bf241b101" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="BookTicketAsync_InvalidShowId_ThrowsInvalidOperationException" />
+    </UnitTest>
+    <UnitTest name="ValidateToken_TamperedToken_ReturnsNull" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="31faec98-f3c5-330e-f783-6131a14c1ae6">
+      <Execution id="0c0883d6-60b0-4423-a85c-7fb9d28dbca8" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.JwtServiceTests" name="ValidateToken_TamperedToken_ReturnsNull" />
+    </UnitTest>
+    <UnitTest name="ValidateToken_ValidToken_ReturnsPrincipal" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="02073565-7acb-04ce-fc14-623a44a0b611">
+      <Execution id="f6464c46-eb55-4a34-aa75-c277cd06c9a7" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.JwtServiceTests" name="ValidateToken_ValidToken_ReturnsPrincipal" />
+    </UnitTest>
+    <UnitTest name="GetBookedSeatsAsync_ReturnsBookedSeats" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="deba8a3b-69c4-71e0-d896-ea50ccaab042">
+      <Execution id="59e6246f-4ee5-48a5-99d2-df70df612b29" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="GetBookedSeatsAsync_ReturnsBookedSeats" />
+    </UnitTest>
+    <UnitTest name="UpdateTheatreAsync_NonExistingId_ReturnsFalse" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="b3d60f72-e711-c569-fa7c-04dbb7ce7177">
+      <Execution id="c82e03ca-a26f-47ae-a9d1-eba746d0eced" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="UpdateTheatreAsync_NonExistingId_ReturnsFalse" />
+    </UnitTest>
+    <UnitTest name="GetTheatreByIdAsync_NonExistingId_ReturnsNull" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="eacd9e73-f8cd-a9cb-ca92-283fbb3f2be5">
+      <Execution id="437d1d92-39e8-4889-a149-df9dcbcf2ea2" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="GetTheatreByIdAsync_NonExistingId_ReturnsNull" />
+    </UnitTest>
+    <UnitTest name="GetAllMoviesAsync_ReturnsAllMovies" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="99ce77ce-89c5-e53e-2140-a45591db9c81">
+      <Execution id="f4fdd991-acf5-4c28-8fc0-f14a4f5d1b39" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="GetAllMoviesAsync_ReturnsAllMovies" />
+    </UnitTest>
+    <UnitTest name="DeactivateTheatreAsync_NoActiveShows_DeactivatesAndReturnsTrue" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="2edb52f5-69b4-241a-c538-c6ae7799c40a">
+      <Execution id="e2e64d06-5f3c-41fa-993a-f61b0064de23" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="DeactivateTheatreAsync_NoActiveShows_DeactivatesAndReturnsTrue" />
+    </UnitTest>
+    <UnitTest name="GetMovieByIdAsync_NonExistingId_ReturnsNull" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="0cac1852-af16-a08b-4d79-8d1960c4b1da">
+      <Execution id="5a143c7e-314a-4a3d-b662-d31221973c97" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="GetMovieByIdAsync_NonExistingId_ReturnsNull" />
+    </UnitTest>
+    <UnitTest name="GetTheatresByCityAsync_ReturnsOnlyMatchingCity" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="217b4296-073d-0046-5cdc-f45bd2f7d14a">
+      <Execution id="0fff00e2-a752-4829-87a5-862735b14bb7" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="GetTheatresByCityAsync_ReturnsOnlyMatchingCity" />
+    </UnitTest>
+    <UnitTest name="ActivateTheatreAsync_InactiveTheatre_ActivatesAndReturnsTrue" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="ac3c07a2-7508-8110-5a1f-d67250a9de4a">
+      <Execution id="e3184232-05c5-4f99-8e90-a62c99578959" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="ActivateTheatreAsync_InactiveTheatre_ActivatesAndReturnsTrue" />
+    </UnitTest>
+    <UnitTest name="SearchMovieAsync_MatchingName_ReturnsResults" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="9a6afd09-a127-a7de-c1f4-1a2722a5b611">
+      <Execution id="41b48468-b505-46ff-af9f-4ec9fb90e894" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="SearchMovieAsync_MatchingName_ReturnsResults" />
+    </UnitTest>
+    <UnitTest name="CreateTheatreAsync_ValidDto_PersistsAndReturnsTheatre" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="655229de-0a41-b245-54d4-2767642b4944">
+      <Execution id="27065a03-bceb-4373-81c1-4b4ad40e7111" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="CreateTheatreAsync_ValidDto_PersistsAndReturnsTheatre" />
+    </UnitTest>
+    <UnitTest name="GetBookedSeatsAsync_NoBookings_ReturnsEmpty" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="b258c749-c009-5b17-2008-f9437056f881">
+      <Execution id="37de5ee8-922e-43b3-8c3f-696281a49560" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="GetBookedSeatsAsync_NoBookings_ReturnsEmpty" />
+    </UnitTest>
+    <UnitTest name="GetTicketsByUserIdAsync_ReturnsOnlyUserTickets" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="5fc988f9-25ba-0a40-5aec-29f33ed539d0">
+      <Execution id="63ee3b51-232c-48a2-a83c-362dabfc11b8" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="GetTicketsByUserIdAsync_ReturnsOnlyUserTickets" />
+    </UnitTest>
+    <UnitTest name="DeleteMovieAsync_WithActiveShows_ThrowsInvalidOperationException" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="31deabf2-6fee-fc71-a42c-aede3cef321c">
+      <Execution id="e4ecf454-c2ff-42a8-bf82-8c05ea7d404a" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="DeleteMovieAsync_WithActiveShows_ThrowsInvalidOperationException" />
+    </UnitTest>
+    <UnitTest name="GetActiveTheatresAsync_ReturnsOnlyActiveTheatres" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="571173fa-320b-5c01-2b9e-9637bce31e3f">
+      <Execution id="1aeb9c9c-0474-421d-ad1a-02617a7b65da" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TheatreServiceTests" name="GetActiveTheatresAsync_ReturnsOnlyActiveTheatres" />
+    </UnitTest>
+    <UnitTest name="CancelTicketAsync_NonExistingTicket_ReturnsFalse" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="24557fab-d648-e54b-1879-916a22954545">
+      <Execution id="ff7fcba0-975f-4099-956f-a8af5f53590b" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.TicketServiceTests" name="CancelTicketAsync_NonExistingTicket_ReturnsFalse" />
+    </UnitTest>
+    <UnitTest name="GetMovieByIdAsync_WithSoldOutShow_ReturnsStatusSoldOut" storage="c:\users\khush\source\repos\michitra\michitra.tests\bin\debug\net8.0\michitra.tests.dll" id="7c0be76a-11e4-351e-0279-be9db0938930">
+      <Execution id="f4851877-f10c-4ebb-b3ec-cf61d992150b" />
+      <TestMethod codeBase="C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="MiChitra.Tests.MovieServiceTests" name="GetMovieByIdAsync_WithSoldOutShow_ReturnsStatusSoldOut" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="c2a1d9aa-2679-3eef-1971-c5dd5f50ad4f" executionId="102f9f5e-b400-478f-8e8b-07e1dab23048" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="31faec98-f3c5-330e-f783-6131a14c1ae6" executionId="0c0883d6-60b0-4423-a85c-7fb9d28dbca8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="deba8a3b-69c4-71e0-d896-ea50ccaab042" executionId="59e6246f-4ee5-48a5-99d2-df70df612b29" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a632ff8d-8b05-cb5c-a0fd-83e5db0fc8ea" executionId="06841ba4-03a8-40fa-a9d5-19747bf482cc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8b6cc809-69af-85b9-4d3e-20efbba1b04c" executionId="29bc6e53-78f6-47dc-b7a8-7c57a3e0234b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="571173fa-320b-5c01-2b9e-9637bce31e3f" executionId="1aeb9c9c-0474-421d-ad1a-02617a7b65da" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2edb52f5-69b4-241a-c538-c6ae7799c40a" executionId="e2e64d06-5f3c-41fa-993a-f61b0064de23" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e4f8ade9-ea28-0801-9e52-7dea79feb50b" executionId="ba6c9e4f-0836-444c-95e9-53b12c07bafa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ebc9cd19-f152-6deb-a650-a12b0d2a3d8a" executionId="d992de69-a288-46f1-b1f2-97d82f2633f7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6bd7f53a-a8d4-59d6-6fef-5ac4cc775e54" executionId="ba25a48f-4c29-4ec0-bf6d-53f6fb60e375" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8f598dad-a3e7-9d5c-484a-bc809785865f" executionId="45d46f86-e7e0-4c4c-9264-93c56bb2c75b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7640e2b4-314e-be66-ac69-a1620bcdd021" executionId="097307a7-fdcf-43de-ad1d-c1315059a097" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b258c749-c009-5b17-2008-f9437056f881" executionId="37de5ee8-922e-43b3-8c3f-696281a49560" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e6e19832-63b9-e6a7-1022-9259d4f40496" executionId="ff24e02b-685c-4aa1-9c82-958803b7e33c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5c28fd28-c1d4-18d4-f82f-eceadd8a2d44" executionId="811ed562-49a4-4ba1-98b6-35fa8ba81f65" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0cac1852-af16-a08b-4d79-8d1960c4b1da" executionId="5a143c7e-314a-4a3d-b662-d31221973c97" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5e146a21-7508-53f5-e143-fc5a0f8c2e8a" executionId="e5ea86e6-4335-4ba7-8b3b-27dd51fccb0c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="65f10f85-f960-467a-5eed-1a71fc6f28b6" executionId="cdc8fad3-0a0b-400f-8e4e-9a8bd77693df" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5b9ec7e7-27a9-2790-7b0b-3c25aeae1194" executionId="16e5d287-2198-4877-a524-62b63b5d3879" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5fc988f9-25ba-0a40-5aec-29f33ed539d0" executionId="63ee3b51-232c-48a2-a83c-362dabfc11b8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="217b4296-073d-0046-5cdc-f45bd2f7d14a" executionId="0fff00e2-a752-4829-87a5-862735b14bb7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f8f02eec-1a9a-9061-ee15-be0d5aa25fc6" executionId="18efefe0-2b75-4053-a73a-8310a2c7c35c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="26f59675-98ad-4eb3-2d05-33956e9b7680" executionId="ee9e39ba-131d-4c70-82d0-fdd84d3dad22" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="09447e94-4249-6f42-7300-77ce0d33454c" executionId="70596eaa-85bb-4856-ac8e-deb088549d7b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="95adcd2a-ed66-7902-5eb0-300d6b6e8b39" executionId="3c4e629f-38ec-438d-8fe7-c3452ae69656" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="166a0395-1651-33a8-145e-91bfc69f9927" executionId="060c10fb-f613-4934-9f41-128bf241b101" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e5ba5004-860d-a018-f519-4caf4b8168bb" executionId="c8ad3591-d288-4645-b80c-f70b0689ed3d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2999dcdc-91bd-5c66-00fe-e005243a9448" executionId="5df85fb4-396e-43bc-a7a8-a870d641b7a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3df7318c-a3db-9379-3178-7f1dc26c7ccd" executionId="80477604-ab28-47e7-9196-f08098b17506" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="28de6682-f703-650d-4ccf-69e2c78b227f" executionId="828c7b31-1030-4999-b644-1aa710b9b87f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5675d897-292b-2a8c-58cb-23bd07c45c91" executionId="8dd12009-44df-4b24-84bd-9cf1e6fcc476" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9bba40d0-a3d0-ee92-b4cb-718612254237" executionId="3b122edd-5668-442c-8bde-4566392417a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9a6afd09-a127-a7de-c1f4-1a2722a5b611" executionId="41b48468-b505-46ff-af9f-4ec9fb90e894" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c618aa4c-8d34-7057-34c0-984ea0930901" executionId="ce765d2f-c67c-416c-a69b-a3bb46442899" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eacd9e73-f8cd-a9cb-ca92-283fbb3f2be5" executionId="437d1d92-39e8-4889-a149-df9dcbcf2ea2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7b39e7c9-6717-d6db-84c1-f24706454bf7" executionId="490b16c8-8c5c-44a5-ae80-602c26b10802" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fd660864-a89e-226e-80f3-99c280faeb30" executionId="af7ad888-c650-41f7-a0fe-35de3bdd760e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="02073565-7acb-04ce-fc14-623a44a0b611" executionId="f6464c46-eb55-4a34-aa75-c277cd06c9a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ac3c07a2-7508-8110-5a1f-d67250a9de4a" executionId="e3184232-05c5-4f99-8e90-a62c99578959" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="99ce77ce-89c5-e53e-2140-a45591db9c81" executionId="f4fdd991-acf5-4c28-8fc0-f14a4f5d1b39" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b3d60f72-e711-c569-fa7c-04dbb7ce7177" executionId="c82e03ca-a26f-47ae-a9d1-eba746d0eced" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="655229de-0a41-b245-54d4-2767642b4944" executionId="27065a03-bceb-4373-81c1-4b4ad40e7111" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="125ad453-8f11-e410-0d41-91353b4e2a28" executionId="84e51764-5569-4ca2-9844-c2972c4cb626" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9cafe4b4-4dac-9876-b5f6-d1982e084193" executionId="e21deada-ca07-4f08-be9f-0d7f28f8f212" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1deb3323-0417-13f8-b429-9a320a614105" executionId="77b9b863-2373-4e81-981f-88621d6a4670" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="31deabf2-6fee-fc71-a42c-aede3cef321c" executionId="e4ecf454-c2ff-42a8-bf82-8c05ea7d404a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="24557fab-d648-e54b-1879-916a22954545" executionId="ff7fcba0-975f-4099-956f-a8af5f53590b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="86031f14-634b-1a73-c0f5-9e0935723ede" executionId="91399b08-fe3e-4c15-9d1e-8fe04cb1559f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aa957a75-3de5-d48c-68b5-2f65f929867c" executionId="04ffa1e4-cf38-4d60-b5d0-776389f88c95" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="85dfd27a-ef05-d4c4-aeaa-c31d0175df91" executionId="b6084bb3-c2b0-4194-81f5-94d255983a4e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7c0be76a-11e4-351e-0279-be9db0938930" executionId="f4851877-f10c-4ebb-b3ec-cf61d992150b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5a2abf4e-dfe6-b947-233b-21af7a7f6a74" executionId="0f9f0a50-45a5-48fe-8870-a10f5963e6d8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="52" executed="52" passed="52" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>NUnit Adapter 4.5.0.0: Test execution started&#xD;
+Running all tests in C:\Users\khush\source\repos\MiChitra\MiChitra.Tests\bin\Debug\net8.0\MiChitra.Tests.dll&#xD;
+   NUnit3TestExecutor discovered 52 of 52 NUnit test cases using Current Discovery mode, Non-Explicit run&#xD;
+NUnit Adapter 4.5.0.0: Test execution complete&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
