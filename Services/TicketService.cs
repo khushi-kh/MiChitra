@@ -30,7 +30,7 @@ namespace MiChitra.Services
                 TotalPrice = ticket.TotalPrice,
                 Status = ticket.Status,
                 ShowTime = ticket.MovieShow?.ShowTime ?? default,
-                PricePerSeat = ticket.MovieShow?.PricePerSeat ?? 0,
+                PricePerSeat = ticket.MovieShow?.PricePerSeat ?? 0m,
                 MovieName = ticket.MovieShow?.Movie?.MovieName,
                 TheatreName = ticket.MovieShow?.Theatre?.Name,
                 City = ticket.MovieShow?.Theatre?.City,
@@ -119,7 +119,7 @@ namespace MiChitra.Services
                 UserId = dto.UserId,
                 MovieShowId = dto.MovieShowId,
                 NumberOfSeats = dto.NumberOfSeats,
-                TotalPrice = dto.NumberOfSeats * (show.PricePerSeat ?? 0),
+                TotalPrice = dto.NumberOfSeats * show.PricePerSeat,
                 BookingDate = DateTime.UtcNow,
                 Status = TicketStatus.Reserved,
                 ReservationExpiry = DateTime.UtcNow.AddMinutes(10), // default reservation window
@@ -132,7 +132,6 @@ namespace MiChitra.Services
             _context.Tickets.Add(ticket);
 
             show.AvailableSeats -= dto.NumberOfSeats;
-            show.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 
@@ -157,7 +156,6 @@ namespace MiChitra.Services
             if (show != null)
             {
                 show.AvailableSeats += ticket.NumberOfSeats;
-                show.UpdatedAt = DateTime.UtcNow;
             }
 
             await _context.SaveChangesAsync();

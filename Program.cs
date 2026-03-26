@@ -151,7 +151,7 @@ builder.Services.AddAuthentication(options =>
     // Use JWT-standard claim types without automatic remapping
     JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
-    options.RequireHttpsMetadata = false;
+    options.RequireHttpsMetadata = true;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
